@@ -3,6 +3,9 @@ package micropng;
 import java.util.AbstractSequentialList;
 import java.util.ListIterator;
 
+import micropng.chunk.Chunk;
+
+
 public class ChunkList extends AbstractSequentialList<Chunk> {
 
     class ChunkListIterator implements ListIterator<Chunk> {
