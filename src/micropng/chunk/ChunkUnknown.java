@@ -8,26 +8,21 @@ public class ChunkUnknown implements Chunk {
 
     @Override
     public boolean isAncillary() {
-	// TODO Auto-generated method stub
-	return false;
+	return (type[0] & 0x10) != 0;
     }
 
     @Override
     public boolean isPrivate() {
-	// TODO Auto-generated method stub
-	return false;
+	return (type[1] & 0x10) != 0;
     }
 
     @Override
     public boolean isSafeToCopy() {
-	// TODO Auto-generated method stub
-	return false;
+	return (type[3] & 0x10) != 0;
     }
 
     @Override
     public boolean isThirdByteUpperCase() {
-	// TODO Auto-generated method stub
-	return false;
+	return (type[2] & 0x10) != 0;
     }
-
 }
