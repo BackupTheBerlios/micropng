@@ -1,6 +1,9 @@
 package micropng.chunk;
 
-public abstract class Chunk {
+public interface Chunk {
 
-    private DataField data;
+    public boolean isAncillary();
+    public boolean isPrivate();
+    public boolean isThirdByteUpperCase();
+    public boolean isSafeToCopy();
 }
