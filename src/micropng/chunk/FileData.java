@@ -4,8 +4,34 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 import micropng.MicroPNGQueue;
+import micropng.MicroPNGThread;
 
 public class FileData implements Data {
+    private class QueueFeeder extends MicroPNGThread {
+
+	private MicroPNGQueue out;
+	private int from;
+	private int to;
+
+	public QueueFeeder(MicroPNGQueue out, int from, int to) {
+	    this.out = out;
+	    this.from = from;
+	    this.to = to;
+	}
+
+	@Override
+	public void run() {
+	    for (int i = from; i < to; i++) {
+		try {
+		    out.put(file.readByte());
+		} catch (InterruptedException e) {
+		    e.printStackTrace();
+		} catch (IOException e) {
+		    e.printStackTrace();
+		}
+	    }
+	}
+    }
 
     private RandomAccessFile file;
     private int start;
@@ -21,7 +47,7 @@ public class FileData implements Data {
     public byte[] getArray(int from, int to) {
 	byte[] res = new byte[to - from];
 	try {
-	    file.read(res, from, to-from);
+	    file.read(res, from, to - from);
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
@@ -41,7 +67,7 @@ public class FileData implements Data {
     @Override
     public MicroPNGQueue getStream(int from, int to) {
 	MicroPNGQueue res = new MicroPNGQueue();
-	// TODO Auto-generated method stub
+	new Thread(new QueueFeeder(res, from, to)).run();
 	return null;
     }
 
