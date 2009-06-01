@@ -19,4 +19,8 @@ public class FileReader {
 
 	return null;
     }
+
+    public void registerChunkType() {
+	
+    }
 }
