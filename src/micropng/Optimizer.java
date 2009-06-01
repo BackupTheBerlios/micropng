@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
+import java.util.LinkedList;
+
+import micropng.chunk.Chunk;
 
 public class Optimizer {
 
@@ -34,27 +37,31 @@ public class Optimizer {
 
     public void run() throws IOException {
 	RandomAccessFile inputFile = new RandomAccessFile(inputFilename, "r");
-	File outputFile = new File(outputFilename);
 	FileChannel inputFileChannel = inputFile.getChannel();
-	FileLock inputFileLock = inputFileChannel.tryLock(0, Long.MAX_VALUE,
-		true);
+	FileLock inputFileLock = inputFileChannel.tryLock(0, Long.MAX_VALUE, true);
+
+	FileReader reader = new FileReader();
+	LinkedList<Chunk> chunkSequence = reader.readSequence(inputFile);
+	
+	File outputFileObject = new File(outputFilename);
+	RandomAccessFile outputFile;
+	FileChannel outputFileChannel;
 	FileLock outputFileLock;
-	BufferedOutputStream outputFileStream;
 
 	if (inputFileLock == null) {
 	    throw new ConcurrentLockException();
 	}
 
-	if (!outputFile.createNewFile()) {
+	if (!outputFileObject.createNewFile()) {
 	    throw new CanNotCreateFileException();
 	}
 
-	outputFileLock = inputFileChannel.tryLock(0, Long.MAX_VALUE, true);
+	outputFile = new RandomAccessFile(outputFileObject, "rw");
+	outputFileChannel = outputFile.getChannel();
+	outputFileLock = outputFileChannel.tryLock();
+
 	if (outputFileLock == null) {
 	    throw new ConcurrentLockException();
 	}
-
-	outputFileStream = new BufferedOutputStream(new FileOutputStream(
-		outputFilename));
     }
 }

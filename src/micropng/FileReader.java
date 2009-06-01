@@ -5,26 +5,36 @@ import java.io.RandomAccessFile;
 import java.util.LinkedList;
 
 import micropng.chunk.Chunk;
+import micropng.chunk.Data;
+import micropng.chunk.FileData;
+import micropng.chunk.Type;
 
 public class FileReader {
 
     public FileReader() {
     }
 
-    public LinkedList<Chunk> readSequence(RandomAccessFile inputFile)
-	    throws IOException {
+    public LinkedList<Chunk> readSequence(RandomAccessFile inputFile) throws IOException {
 	LinkedList<Chunk> res = new LinkedList<Chunk>();
+	int filePointerPosition = PNGProperties.getSignature().length;
 
-	inputFile.seek(PNGProperties.getSignature().length);
+	inputFile.seek(filePointerPosition);
 
 	do {
-	    res.add(new Chunk());
-	} while(inputFile.getFilePointer() < inputFile.length());
+	    int length = inputFile.readInt();
+	    Type type = new Type(inputFile.readInt());
+	    filePointerPosition += 8;
 
-	return null;
-    }
+	    Data data = new FileData(inputFile, (int) inputFile.getFilePointer(), length);
+	    filePointerPosition += length;
+	    inputFile.seek(filePointerPosition);
 
-    public void registerChunkType() {
-	
+	    int crc = inputFile.readInt();
+	    filePointerPosition += 4;
+
+	    res.add(new Chunk(type, data, crc));
+	} while (inputFile.getFilePointer() < inputFile.length());
+
+	return res;
     }
 }

@@ -2,9 +2,15 @@ package micropng.chunk;
 
 public class Chunk {
 
-    private Data data;
     private Type type;
+    private Data data;
     private int crc;
+
+    public Chunk(Type type, Data data, int crc) {
+	this.type = type;
+	this.data = data;
+	this.crc = crc;
+    }
 
     public boolean isAncillary() {
 	return type.isAncillary();
