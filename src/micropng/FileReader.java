@@ -17,6 +17,10 @@ public class FileReader {
 
 	inputFile.seek(PNGProperties.getSignature().length);
 
+	do {
+	    res.add(new Chunk());
+	} while(inputFile.getFilePointer() < inputFile.length());
+
 	return null;
     }
 

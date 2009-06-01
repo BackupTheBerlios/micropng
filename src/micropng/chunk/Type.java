@@ -23,4 +23,18 @@ public class Type {
     public boolean isSafeToCopy() {
 	return (value & 0x00000010) != 0;
     }
+
+    public int toInt() {
+	return value;
+    }
+
+    public int[] toArray() {
+	int[] res = new int[4];
+	int tmp = value;
+	for (int i = 0; i < 4; i++) {
+	    res[i] = tmp & 0xff;
+	    tmp >>= 8;
+	}
+	return res;
+    }
 }
