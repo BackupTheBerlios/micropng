@@ -9,17 +9,17 @@ public class RAMData implements Data {
 
 	private MicroPNGQueue out;
 	private int from;
-	private int to;
+	private int length;
 
-	public QueueFeeder(MicroPNGQueue out, int from, int to) {
+	public QueueFeeder(MicroPNGQueue out, int from, int length) {
 	    this.out = out;
 	    this.from = from;
-	    this.to = to;
+	    this.length = length;
 	}
 
 	@Override
 	public void run() {
-	    for (int i = from; i < to; i++) {
+	    for (int i = from; i < length; i++) {
 		try {
 		    out.put(data[i]);
 		} catch (InterruptedException e) {
@@ -36,9 +36,9 @@ public class RAMData implements Data {
     }
 
     @Override
-    public byte[] getArray(int from, int to) {
-	byte[] res = new byte[to - from];
-	System.arraycopy(data, from, res, 0, to - from);
+    public byte[] getArray(int from, int length) {
+	byte[] res = new byte[length];
+	System.arraycopy(data, from, res, 0, length);
 	return res;
     }
 
@@ -53,9 +53,9 @@ public class RAMData implements Data {
     }
 
     @Override
-    public MicroPNGQueue getStream(int from, int to) {
+    public MicroPNGQueue getStream(int from, int length) {
 	MicroPNGQueue res = new MicroPNGQueue();
-	new Thread(new QueueFeeder(res, from, to)).run();
+	new Thread(new QueueFeeder(res, from, length)).run();
 	return res;
     }
 

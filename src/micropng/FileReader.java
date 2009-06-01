@@ -16,7 +16,7 @@ public class FileReader {
 
     public LinkedList<Chunk> readSequence(RandomAccessFile inputFile) throws IOException {
 	LinkedList<Chunk> res = new LinkedList<Chunk>();
-	int filePointerPosition = PNGProperties.getSignature().length;
+	long filePointerPosition = PNGProperties.getSignature().length;
 
 	inputFile.seek(filePointerPosition);
 
@@ -25,7 +25,7 @@ public class FileReader {
 	    Type type = new Type(inputFile.readInt());
 	    filePointerPosition += 8;
 
-	    Data data = new FileData(inputFile, (int) inputFile.getFilePointer(), length);
+	    Data data = new FileData(inputFile, inputFile.getFilePointer(), length);
 	    filePointerPosition += length;
 	    inputFile.seek(filePointerPosition);
 

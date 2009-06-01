@@ -5,8 +5,8 @@ import micropng.MicroPNGQueue;
 public interface Data {
 
     public int getSize();
-    public MicroPNGQueue getStream(int start, int stop);
+    public MicroPNGQueue getStream(int from, int length);
     public MicroPNGQueue getStream();
-    public byte[] getArray(int start, int stop);
+    public byte[] getArray(int from, int length);
     public byte[] getArray();
 }
