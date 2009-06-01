@@ -2,7 +2,7 @@ package micropng.chunk;
 
 import micropng.MicroPNGQueue;
 
-public class RAMData implements DataField {
+public class RAMData implements Data {
 
     private int size;
 

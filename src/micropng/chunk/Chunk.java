@@ -1,9 +1,20 @@
 package micropng.chunk;
 
-public interface Chunk {
+public class Chunk {
 
-    public boolean isAncillary();
-    public boolean isPrivate();
-    public boolean isThirdByteUpperCase();
-    public boolean isSafeToCopy();
+    private Type type;
+
+    public boolean isAncillary() {
+	return type.isAncillary();
+    }
+    public boolean isPrivate() {
+	return type.isPrivate();
+    }
+    public boolean isThirdByteUpperCase() {
+	return type.isThirdByteUpperCase();
+    }
+    public boolean isSafeToCopy() {
+	return type.isSafeToCopy();
+    }
+    
 }
