@@ -30,9 +30,9 @@ public class FileReader {
 	    Type type = new Type(inputFile.readInt());
 	    newFilePointerPosition += 8;
 
-	    Data data = new FileData(inputFile, filePointerPosition, length);
+	    Data data = new FileData(inputFile, newFilePointerPosition, length);
 	    newFilePointerPosition += length;
-	    inputFile.seek(filePointerPosition);
+	    inputFile.seek(newFilePointerPosition);
 
 	    int crc = inputFile.readInt();
 	    newFilePointerPosition += 4;
