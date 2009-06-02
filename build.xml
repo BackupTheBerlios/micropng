@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. -->
+<project basedir="." default="build" name="nanopng">
+    <property environment="env"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.6"/>
+    <property name="source" value="1.6"/>
+    <path id="nanopng.classpath">
+        <pathelement location="bin"/>
+    </path>
+    <path id="run.[Scrapbook] Test.jpage.classpath">
+        <pathelement location="../../.eclipse/org.eclipse.platform_3.4.0_272132067/configuration/org.eclipse.osgi/bundles/93/1/.cp/snippetsupport.jar"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src" excludes="**/*.launch, **/*.testsuite, **/*.deploy, **/*.location, **/*.execution, **/*.datapool, **/*.artifact, **/*.testlog, **/*.xml, **/*.html, **/*.svg, **/*.java"/>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="nanopng.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target name="MicroPNG">
+        <java classname="micropng.Main" failonerror="true" fork="yes">
+            <arg line="test.png"/>
+            <classpath refid="nanopng.classpath"/>
+        </java>
+    </target>
+    <target name="[Scrapbook] Test.jpage">
+        <java classname="org.eclipse.jdt.internal.debug.ui.snippeteditor.ScrapbookMain" failonerror="true" fork="yes">
+            <arg line=" file:/home/neo/workspace/.metadata/.plugins/org.eclipse.core.resources/.projects/nanopng/org.eclipse.jdt.debug.ui/ file:/home/neo/workspace/nanopng/bin/"/>
+            <classpath refid="run.[Scrapbook] Test.jpage.classpath"/>
+        </java>
+    </target>
+    <target name="Chunk">
+        <java classname="micropng.chunk.Chunk" failonerror="true" fork="yes">
+            <classpath refid="nanopng.classpath"/>
+        </java>
+    </target>
+    <target name="CRCCalculator">
+        <java classname="micropng.CRCCalculator" failonerror="true" fork="yes">
+            <classpath refid="nanopng.classpath"/>
+        </java>
+    </target>
+</project>
