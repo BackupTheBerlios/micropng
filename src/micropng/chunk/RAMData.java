@@ -1,17 +1,17 @@
 package micropng.chunk;
 
-import micropng.MicroPNGQueue;
-import micropng.MicroPNGThread;
+import micropng.Queue;
+import micropng.MicropngThread;
 
 public class RAMData implements Data {
 
-    private class QueueFeeder extends MicroPNGThread {
+    private class QueueFeeder extends MicropngThread {
 
-	private MicroPNGQueue out;
+	private Queue out;
 	private int from;
 	private int length;
 
-	public QueueFeeder(MicroPNGQueue out, int from, int length) {
+	public QueueFeeder(Queue out, int from, int length) {
 	    this.out = out;
 	    this.from = from;
 	    this.length = length;
@@ -53,14 +53,14 @@ public class RAMData implements Data {
     }
 
     @Override
-    public MicroPNGQueue getStream(int from, int length) {
-	MicroPNGQueue res = new MicroPNGQueue();
+    public Queue getStream(int from, int length) {
+	Queue res = new Queue();
 	new Thread(new QueueFeeder(res, from, length)).run();
 	return res;
     }
 
     @Override
-    public MicroPNGQueue getStream() {
+    public Queue getStream() {
 	return getStream(0, data.length);
     }
 }

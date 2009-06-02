@@ -3,17 +3,17 @@ package micropng.chunk;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-import micropng.MicroPNGQueue;
-import micropng.MicroPNGThread;
+import micropng.Queue;
+import micropng.MicropngThread;
 
 public class FileData implements Data {
-    private class QueueFeeder extends MicroPNGThread {
+    private class QueueFeeder extends MicropngThread {
 
-	private MicroPNGQueue out;
+	private Queue out;
 	private int from;
 	private int length;
 
-	public QueueFeeder(MicroPNGQueue out, int from, int length) {
+	public QueueFeeder(Queue out, int from, int length) {
 	    this.out = out;
 	    this.from = from;
 	    this.length = length;
@@ -49,7 +49,6 @@ public class FileData implements Data {
     public byte[] getArray(int from, int length) {
 	byte[] res = new byte[length];
 	try {
-	    // TODO: make file reads thread safe
 	    file.seek(start + from);
 	    file.readFully(res, 0, length);
 	} catch (IOException e) {
@@ -69,14 +68,14 @@ public class FileData implements Data {
     }
 
     @Override
-    public MicroPNGQueue getStream(int from, int length) {
-	MicroPNGQueue res = new MicroPNGQueue();
+    public Queue getStream(int from, int length) {
+	Queue res = new Queue();
 	new Thread(new QueueFeeder(res, from, length)).run();
 	return null;
     }
 
     @Override
-    public MicroPNGQueue getStream() {
+    public Queue getStream() {
 	return getStream(0, size);
     }
 }

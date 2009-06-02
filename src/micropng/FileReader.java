@@ -1,5 +1,6 @@
 package micropng;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.LinkedList;
@@ -14,26 +15,35 @@ public class FileReader {
     public FileReader() {
     }
 
-    public LinkedList<Chunk> readSequence(RandomAccessFile inputFile) throws IOException {
+    public LinkedList<Chunk> readSequence(File inputFileObject) throws IOException {
 	LinkedList<Chunk> res = new LinkedList<Chunk>();
 	long filePointerPosition = PNGProperties.getSignature().length;
 
-	inputFile.seek(filePointerPosition);
-
 	do {
-	    int length = inputFile.readInt();
-	    Type type = new Type(inputFile.readInt());
-	    filePointerPosition += 8;
+	    RandomAccessFile inputFile = new RandomAccessFile(inputFileObject, "r");
+	    int length;
+	    long newFilePointerPosition = filePointerPosition;
 
-	    Data data = new FileData(inputFile, inputFile.getFilePointer(), length);
-	    filePointerPosition += length;
+	    inputFile.seek(newFilePointerPosition);
+
+	    length = inputFile.readInt();
+	    Type type = new Type(inputFile.readInt());
+	    newFilePointerPosition += 8;
+
+	    Data data = new FileData(inputFile, filePointerPosition, length);
+	    newFilePointerPosition += length;
 	    inputFile.seek(filePointerPosition);
 
 	    int crc = inputFile.readInt();
-	    filePointerPosition += 4;
+	    newFilePointerPosition += 4;
+
+	    if (inputFile.getChannel().lock(filePointerPosition, length + 12, true) == null) {
+		throw new ConcurrentLockException();
+	    }
 
 	    res.add(new Chunk(type, data, crc));
-	} while (inputFile.getFilePointer() < inputFile.length());
+	    filePointerPosition = newFilePointerPosition;
+	} while (filePointerPosition < inputFileObject.length());
 
 	return res;
     }

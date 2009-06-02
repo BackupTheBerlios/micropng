@@ -1,12 +1,12 @@
 package micropng.chunk;
 
-import micropng.MicroPNGQueue;
+import micropng.Queue;
 
 public interface Data {
 
     public int getSize();
-    public MicroPNGQueue getStream(int from, int length);
-    public MicroPNGQueue getStream();
+    public Queue getStream(int from, int length);
+    public Queue getStream();
     public byte[] getArray(int from, int length);
     public byte[] getArray();
 }
