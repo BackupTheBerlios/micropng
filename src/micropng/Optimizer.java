@@ -18,22 +18,18 @@ public class Optimizer {
 	}
     }
 
-    private String inputFilename;
-    private String outputFilename;
+    private File inputFileObject;
+    private File outputFileObject;
 
-    public Optimizer(String inputFilename, String outputFilename) {
-	this.inputFilename = inputFilename;
-	this.outputFilename = outputFilename;
+    public Optimizer(String inputFilepath) {
+	inputFileObject = new File(inputFilepath);
+	outputFileObject = new File(inputFileObject.getName() + "_output.png");
     }
 
     public void run() throws IOException {
-	File inputFileObject = new File(inputFilename);
-	RandomAccessFile inputFile = new RandomAccessFile(inputFileObject, "r");
-
 	FileReader reader = new FileReader();
 	LinkedList<Chunk> chunkSequence = reader.readSequence(inputFileObject);
 
-	File outputFileObject = new File(outputFilename);
 	RandomAccessFile outputFile;
 	FileChannel outputFileChannel;
 	FileLock outputFileLock;

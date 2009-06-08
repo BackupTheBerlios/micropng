@@ -10,7 +10,6 @@ public class Main {
      */
     public static void main(String[] args) throws IOException {
 	String inputFilename;
-	String outputFilename;
 
 	if (args.length != 1) {
 	    System.out.println("usage: java micropng.Main <filename>");
@@ -18,9 +17,8 @@ public class Main {
 	}
 
 	inputFilename = args[0];
-	outputFilename = args[0] + "_output.png";
 
-	Optimizer optimizer = new Optimizer(inputFilename, outputFilename);
+	Optimizer optimizer = new Optimizer(inputFilename);
 	optimizer.run();
     }
 }
