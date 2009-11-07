@@ -17,33 +17,29 @@ public class FileReader {
 
     public LinkedList<Chunk> readSequence(File inputFileObject) throws IOException {
 	LinkedList<Chunk> res = new LinkedList<Chunk>();
+	RandomAccessFile inputFile = new RandomAccessFile(inputFileObject, "r");
 	long filePointerPosition = PNGProperties.getSignature().length;
+	inputFile.seek(filePointerPosition);
 
 	do {
-	    RandomAccessFile inputFile = new RandomAccessFile(inputFileObject, "r");
 	    int length;
-	    long newFilePointerPosition = filePointerPosition;
-
-	    inputFile.seek(newFilePointerPosition);
+	    Type type;
+	    Data data;
+	    int crc;
 
 	    length = inputFile.readInt();
-	    Type type = new Type(inputFile.readInt());
-	    newFilePointerPosition += 8;
-
-	    Data data = new FileData(inputFile, newFilePointerPosition, length);
-	    newFilePointerPosition += length;
-	    inputFile.seek(newFilePointerPosition);
-
-	    int crc = inputFile.readInt();
-	    newFilePointerPosition += 4;
+	    type = new Type(inputFile.readInt());
+	    data = new FileData(inputFile, inputFile.getFilePointer(), length);
+	    inputFile.seek(inputFile.getFilePointer() + length);
+	    crc = inputFile.readInt();
 
 	    if (inputFile.getChannel().lock(filePointerPosition, length + 12, true) == null) {
 		throw new ConcurrentLockException();
 	    }
 
 	    res.add(new Chunk(type, data, crc));
-	    filePointerPosition = newFilePointerPosition;
-	} while (filePointerPosition < inputFileObject.length());
+	    filePointerPosition = inputFile.getFilePointer();
+	} while (inputFile.getFilePointer() < inputFileObject.length());
 
 	return res;
     }
