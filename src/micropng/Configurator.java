@@ -5,9 +5,11 @@ import java.util.TreeSet;
 public class Configurator {
 
     private TreeSet<Integer> knownChunks;
+    private Configuration configuration;
 
     public Configurator() {
 	knownChunks = new TreeSet<Integer>();
+	configuration = new Configuration();
     }
 
     private int convertStringToInt(String s) {
