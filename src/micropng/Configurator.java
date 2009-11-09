@@ -7,9 +7,9 @@ public class Configurator {
     private TreeSet<Integer> knownChunks;
     private Configuration configuration;
 
-    public Configurator() {
+    public Configurator(Configuration configuration) {
 	knownChunks = new TreeSet<Integer>();
-	configuration = new Configuration();
+	this.configuration = configuration;
     }
 
     private int convertStringToInt(String s) {

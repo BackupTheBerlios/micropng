@@ -6,11 +6,11 @@ public class OutputChannel {
 	System.err.println(message);
 	System.exit(-1);
     }
-    
+
     public void info(String message) {
 	System.out.println(message);
     }
- 
+
     public void debug(String message) {
 	info(message);
     }

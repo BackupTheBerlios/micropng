@@ -67,6 +67,9 @@ public class CommandLineParser {
 		}
 	    }
 	}
+	if (!filenameHasBeenFound) {
+	    throw new WrongUsageException("no filename given");
+	}
 	return res;
     }
 }
