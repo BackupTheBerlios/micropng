@@ -43,14 +43,14 @@ public class Chunk {
     public byte[] getTypeByteArray() {
 	return intToByteArray(type.toInt());
     }
-    
+
     public int getSize() {
 	return data.getSize() + 12;
     }
-    
+
     public byte[] getDataSizeByteArray() {
 	return intToByteArray(data.getSize());
-     }
+    }
 
     public int getCrc() {
 	return crc;
