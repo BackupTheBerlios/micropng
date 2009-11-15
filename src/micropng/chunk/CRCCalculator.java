@@ -8,7 +8,8 @@ public class CRCCalculator {
     private int crc;
     private int length;
     private Queue input;
-    //private Queue output;
+
+    // private Queue output;
 
     public CRCCalculator(Queue input, int length, int[] type) {
 	crcTable = new int[256];
@@ -16,7 +17,7 @@ public class CRCCalculator {
 	makeCrcTable();
 	this.input = input;
 	this.length = length;
-//	this.output = new Queue();
+	// this.output = new Queue();
 
 	for (int i = 0; i < 4; i++) {
 	    crc = crcTable[(crc ^ type[i]) & 0x000000ff] ^ (crc >>> 8);
@@ -42,10 +43,10 @@ public class CRCCalculator {
 	    for (int i = length; i != 0; i--) {
 		int currentValue = input.take();
 		crc = crcTable[(crc ^ currentValue) & 0x000000ff] ^ (crc >>> 8);
-//		output.put(currentValue);
+		// output.put(currentValue);
 	    }
 
-//	    output.flush();
+	    // output.flush();
 	} catch (InterruptedException e) {
 	    e.printStackTrace();
 	}
@@ -59,7 +60,7 @@ public class CRCCalculator {
 	return getResult() == referenceValue;
     }
 
-//    public Queue getOutputQueue() {
-//	return output;
-//    }
+    // public Queue getOutputQueue() {
+    // return output;
+    // }
 }
