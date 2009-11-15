@@ -1,6 +1,6 @@
 package micropng.chunk;
 
-public class Chunk {
+public class Chunk implements Comparable<Chunk> {
 
     private Type type;
     private Data data;
@@ -68,5 +68,11 @@ public class Chunk {
 	    tmp >>= 8;
 	}
 	return res;
+    }
+
+    @Override
+    public int compareTo(Chunk o) {
+	int res;
+	return 0; // TODO
     }
 }
