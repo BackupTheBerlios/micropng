@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
-import java.util.LinkedList;
 
 import micropng.chunk.Chunk;
 
@@ -21,7 +20,7 @@ public class FileWriter {
     public FileWriter() {
     }
 
-    public void writeSequence(File outputFileObject, LinkedList<Chunk> chunkSequence) throws IOException {
+    public void writeSequence(File outputFileObject, ChunkSequence chunkSequence) throws IOException {
 	RandomAccessFile outputFile;
 	FileChannel outputFileChannel;
 	FileLock outputFileLock;

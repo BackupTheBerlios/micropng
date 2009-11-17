@@ -3,7 +3,6 @@ package micropng;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.LinkedList;
 
 import micropng.chunk.Chunk;
 import micropng.chunk.ChunkFactory;
@@ -13,8 +12,8 @@ public class FileReader {
     public FileReader() {
     }
 
-    public LinkedList<Chunk> readSequence(File inputFileObject) throws IOException {
-	LinkedList<Chunk> res = new LinkedList<Chunk>();
+    public ChunkSequence readSequence(File inputFileObject) throws IOException {
+	ChunkSequence res = new ChunkSequence();
 	RandomAccessFile inputFile = new RandomAccessFile(inputFileObject, "r");
 	long filePointerPosition = PNGProperties.getSignature().length;
 	inputFile.seek(filePointerPosition);
@@ -27,7 +26,7 @@ public class FileReader {
 		throw new ConcurrentLockException();
 	    }
 
-	    res.add(nextChunk);
+	    res.append(nextChunk);
 	    filePointerPosition = inputFile.getFilePointer();
 	} while (inputFile.getFilePointer() < inputFileObject.length());
 

@@ -46,5 +46,4 @@ public class Configuration {
     public void setRemoveAncillaryChunks(boolean removeAncillaryChunks) {
 	this.removeAncillaryChunks = removeAncillaryChunks;
     }
-
 }

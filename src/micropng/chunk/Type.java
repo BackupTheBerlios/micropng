@@ -27,5 +27,4 @@ public class Type {
     public int toInt() {
 	return value;
     }
-
 }

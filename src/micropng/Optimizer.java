@@ -2,9 +2,6 @@ package micropng;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
-
-import micropng.chunk.Chunk;
 
 public class Optimizer {
 
@@ -19,7 +16,7 @@ public class Optimizer {
     public void run() throws IOException {
 	inputFileObject = new File(configuration.getFilename());
 	FileReader reader = new FileReader();
-	LinkedList<Chunk> chunkSequence = reader.readSequence(inputFileObject);
+	ChunkSequence chunkSequence = reader.readSequence(inputFileObject);
 
 	outputFileObject = new File(inputFileObject.getName() + "_output.png");
 	FileWriter writer = new FileWriter();
