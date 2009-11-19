@@ -63,4 +63,9 @@ public class RAMData implements Data {
     public Queue getStream() {
 	return getStream(0, data.length);
     }
+
+    @Override
+    public int getByteAt(int pos) {
+	return data[pos];
+    }
 }

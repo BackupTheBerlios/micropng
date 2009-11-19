@@ -8,6 +8,10 @@ public class Type {
 	this.value = type;
     }
 
+    public Type(String name) {
+	this.value = toInt(name);
+    }
+
     public boolean isAncillary() {
 	return (value & 0x10000000) != 0;
     }
@@ -26,5 +30,14 @@ public class Type {
 
     public int toInt() {
 	return value;
+    }
+
+    private static int toInt(String name) {
+	int res = 0;
+	for (int i = 0; i < 4; i++) {
+	    res += name.charAt(3 - i);
+	    res >>= 8;
+	}
+	return res;
     }
 }

@@ -78,4 +78,15 @@ public class FileData implements Data {
     public Queue getStream() {
 	return getStream(0, size);
     }
+
+    @Override
+    public int getByteAt(int pos) {
+	try {
+	    file.seek(start + pos);
+	    file.read();
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
+	return 0;
+    }
 }

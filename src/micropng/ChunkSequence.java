@@ -15,8 +15,7 @@ public class ChunkSequence implements Iterable<Chunk> {
 
     @Override
     public Iterator<Chunk> iterator() {
-	// TODO Auto-generated method stub
-	return null;
+	return chunkList.iterator();
     }
 
     public void append(Chunk c) {

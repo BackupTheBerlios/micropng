@@ -69,4 +69,12 @@ public class Chunk {
 	}
 	return res;
     }
+
+    public int getByteAt(int pos) {
+	return data.getByteAt(pos);
+    }
+
+    public int getDataSize() {
+	return data.getSize();
+    }
 }
