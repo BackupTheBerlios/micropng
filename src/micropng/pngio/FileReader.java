@@ -1,9 +1,10 @@
-package micropng;
+package micropng.pngio;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
+import micropng.ChunkSequence;
 import micropng.chunk.Chunk;
 import micropng.chunk.ChunkFactory;
 
@@ -16,6 +17,7 @@ public class FileReader {
 	ChunkSequence res = new ChunkSequence();
 	RandomAccessFile inputFile = new RandomAccessFile(inputFileObject, "r");
 	long filePointerPosition = PNGProperties.getSignature().length;
+
 	inputFile.seek(filePointerPosition);
 	ChunkFactory factory = new ChunkFactory();
 

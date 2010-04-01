@@ -1,10 +1,14 @@
-package micropng;
+package micropng.pngoptimization;
 
 import java.util.Hashtable;
 import java.util.TreeMap;
 
+import micropng.ChunkSequence;
 import micropng.chunk.Chunk;
 import micropng.chunk.Type;
+import micropng.pngordering.DataComparator;
+import micropng.pngordering.DataComparatorPosition;
+import micropng.pngordering.OrderingKey;
 
 public class OptimizerOrdering {
     private Hashtable<Integer, Integer> relationLookUpTable;
@@ -30,7 +34,7 @@ public class OptimizerOrdering {
     }
 
     public int getPartialRelation(int type) {
-	//System.out.println(type);
+	// System.out.println(type);
 	Integer res = relationLookUpTable.get(type);
 	if (res == null) {
 	    res = 0;

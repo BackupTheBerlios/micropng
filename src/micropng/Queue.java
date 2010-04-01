@@ -13,10 +13,10 @@ public class Queue {
     private int outPos;
 
     public Queue() {
+	queue = new ArrayBlockingQueue<int[]>(2);
 	blockSize = 0x1 << 10;
 	inPos = 0;
 	outPos = 0;
-	queue = new ArrayBlockingQueue<int[]>(2);
     }
 
     public int take() throws InterruptedException {
@@ -44,7 +44,6 @@ public class Queue {
 	}
 
 	inBlock[inPos] = value;
-
 	inPos++;
 
 	if (inPos == blockSize) {

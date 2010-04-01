@@ -1,4 +1,4 @@
-package micropng;
+package micropng.pngio;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,6 +6,7 @@ import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 
+import micropng.ChunkSequence;
 import micropng.chunk.Chunk;
 
 public class FileWriter {
@@ -39,7 +40,7 @@ public class FileWriter {
 
 	outputFile.write(PNGProperties.getSignature());
 
-	for(Chunk c : chunkSequence) {
+	for (Chunk c : chunkSequence) {
 	    outputFile.write(c.getDataSizeByteArray());
 	    outputFile.write(c.getTypeByteArray());
 	    outputFile.write(c.getData().getArray());

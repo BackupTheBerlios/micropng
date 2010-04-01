@@ -1,8 +1,7 @@
 package micropng.chunk;
 
 //import micropng.DataComparatorPosition;
-import micropng.Optimizer;
-//import micropng.OptimizerOrdering;
+import micropng.pngoptimization.Optimizer;
 
 public class IHDR {
     public IHDR(Optimizer optimizer) {

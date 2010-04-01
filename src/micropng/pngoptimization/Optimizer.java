@@ -1,16 +1,20 @@
-package micropng;
+package micropng.pngoptimization;
 
 import java.io.File;
 import java.io.IOException;
 
+import micropng.ChunkSequence;
+import micropng.Configuration;
 import micropng.chunk.ChunkRegistrar;
+import micropng.pngio.FileReader;
+import micropng.pngio.FileWriter;
 
 public class Optimizer {
 
-    private File inputFileObject;
-    private File outputFileObject;
     private Configuration configuration;
     private OptimizerOrdering ordering;
+    private File inputFileObject;
+    private File outputFileObject;
 
     public Optimizer(Configuration configuration) {
 	this.configuration = configuration;

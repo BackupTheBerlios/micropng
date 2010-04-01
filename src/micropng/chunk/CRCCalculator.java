@@ -4,19 +4,20 @@ import micropng.Queue;
 
 public class CRCCalculator {
 
+    private Queue input;
+    private int length;
     private int[] crcTable;
     private int crc;
-    private int length;
-    private Queue input;
 
     // private Queue output;
 
     public CRCCalculator(Queue input, int length, int[] type) {
-	crcTable = new int[256];
-	crc = 0xffffffff;
-	makeCrcTable();
 	this.input = input;
 	this.length = length;
+	crcTable = new int[256];
+	crc = 0xffffffff;
+
+	makeCrcTable();
 	// this.output = new Queue();
 
 	for (int i = 0; i < 4; i++) {

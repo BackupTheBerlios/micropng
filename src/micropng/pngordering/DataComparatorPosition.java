@@ -1,4 +1,4 @@
-package micropng;
+package micropng.pngordering;
 
 public class DataComparatorPosition implements DataComparator {
 

@@ -1,8 +1,8 @@
 package micropng.chunk;
 
-import micropng.DataComparatorAlphabet;
-import micropng.Optimizer;
-import micropng.OptimizerOrdering;
+import micropng.pngoptimization.Optimizer;
+import micropng.pngoptimization.OptimizerOrdering;
+import micropng.pngordering.DataComparatorAlphabet;
 
 public class zTXT {
     public zTXT(Optimizer optimizer) {

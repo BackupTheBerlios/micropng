@@ -1,15 +1,17 @@
-package micropng;
+package micropng.cli;
+
+import micropng.Configuration;
 
 public class CommandLineParser {
 
-    private int pos;
     private String[] parameters;
+    private int pos;
     private Configuration res;
     private boolean filenameHasBeenFound;
 
     public CommandLineParser(String[] parameters) {
-	pos = 0;
 	this.parameters = parameters;
+	pos = 0;
 	res = new Configuration();
 	filenameHasBeenFound = false;
     }

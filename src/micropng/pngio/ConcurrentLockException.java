@@ -1,8 +1,8 @@
-package micropng;
+package micropng.pngio;
 
 import java.io.IOException;
 
-class ConcurrentLockException extends IOException {
+public class ConcurrentLockException extends IOException {
     private static final long serialVersionUID = 1L;
 
     public ConcurrentLockException() {

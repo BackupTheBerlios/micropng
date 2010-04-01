@@ -1,4 +1,4 @@
-package micropng;
+package micropng.cli;
 
 public class OutputChannel {
 

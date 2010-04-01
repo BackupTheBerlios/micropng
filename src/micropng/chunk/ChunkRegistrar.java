@@ -1,6 +1,6 @@
 package micropng.chunk;
 
-import micropng.Optimizer;
+import micropng.pngoptimization.Optimizer;
 
 public class ChunkRegistrar {
 

@@ -1,4 +1,4 @@
-package micropng;
+package micropng.pngio;
 
 public class PNGProperties {
 

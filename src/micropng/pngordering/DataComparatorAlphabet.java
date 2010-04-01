@@ -1,4 +1,4 @@
-package micropng;
+package micropng.pngordering;
 
 import micropng.chunk.Chunk;
 

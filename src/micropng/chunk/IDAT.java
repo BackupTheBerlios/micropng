@@ -1,8 +1,8 @@
 package micropng.chunk;
 
-import micropng.DataComparatorPosition;
-import micropng.Optimizer;
-import micropng.OptimizerOrdering;
+import micropng.pngoptimization.Optimizer;
+import micropng.pngoptimization.OptimizerOrdering;
+import micropng.pngordering.DataComparatorPosition;
 
 public class IDAT {
     public IDAT(Optimizer optimizer) {

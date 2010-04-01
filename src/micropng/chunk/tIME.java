@@ -1,7 +1,7 @@
 package micropng.chunk;
 
-import micropng.Optimizer;
-import micropng.OptimizerOrdering;
+import micropng.pngoptimization.Optimizer;
+import micropng.pngoptimization.OptimizerOrdering;
 
 public class tIME {
     public tIME(Optimizer optimizer) {

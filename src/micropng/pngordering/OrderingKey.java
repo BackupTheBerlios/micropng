@@ -1,22 +1,22 @@
-package micropng;
+package micropng.pngordering;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import micropng.chunk.Chunk;
+import micropng.pngoptimization.OptimizerOrdering;
 
 public class OrderingKey implements Comparable<OrderingKey> {
 
-    private DataComparator comparator;
     private Chunk chunk;
     private int position;
+    private DataComparator comparator;
     private OptimizerOrdering optimizer;
 
-    public OrderingKey(Chunk chunk, int position,
-	    DataComparator comparator, OptimizerOrdering optimizer) {
+    public OrderingKey(Chunk chunk, int position, DataComparator comparator, OptimizerOrdering optimizer) {
 	this.chunk = chunk;
-	this.comparator = comparator;
 	this.position = position;
+	this.comparator = comparator;
 	this.optimizer = optimizer;
     }
 
@@ -79,22 +79,22 @@ public class OrderingKey implements Comparable<OrderingKey> {
 	    Integer my = myIterator.next();
 	    Integer other = otherIterator.next();
 	    if (my < other) {
-		res=-1;
+		res = -1;
 	    }
 	    if (my > other) {
-		res=1;
+		res = 1;
 	    }
 	}
 	if (otherIterator.hasNext()) {
-	    res=-1;
+	    res = -1;
 	}
 	if (myIterator.hasNext()) {
-	    res=1;
+	    res = 1;
 	}
 	if (res == 0) {
 	    res = compareWithChunkType(otherKey);
 	}
-	
+
 	return res;
     }
 }
