@@ -2,10 +2,15 @@ package micropng.chunk;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.HashMap;
 
 public class ChunkFactory {
 
+    private HashMap<Integer, MandatoryChunkOrientation> chunkOrientations;
+    private HashMap<Integer, MandatoryChunkOrientation> sameTypeComparator;
+
     public ChunkFactory() {
+	
     }
 
     public Chunk readChunk(RandomAccessFile inputFile) throws IOException {

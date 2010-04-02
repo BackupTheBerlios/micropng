@@ -2,9 +2,9 @@ package micropng.chunk;
 
 import micropng.pngoptimization.Optimizer;
 
-public class ChunkRegistrar {
+public class MandatoryChunkOrientationRegistrar {
 
-    public ChunkRegistrar(Optimizer optimizer) {
+    public MandatoryChunkOrientationRegistrar(Optimizer optimizer) {
 	new bKGD(optimizer);
 	new cHRM(optimizer);
 	new gAMA(optimizer);
