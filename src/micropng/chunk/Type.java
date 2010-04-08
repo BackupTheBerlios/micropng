@@ -1,5 +1,7 @@
 package micropng.chunk;
 
+import java.util.Enumeration;
+
 public class Type {
 
     private int value;
@@ -9,7 +11,7 @@ public class Type {
     }
 
     public Type(String name) {
-	this.value = toInt(name);
+	this.value = intValue(name);
     }
 
     public boolean isAncillary() {
@@ -28,15 +30,30 @@ public class Type {
 	return (value & 0x00000010) != 0;
     }
 
+    public boolean isKnown() {
+	//KnownChunkType.values().;
+	//return KnownChunkType.valueOf("");
+	return false;
+    }
+
     public int toInt() {
 	return value;
     }
 
-    private static int toInt(String name) {
+    public static String stringValue(int name) {
+	char[] tmp = new char[4];
+	for (int i = 0; i < 4; i++) {
+	    tmp[3 - i] = (char) (name & 0xff);
+	    name >>= 8;
+	}
+	return new String(tmp);
+    }
+
+    public static int intValue(String name) {
 	int res = 0;
 	for (int i = 0; i < 4; i++) {
-	    res += name.charAt(3 - i);
-	    res >>= 8;
+	    res <<= 8;
+	    res += name.charAt(i);
 	}
 	return res;
     }

@@ -5,6 +5,7 @@ public class Chunk {
     private Type type;
     private Data data;
     private int crc;
+    private ChunkBehaviour behaviour;
 
     public Chunk(Type type, Data data, int crc) {
 	this.type = type;
@@ -76,5 +77,9 @@ public class Chunk {
 
     public int getDataSize() {
 	return data.getSize();
+    }
+
+    public boolean isType(String s) {
+	return type.toString().equals(s);
     }
 }

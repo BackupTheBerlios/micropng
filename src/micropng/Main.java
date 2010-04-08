@@ -2,6 +2,8 @@ package micropng;
 
 import java.io.IOException;
 
+import micropng.chunk.Chunk;
+import micropng.chunk.Type;
 import micropng.cli.CommandLineParser;
 import micropng.cli.OutputChannel;
 import micropng.cli.WrongUsageException;
