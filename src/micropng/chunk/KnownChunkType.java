@@ -6,14 +6,14 @@ public enum KnownChunkType {
     bKGD, cHRM, gAMA, hIST, iCCP, IHDR, IDAT, IEND, iTXt, pHYs, PLTE, sBIT, sPLT, sRGB, tEXt, tIME, tRNS, zTXt;
 
     private int intType;
-    private static final HashSet<String> lookUpTable;
+    private static final HashSet<Integer> lookUpTable;
 
     static {
 	KnownChunkType[] values = KnownChunkType.values();
-	lookUpTable = new HashSet<String>(values.length * 2);
+	lookUpTable = new HashSet<Integer>(values.length * 2);
 
 	for (KnownChunkType type : values) {
-	    lookUpTable.add(type.name());
+	    lookUpTable.add(type.intType);
 	}
     }
 
@@ -21,11 +21,7 @@ public enum KnownChunkType {
 	intType = Type.intValue(name());
     }
 
-    public int intValue() {
-	return intType;
-    }
-
     public static boolean isKnown(int type) {
-	return lookUpTable.contains(Type.stringValue(type));
+	return lookUpTable.contains(type);
     }
 }

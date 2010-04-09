@@ -5,7 +5,6 @@ import java.io.IOException;
 
 import micropng.ChunkSequence;
 import micropng.Configuration;
-import micropng.chunk.MandatoryChunkOrientation;
 import micropng.pngio.FileReader;
 import micropng.pngio.FileWriter;
 
@@ -29,8 +28,6 @@ public class Optimizer {
 	inputFileObject = new File(configuration.getFilename());
 	FileReader reader = new FileReader();
 	ChunkSequence chunkSequence = reader.readSequence(inputFileObject);
-
-	//new MandatoryChunkOrientation(this);
 
 	chunkSequence = ordering.optimize(chunkSequence);
 

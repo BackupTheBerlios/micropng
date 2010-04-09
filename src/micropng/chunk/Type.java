@@ -1,7 +1,6 @@
 package micropng.chunk;
 
 public class Type {
-
     private int value;
 
     public Type(int type) {
