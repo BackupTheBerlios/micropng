@@ -1,7 +1,5 @@
 package micropng.chunk;
 
-import java.util.Enumeration;
-
 public class Type {
 
     private int value;
