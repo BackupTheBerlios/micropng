@@ -29,9 +29,7 @@ public class Type {
     }
 
     public boolean isKnown() {
-	//KnownChunkType.values().;
-	//return KnownChunkType.valueOf("");
-	return false;
+	return KnownChunkType.isKnown(value);
     }
 
     public int toInt() {
