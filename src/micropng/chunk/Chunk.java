@@ -2,15 +2,21 @@ package micropng.chunk;
 
 public class Chunk {
 
+    private static int nextId = 0;
+
     private Type type;
     private Data data;
     private int crc;
     private ChunkBehaviour behaviour;
+    private int id;
+    
 
     public Chunk(Type type, Data data, int crc) {
 	this.type = type;
 	this.data = data;
 	this.crc = crc;
+	this.id = nextId;
+	nextId++;
     }
 
     public boolean isAncillary() {
@@ -36,7 +42,15 @@ public class Chunk {
     public byte[] getDataByteArray() {
 	return data.getArray();
     }
+    
+    public ChunkBehaviour getBehaviour() {
+        return behaviour;
+    }
 
+    public int getId() {
+        return id;
+    }
+    
     public int getTypeInt() {
 	return type.toInt();
     }
