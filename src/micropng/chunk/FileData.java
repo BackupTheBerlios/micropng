@@ -71,7 +71,7 @@ public class FileData implements Data {
     public Queue getStream(int from, int length) {
 	Queue res = new Queue();
 	new Thread(new QueueFeeder(res, from, length)).run();
-	return null;
+	return res;
     }
 
     @Override
