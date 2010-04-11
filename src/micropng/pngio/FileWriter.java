@@ -41,10 +41,20 @@ public class FileWriter {
 	outputFile.write(PNGProperties.getSignature());
 
 	for (Chunk c : chunkSequence) {
-	    outputFile.write(c.getDataSizeByteArray());
-	    outputFile.write(c.getTypeByteArray());
+	    outputFile.write(intToByteArray(c.getDataSize()));
+	    outputFile.write(intToByteArray(c.getType()));
 	    outputFile.write(c.getData().getArray());
-	    outputFile.write(c.getCrcByteArray());
+	    outputFile.write(intToByteArray(c.getCrc()));
 	}
+    }
+
+    private byte[] intToByteArray(int integer) {
+	byte[] res = new byte[4];
+	int tmp = integer;
+	for (int i = 0; i < 4; i++) {
+	    res[3 - i] = (byte) (tmp & 0xff);
+	    tmp >>= 8;
+	}
+	return res;
     }
 }

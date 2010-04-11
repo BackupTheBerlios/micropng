@@ -3,16 +3,16 @@ package micropng.chunk;
 import java.util.HashMap;
 
 public enum ChunkBehaviourFactory {
-    MAPS;
+    ;
 
-    private static final int defaultMapSize = 127;
+    private static final int mapSize = 127;
 
-    private HashMap<Integer, Integer> orientationsMap = new HashMap<Integer, Integer>(defaultMapSize);
-    private HashMap<Integer, SameTypeComparator> comparatorsMap = new HashMap<Integer, SameTypeComparator>(defaultMapSize);
+    static private HashMap<Integer, Integer> orientationsMap = new HashMap<Integer, Integer>(mapSize);
+    static private HashMap<Integer, SameTypeComparator> comparatorsMap = new HashMap<Integer, SameTypeComparator>(mapSize);
 
-    ChunkBehaviourFactory() {
-	for (KnownChunkType type : KnownChunkType.values()) {
-	    int typeInt = Type.intValue(type.toString());
+    static {
+	for (ChunkType type : ChunkType.values()) {
+	    int typeInt = type.toInt();
 	    String typeName = type.name();
 
 	    orientationsMap.put(typeInt, Integer.parseInt(MandatoryChunkOrientation.valueOf(typeName).getOrientation()));
@@ -20,12 +20,12 @@ public enum ChunkBehaviourFactory {
 	}
     }
 
-    public ChunkBehaviour getChunkBehaviour(int type, int lastMandatory) {
+    public static ChunkBehaviour getChunkBehaviour(int type, int lastMandatory) {
 	return new ChunkBehaviour(getOrientation(type, lastMandatory), getComparator(type));
     }
 
-    //TODO: clean up this mess
-    private int getOrientation(int type, int lastMandatory) {
+    // TODO: clean up this mess
+    private static int getOrientation(int type, int lastMandatory) {
 	int res;
 	if (orientationsMap.containsKey(type)) {
 	    Integer value = orientationsMap.get(type);
@@ -40,7 +40,7 @@ public enum ChunkBehaviourFactory {
 	return res;
     }
 
-    private SameTypeComparator getComparator(int type) {
+    private static SameTypeComparator getComparator(int type) {
 	SameTypeComparator res;
 	if (comparatorsMap.containsKey(type)) {
 	    res = comparatorsMap.get(type);

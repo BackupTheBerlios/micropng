@@ -6,7 +6,7 @@ import java.io.RandomAccessFile;
 
 import micropng.ChunkSequence;
 import micropng.chunk.Chunk;
-import micropng.chunk.ChunkFactory;
+import micropng.chunk.ChunkReader;
 
 public class FileReader {
 
@@ -17,14 +17,14 @@ public class FileReader {
 	ChunkSequence res = new ChunkSequence();
 	RandomAccessFile inputFile = new RandomAccessFile(inputFileObject, "r");
 	long filePointerPosition = PNGProperties.getSignature().length;
-	ChunkFactory factory = new ChunkFactory();
+	ChunkReader factory = new ChunkReader();
 
 	inputFile.seek(filePointerPosition);
 
 	do {
 	    Chunk nextChunk = factory.readChunk(inputFile);
 
-	    if (inputFile.getChannel().lock(filePointerPosition, nextChunk.getSize(), true) == null) {
+	    if (inputFile.getChannel().lock(filePointerPosition, nextChunk.getDataSize() + 12, true) == null) {
 		throw new ConcurrentLockException();
 	    }
 

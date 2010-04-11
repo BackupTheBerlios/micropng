@@ -3,12 +3,8 @@ package micropng.pngoptimization;
 import java.util.Hashtable;
 import java.util.TreeMap;
 
-import micropng.ChunkSequence;
+import micropng.chunk.ChunksOrganisationSequence;
 import micropng.chunk.Chunk;
-import micropng.chunk.Type;
-import micropng.pngordering.DataComparator;
-import micropng.pngordering.DataComparatorPosition;
-import micropng.pngordering.OrderingKey;
 
 public class OptimizerOrdering {
     private Hashtable<Integer, Integer> relationLookUpTable;
@@ -47,7 +43,7 @@ public class OptimizerOrdering {
 	int lastMandatoryType = 0;
 	int pos = 0;
 	for (Chunk c : seq) {
-	    int type = c.getTypeInt();
+	    int type = c.getType();
 	    Integer postInteger = relationLookUpTable.get(type);
 	    int post = 0;
 	    if (postInteger != null) {
@@ -64,7 +60,7 @@ public class OptimizerOrdering {
 	    }
 	    OrderingKey key = new OrderingKey(c, pos, dataComparator, this);
 	    if (!c.isAncillary()) {
-		lastMandatoryType = c.getTypeInt();
+		lastMandatoryType = c.getType();
 	    }
 	    map.put(key, c);
 	    pos++;
