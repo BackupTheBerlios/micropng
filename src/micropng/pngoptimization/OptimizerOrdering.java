@@ -3,6 +3,7 @@ package micropng.pngoptimization;
 import java.util.Hashtable;
 import java.util.TreeMap;
 
+import micropng.ChunkSequence;
 import micropng.chunk.ChunksOrganisationSequence;
 import micropng.chunk.Chunk;
 
@@ -66,7 +67,7 @@ public class OptimizerOrdering {
 	    pos++;
 	}
 	for (Chunk c : map.values()) {
-	    res.append(c);
+	    res.add(c);
 	}
 	return res;
     }

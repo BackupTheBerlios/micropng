@@ -7,14 +7,14 @@ import micropng.ChunkSequence;
 
 public class ChunksOrganisationSequence implements Iterable<ChunksOrganisationUnit> {
 
-    private ArrayList<ChunksOrganisationUnit> chunkList;
+    private ArrayList<ChunksOrganisationUnit> chunkUnitList;
 
     public ChunksOrganisationSequence(ChunkSequence inputSequence) {
 	Iterator<Chunk> inputSequenceIterator = inputSequence.iterator();
 	int lastMandatory = 0;
 	ChunkSequence currentSequence = null;
 
-	chunkList = new ArrayList<ChunksOrganisationUnit>();
+	chunkUnitList = new ArrayList<ChunksOrganisationUnit>();
 
 	while (inputSequenceIterator.hasNext()) {
 	    Chunk currentChunk = inputSequenceIterator.next();
@@ -23,10 +23,10 @@ public class ChunksOrganisationSequence implements Iterable<ChunksOrganisationUn
 	    if (!((ChunkType.IDAT.equals(currentType)) && (ChunkType.IDAT.equals(lastMandatory)))) {
 		ChunkBehaviour currentBehaviour = ChunkBehaviourFactory.getChunkBehaviour(currentType, lastMandatory);
 		currentSequence = new ChunkSequence();
-		chunkList.add(new ChunksOrganisationUnit(currentSequence, currentBehaviour));
+		chunkUnitList.add(new ChunksOrganisationUnit(currentSequence, currentBehaviour));
 	    }
 
-	    currentSequence.append(currentChunk);
+	    currentSequence.add(currentChunk);
 
 	    if (ChunkType.isAncillary(currentType)) {
 		lastMandatory = currentType;
@@ -36,6 +36,14 @@ public class ChunksOrganisationSequence implements Iterable<ChunksOrganisationUn
 
     @Override
     public Iterator<ChunksOrganisationUnit> iterator() {
-	return chunkList.iterator();
+	return chunkUnitList.iterator();
+    }
+
+    public ChunkSequence toChunkSequence() {
+	ChunkSequence res = new ChunkSequence();
+	for (ChunksOrganisationUnit u : chunkUnitList) {
+	    res.addAll(u.getChunks());
+	}
+	return res;
     }
 }

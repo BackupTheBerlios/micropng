@@ -28,7 +28,7 @@ public class FileReader {
 		throw new ConcurrentLockException();
 	    }
 
-	    res.append(nextChunk);
+	    res.add(nextChunk);
 	    filePointerPosition = inputFile.getFilePointer();
 	} while (inputFile.getFilePointer() < inputFileObject.length());
 
