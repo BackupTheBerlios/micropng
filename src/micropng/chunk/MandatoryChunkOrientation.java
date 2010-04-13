@@ -2,35 +2,31 @@ package micropng.chunk;
 
 public enum MandatoryChunkOrientation {
     IHDR(null),
-    cHRM(MandatoryChunkOrientation.ihdr),
-    gAMA(MandatoryChunkOrientation.ihdr),
-    iCCP(MandatoryChunkOrientation.ihdr),
-    iTXt(MandatoryChunkOrientation.ihdr),
-    pHYs(MandatoryChunkOrientation.ihdr),
-    sBIT(MandatoryChunkOrientation.ihdr),
-    sPLT(MandatoryChunkOrientation.ihdr),
-    sRGB(MandatoryChunkOrientation.ihdr),
-    tEXt(MandatoryChunkOrientation.ihdr),
-    tIME(MandatoryChunkOrientation.ihdr),
-    zTXt(MandatoryChunkOrientation.ihdr),
-    PLTE(MandatoryChunkOrientation.ihdr),
-    bKGD(MandatoryChunkOrientation.plte),
-    hIST(MandatoryChunkOrientation.plte),
-    tRNS(MandatoryChunkOrientation.plte),
-    IDAT(MandatoryChunkOrientation.plte),
-    IEND(MandatoryChunkOrientation.idat);
+    cHRM(ChunkType.IHDR),
+    gAMA(ChunkType.IHDR),
+    iCCP(ChunkType.IHDR),
+    iTXt(ChunkType.IHDR),
+    pHYs(ChunkType.IHDR),
+    sBIT(ChunkType.IHDR),
+    sPLT(ChunkType.IHDR),
+    sRGB(ChunkType.IHDR),
+    tEXt(ChunkType.IHDR),
+    tIME(ChunkType.IHDR),
+    zTXt(ChunkType.IHDR),
+    PLTE(ChunkType.IHDR),
+    bKGD(ChunkType.PLTE),
+    hIST(ChunkType.PLTE),
+    tRNS(ChunkType.PLTE),
+    IDAT(ChunkType.PLTE),
+    IEND(ChunkType.IDAT);
 
-    private final static String ihdr = "IHDR";
-    private final static String plte = "PLTE";
-    private final static String idat = "IDAT";
+    private final ChunkType orientation;
 
-    private final String orientation;
-
-    MandatoryChunkOrientation(String orientation) {
-	this.orientation = orientation;
+    MandatoryChunkOrientation(ChunkType t) {
+	this.orientation = t;
     }
 
-    public String getOrientation() {
+    public ChunkType getOrientation() {
 	return orientation;
     }
 }

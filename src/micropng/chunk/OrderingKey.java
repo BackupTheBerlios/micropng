@@ -1,4 +1,4 @@
-package micropng.pngordering;
+/*package micropng.chunk;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -98,3 +98,4 @@ public class OrderingKey implements Comparable<OrderingKey> {
 	return res;
     }
 }
+*/

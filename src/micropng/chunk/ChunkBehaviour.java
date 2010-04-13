@@ -2,15 +2,15 @@ package micropng.chunk;
 
 public class ChunkBehaviour {
 
-    private int chunkOrientation;
+    private ChunkType chunkOrientation;
     private SameTypeComparator sameTypeComparator;
 
-    public ChunkBehaviour(int chunkOrientation, SameTypeComparator sameTypeComparator) {
+    public ChunkBehaviour(ChunkType chunkOrientation, SameTypeComparator sameTypeComparator) {
 	this.chunkOrientation = chunkOrientation;
 	this.sameTypeComparator = sameTypeComparator;
     }
 
-    public int getLeadingMandatoryChunk() {
+    public ChunkType getLeadingMandatoryChunk() {
 	return chunkOrientation;
     }
 
