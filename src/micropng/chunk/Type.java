@@ -47,19 +47,19 @@ public enum Type {
     }
 
     public static boolean isAncillary(int type) {
-	return (type & 0x10000000) != 0;
+	return (type & 0x20000000) != 0;
     }
 
     public static boolean isPrivate(int type) {
-	return (type & 0x00100000) != 0;
+	return (type & 0x00200000) != 0;
     }
 
     public static boolean isThirdByteUpperCase(int type) {
-	return (type & 0x00001000) != 0;
+	return (type & 0x00002000) != 0;
     }
 
     public static boolean isSafeToCopy(int type) {
-	return (type & 0x00000010) != 0;
+	return (type & 0x00000020) != 0;
     }
 
     public static String stringValue(int type) {
