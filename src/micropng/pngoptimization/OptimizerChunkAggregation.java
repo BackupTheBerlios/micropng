@@ -2,14 +2,14 @@ package micropng.pngoptimization;
 
 import micropng.ChunkSequence;
 import micropng.chunk.Chunk;
-import micropng.chunk.ChunkType;
+import micropng.chunk.Type;
 
 public class OptimizerChunkAggregation {
 
     public ChunkSequence optimize(ChunkSequence seq) {
 	ChunkSequence res = new ChunkSequence();
 	for (Chunk c : seq) {
-	    if (ChunkType.IDAT.equals(c.getType())) {
+	    if (Type.IDAT.equals(c.getType())) {
 		
 	    }
 	}

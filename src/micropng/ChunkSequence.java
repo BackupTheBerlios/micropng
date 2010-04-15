@@ -14,6 +14,10 @@ public class ChunkSequence implements Collection<Chunk> {
 	this.chunkList = new ArrayList<Chunk>();
     }
 
+    public Chunk elementAt(int pos) {
+	return chunkList.get(pos);
+    }
+
     @Override
     public Iterator<Chunk> iterator() {
 	return chunkList.iterator();

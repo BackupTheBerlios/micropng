@@ -4,22 +4,39 @@ import java.util.Iterator;
 
 import micropng.ChunkSequence;
 
-public class ChunksOrganisationUnit {
+public class ChunksOrganisationUnit implements Comparable<ChunksOrganisationUnit> {
 
     private ChunkSequence chunks;
-    private ChunkBehaviour behaviour;
+    private int type;
+    private Type previousType;
 
-    public ChunksOrganisationUnit(ChunkSequence chunks, ChunkBehaviour behaviour) {
+    /**
+     * 
+     * @param chunks
+     *            non-null ChunkSequence with at least one element
+     * @param behaviour
+     *            non-null ChunkBehaviour
+     * @param previousType
+     */
+
+    public ChunksOrganisationUnit(ChunkSequence chunks, Type previousType) {
 	this.chunks = chunks;
-	this.behaviour = behaviour;
+	this.type = chunks.elementAt(0).getType();
+
+	if (Type.isKnown(type)) {
+	    this.previousType = Orientation.valueOf(type).getOrientation();
+	} else {
+	    if (Type.isSafeToCopy(type)) {
+		this.previousType = (Orientation.beforeIDAT(previousType)) ? Type.IDAT
+			: Type.IHDR;
+	    } else {
+		this.previousType = previousType;
+	    }
+	}
     }
 
     public ChunkSequence getChunks() {
-        return chunks;
-    }
-
-    public ChunkBehaviour getBehaviour() {
-        return behaviour;
+	return chunks;
     }
 
     public int getByteAt(int pos) {
@@ -44,5 +61,57 @@ public class ChunksOrganisationUnit {
 	    res += c.getDataSize();
 	}
 	return res;
+    }
+
+    private int compareOrientation(ChunksOrganisationUnit c) {
+	int sizeOfOrientationOfThis = Orientation.chainOfOrientation(previousType).size();
+	int sizeOfOrientationOfC = Orientation.chainOfOrientation(c.previousType).size();
+
+	if (sizeOfOrientationOfThis != sizeOfOrientationOfC) {
+	    return (sizeOfOrientationOfThis < sizeOfOrientationOfC) ? -1 : 1;
+	}
+
+	if (!Type.isAncillary(type)) {
+	    return 1;
+	}
+
+	if (!Type.isAncillary(c.type)) {
+	    return -1;
+	}
+
+	return 0;
+    }
+
+    private int compareType(ChunksOrganisationUnit c) {
+	if (type < c.type) {
+	    return -1;
+	}
+	if (type > c.type) {
+	    return 1;
+	}
+	return 0;
+    }
+
+    private int compareContent(ChunksOrganisationUnit c) {
+	if (Type.isKnown(type)) {
+	    return KnownSameTypeComparatorCorrelations.valueOf(Type.stringValue(type)).getComparator().compare(this, c);
+	} else {
+	    return SameTypeComparator.ALPHABETICAL_ORDERING.compare(this, c);
+	}
+    }
+
+    @Override
+    public int compareTo(ChunksOrganisationUnit c) {
+	int res = compareOrientation(c);
+	if (res != 0) {
+	    return res;
+	}
+
+	res = compareType(c);
+	if (res != 0) {
+	    return res;
+	}
+
+	return compareContent(c);
     }
 }

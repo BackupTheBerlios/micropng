@@ -2,33 +2,33 @@ package micropng.chunk;
 
 import java.util.HashSet;
 
-public enum ChunkType {
+public enum Type {
     bKGD, cHRM, gAMA, hIST, iCCP, IHDR, IDAT, IEND, iTXt, pHYs, PLTE, sBIT, sPLT, sRGB, tEXt, tIME, tRNS, zTXt;
 
     private int intType;
     private static final HashSet<Integer> lookUpTable;
 
     static {
-	ChunkType[] values = ChunkType.values();
+	Type[] values = Type.values();
 	lookUpTable = new HashSet<Integer>(values.length * 2);
 
-	for (ChunkType type : values) {
+	for (Type type : values) {
 	    lookUpTable.add(type.intType);
 	}
     }
 
-    private ChunkType() {
+    private Type() {
 	intType = intValue(name());
     }
 
     public int toInt() {
 	return intType;
     }
-
+/*
     public boolean equals(int type) {
 	return intType == type;
     }
-
+*/
     public static boolean isKnown(int type) {
 	return lookUpTable.contains(type);
     }
@@ -65,5 +65,9 @@ public enum ChunkType {
 	    res += type.charAt(i);
 	}
 	return res;
+    }
+
+    public static Type valueOf(int type) {
+	return valueOf(stringValue(type));
     }
 }

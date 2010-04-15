@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import micropng.Configuration;
-import micropng.chunk.ChunksOrganisationSequence;
+import micropng.chunk.OrganisationSequence;
 import micropng.pngio.FileReader;
 import micropng.pngio.FileWriter;
 
@@ -27,9 +27,9 @@ public class Optimizer {
     public void run() throws IOException {
 	inputFileObject = new File(configuration.getFilename());
 	FileReader reader = new FileReader();
-	ChunksOrganisationSequence chunkOrganisationSequence = new ChunksOrganisationSequence(reader.readSequence(inputFileObject));
+	OrganisationSequence chunkOrganisationSequence = new OrganisationSequence(reader.readSequence(inputFileObject));
 
-//	chunkSequence = ordering.optimize(chunkSequence);
+	ordering.optimize(chunkOrganisationSequence);
 
 	outputFileObject = new File(inputFileObject.getName() + "_output.png");
 	FileWriter writer = new FileWriter();
