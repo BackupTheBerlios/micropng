@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import micropng.ChunkSequence;
 
-public class ChunksOrganisationUnit implements Comparable<ChunksOrganisationUnit> {
+public class OrganisationUnit implements Comparable<OrganisationUnit> {
 
     private ChunkSequence chunks;
     private int type;
@@ -19,7 +19,7 @@ public class ChunksOrganisationUnit implements Comparable<ChunksOrganisationUnit
      * @param previousType
      */
 
-    public ChunksOrganisationUnit(ChunkSequence chunks, Type previousType) {
+    public OrganisationUnit(ChunkSequence chunks, Type previousType) {
 	this.chunks = chunks;
 	this.type = chunks.elementAt(0).getType();
 
@@ -63,7 +63,7 @@ public class ChunksOrganisationUnit implements Comparable<ChunksOrganisationUnit
 	return res;
     }
 
-    private int compareOrientation(ChunksOrganisationUnit c) {
+    private int compareOrientation(OrganisationUnit c) {
 	int sizeOfOrientationOfThis = Orientation.chainOfOrientation(previousType).size();
 	int sizeOfOrientationOfC = Orientation.chainOfOrientation(c.previousType).size();
 
@@ -82,7 +82,7 @@ public class ChunksOrganisationUnit implements Comparable<ChunksOrganisationUnit
 	return 0;
     }
 
-    private int compareType(ChunksOrganisationUnit c) {
+    private int compareType(OrganisationUnit c) {
 	if (type < c.type) {
 	    return -1;
 	}
@@ -92,16 +92,16 @@ public class ChunksOrganisationUnit implements Comparable<ChunksOrganisationUnit
 	return 0;
     }
 
-    private int compareContent(ChunksOrganisationUnit c) {
+    private int compareContent(OrganisationUnit c) {
 	if (Type.isKnown(type)) {
-	    return KnownSameTypeComparatorCorrelations.valueOf(Type.stringValue(type)).getComparator().compare(this, c);
+	    return ComparatorCorrelations.valueOf(Type.stringValue(type)).getComparator().compare(this, c);
 	} else {
 	    return SameTypeComparator.ALPHABETICAL_ORDERING.compare(this, c);
 	}
     }
 
     @Override
-    public int compareTo(ChunksOrganisationUnit c) {
+    public int compareTo(OrganisationUnit c) {
 	int res = compareOrientation(c);
 	if (res != 0) {
 	    return res;

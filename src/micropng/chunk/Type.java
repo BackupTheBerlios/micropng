@@ -3,7 +3,24 @@ package micropng.chunk;
 import java.util.HashSet;
 
 public enum Type {
-    bKGD, cHRM, gAMA, hIST, iCCP, IHDR, IDAT, IEND, iTXt, pHYs, PLTE, sBIT, sPLT, sRGB, tEXt, tIME, tRNS, zTXt;
+    bKGD,
+    cHRM,
+    gAMA,
+    hIST,
+    iCCP,
+    IHDR,
+    IDAT,
+    IEND,
+    iTXt,
+    pHYs,
+    PLTE,
+    sBIT,
+    sPLT,
+    sRGB,
+    tEXt,
+    tIME,
+    tRNS,
+    zTXt;
 
     private int intType;
     private static final HashSet<Integer> lookUpTable;
@@ -24,11 +41,7 @@ public enum Type {
     public int toInt() {
 	return intType;
     }
-/*
-    public boolean equals(int type) {
-	return intType == type;
-    }
-*/
+
     public static boolean isKnown(int type) {
 	return lookUpTable.contains(type);
     }

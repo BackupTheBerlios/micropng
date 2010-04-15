@@ -30,8 +30,9 @@ public class Optimizer {
 	OrganisationSequence chunkOrganisationSequence = new OrganisationSequence(reader.readSequence(inputFileObject));
 
 	ordering.optimize(chunkOrganisationSequence);
+	
 
-	outputFileObject = new File(inputFileObject.getName() + "_output.png");
+	outputFileObject = new File(configuration.getFilename() + "_output.png");
 	FileWriter writer = new FileWriter();
 	writer.writeSequence(outputFileObject, chunkOrganisationSequence.toChunkSequence());
     }

@@ -6,7 +6,7 @@ import java.util.Iterator;
 import micropng.ChunkSequence;
 
 @SuppressWarnings("serial")
-public class OrganisationSequence extends ArrayList<ChunksOrganisationUnit> {
+public class OrganisationSequence extends ArrayList<OrganisationUnit> {
 
     public OrganisationSequence(ChunkSequence inputSequence) {
 	Iterator<Chunk> inputSequenceIterator = inputSequence.iterator();
@@ -20,7 +20,7 @@ public class OrganisationSequence extends ArrayList<ChunksOrganisationUnit> {
 	    if (!((Type.IDAT.equals(currentType)) && (Type.IDAT.equals(lastMandatory)))) {
 		currentSequence = new ChunkSequence();
 		currentSequence.add(currentChunk);
-		add(new ChunksOrganisationUnit(currentSequence, lastMandatory));
+		add(new OrganisationUnit(currentSequence, lastMandatory));
 	    } else {
 		currentSequence.add(currentChunk);
 	    }
@@ -33,7 +33,7 @@ public class OrganisationSequence extends ArrayList<ChunksOrganisationUnit> {
 
     public ChunkSequence toChunkSequence() {
 	ChunkSequence res = new ChunkSequence();
-	for (ChunksOrganisationUnit u : this) {
+	for (OrganisationUnit u : this) {
 	    res.addAll(u.getChunks());
 	}
 	return res;

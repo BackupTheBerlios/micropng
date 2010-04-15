@@ -1,6 +1,6 @@
 package micropng.chunk;
 
-public enum KnownSameTypeComparatorCorrelations {
+public enum ComparatorCorrelations {
 
     bKGD(null),
     cHRM(null),
@@ -24,7 +24,7 @@ public enum KnownSameTypeComparatorCorrelations {
 
     private final SameTypeComparator comparator;
 
-    private KnownSameTypeComparatorCorrelations(SameTypeComparator comparator) {
+    private ComparatorCorrelations(SameTypeComparator comparator) {
 	this.comparator = comparator;
     }
 
