@@ -7,7 +7,6 @@ import micropng.cli.OutputChannel;
 import micropng.cli.WrongUsageException;
 import micropng.pngoptimization.Optimizer;
 
-
 public class Main {
 
     OutputChannel out;

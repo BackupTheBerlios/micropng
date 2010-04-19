@@ -7,15 +7,13 @@ import micropng.ChunkSequence;
 public class OrganisationUnit implements Comparable<OrganisationUnit> {
 
     private ChunkSequence chunks;
-    private int type;
     private Type previousType;
+    private int type;
 
     /**
      * 
      * @param chunks
      *            non-null ChunkSequence with at least one element
-     * @param behaviour
-     *            non-null ChunkBehaviour
      * @param previousType
      */
 
@@ -27,8 +25,7 @@ public class OrganisationUnit implements Comparable<OrganisationUnit> {
 	    this.previousType = Orientation.valueOf(type).getOrientation();
 	} else {
 	    if (Type.isSafeToCopy(type)) {
-		this.previousType = (Orientation.beforeIDAT(previousType)) ? Type.IDAT
-			: Type.IHDR;
+		this.previousType = (Orientation.beforeIDAT(previousType)) ? Type.IDAT : Type.IHDR;
 	    } else {
 		this.previousType = previousType;
 	    }
@@ -113,5 +110,9 @@ public class OrganisationUnit implements Comparable<OrganisationUnit> {
 	}
 
 	return compareContent(c);
+    }
+
+    public int getType() {
+	return type;
     }
 }
