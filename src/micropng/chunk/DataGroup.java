@@ -1,6 +1,7 @@
 package micropng.chunk;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import micropng.Queue;
 
@@ -15,26 +16,58 @@ public class DataGroup implements Data {
     @Override
     public byte[] getArray(int from, int length) {
 	byte[] res = new byte[length];
-	int bytesRead = 0;
-	Data nextDataElement = dataElements.get(0);
+	int to = from + length;
+	int currentPos = 0;
+	int remainingBytes = length;
+	Iterator<Data> dataElementsIterator = dataElements.iterator();
+	Data currentDataElement = dataElementsIterator.next();
+	int nextElementBorder = currentDataElement.getSize();
+	int firstPosInFirstChunk;
 
-	while (bytesRead + nextDataElement.getSize() < length) {
-	    System.arraycopy(nextDataElement.getArray(), 0, res, bytesRead, nextDataElement.getSize());
-	    bytesRead += nextDataElement.getSize();
+	while (nextElementBorder < from) {
+	    currentPos = nextElementBorder;
+	    currentDataElement = dataElementsIterator.next();
+	    nextElementBorder = currentDataElement.getSize();
 	}
+
+	firstPosInFirstChunk = from - currentPos;
+
+	if (nextElementBorder > to) {
+	    return currentDataElement.getArray(firstPosInFirstChunk, length);
+	} else {
+	    int bytesInFirstChunk = currentDataElement.getSize() - firstPosInFirstChunk;
+	    byte[] firstBytes = currentDataElement.getArray(firstPosInFirstChunk, bytesInFirstChunk);
+	    System.arraycopy(firstBytes, 0, res, 0, bytesInFirstChunk);
+	    remainingBytes -= bytesInFirstChunk;
+	    currentDataElement = dataElementsIterator.next();
+	}
+
+	while (currentDataElement.getSize() < remainingBytes) {
+	    System.arraycopy(currentDataElement.getArray(), 0, res, length - remainingBytes, currentDataElement.getSize());
+	    currentDataElement = dataElementsIterator.next();
+	}
+
+	System.arraycopy(currentDataElement.getArray(0, remainingBytes), 0, res, length - remainingBytes, remainingBytes);
 
 	return res;
     }
 
     @Override
     public byte[] getArray() {
-	// TODO Auto-generated method stub
-	return null;
+	byte[] res = new byte[getSize()];
+	int pos = 0;
+
+	for (Data d : dataElements) {
+	    System.arraycopy(d.getArray(), 0, res, pos, d.getSize());
+	}
+
+	return res;
     }
 
     @Override
     public int getByteAt(int pos) {
-	// TODO Auto-generated method stub
+
+	
 	return 0;
     }
 
