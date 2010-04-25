@@ -115,4 +115,8 @@ public class OrganisationUnit implements Comparable<OrganisationUnit> {
     public int getType() {
 	return type;
     }
+
+    public Type getPreviousType() {
+	return previousType;
+    }
 }

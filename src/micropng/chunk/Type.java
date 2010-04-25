@@ -80,6 +80,15 @@ public enum Type {
 	return res;
     }
 
+    public static int[] intArrayValue(int type) {
+	int[] res = new int[4];
+	for (int i = 0; i < 4; i++) {
+	    res[3 - i] = (char) (type & 0xff);
+	    type >>= 8;
+	}
+	return res;
+    }
+
     public static Type valueOf(int type) {
 	return valueOf(stringValue(type));
     }

@@ -6,7 +6,7 @@ public interface Data {
 
     public int getSize();
 
-    public Queue getStream(int from, int length);
+//    public Queue getStream(int from, int length);
 
     public Queue getStream();
 

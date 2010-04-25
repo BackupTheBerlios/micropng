@@ -10,21 +10,17 @@ public class FileData implements Data {
     private class QueueFeeder extends MicropngThread {
 
 	private Queue out;
-	private int from;
-	private int length;
 
-	public QueueFeeder(Queue out, int from, int length) {
+	public QueueFeeder(Queue out) {
 	    this.out = out;
-	    this.from = from;
-	    this.length = length;
 	}
 
 	@Override
 	public void run() {
 	    try {
-		file.seek(start + from);
+		file.seek(start);
 
-		for (int i = 0; i < length; i++) {
+		for (int i = 0; i < size; i++) {
 		    out.put(file.readByte());
 		}
 	    } catch (InterruptedException e) {
@@ -66,17 +62,20 @@ public class FileData implements Data {
     public int getSize() {
 	return size;
     }
-
+/*
     @Override
     public Queue getStream(int from, int length) {
 	Queue res = new Queue();
 	new Thread(new QueueFeeder(res, from, length)).run();
 	return res;
     }
-
+*/
     @Override
     public Queue getStream() {
-	return getStream(0, size);
+	Queue res = new Queue();
+	new Thread(new QueueFeeder(res)).run();
+	return res;
+//	return getStream(0, size);
     }
 
     @Override

@@ -12,12 +12,14 @@ public class Optimizer {
 
     private Configuration configuration;
     private OptimizerOrdering ordering;
+    private OptimizerChunkAggregation aggregation;
     private File inputFileObject;
     private File outputFileObject;
 
     public Optimizer(Configuration configuration) {
 	this.configuration = configuration;
 	this.ordering = new OptimizerOrdering();
+	this.aggregation = new OptimizerChunkAggregation();
     }
 
     public OptimizerOrdering getOptimizerOrdering() {
@@ -30,7 +32,7 @@ public class Optimizer {
 	OrganisationSequence chunkOrganisationSequence = new OrganisationSequence(reader.readSequence(inputFileObject));
 
 	ordering.optimize(chunkOrganisationSequence);
-
+	aggregation.optimize(chunkOrganisationSequence);
 
 	outputFileObject = new File(configuration.getFilename() + "_output.png");
 	FileWriter writer = new FileWriter();

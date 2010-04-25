@@ -3,9 +3,38 @@ package micropng.chunk;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import micropng.MicropngThread;
 import micropng.Queue;
 
 public class DataGroup implements Data {
+
+    private class QueueFeeder extends MicropngThread {
+
+	private Queue out;
+
+	public QueueFeeder(Queue out) {
+	    this.out = out;
+	}
+
+	@Override
+	public void run() {
+	    try {
+		for (Data d : dataElements) {
+		    Queue q = d.getStream();
+		    int value;
+		    value = q.take();
+		    while (value != -1) {
+			out.put(value);
+			value = q.take();
+		    }
+		}
+		out.put(-1);
+	    } catch (InterruptedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+	}
+    }
 
     private ArrayList<Data> dataElements;
 
@@ -36,18 +65,21 @@ public class DataGroup implements Data {
 	    return currentDataElement.getArray(firstPosInFirstChunk, length);
 	} else {
 	    int bytesInFirstChunk = currentDataElement.getSize() - firstPosInFirstChunk;
-	    byte[] firstBytes = currentDataElement.getArray(firstPosInFirstChunk, bytesInFirstChunk);
+	    byte[] firstBytes = currentDataElement
+		    .getArray(firstPosInFirstChunk, bytesInFirstChunk);
 	    System.arraycopy(firstBytes, 0, res, 0, bytesInFirstChunk);
 	    remainingBytes -= bytesInFirstChunk;
 	    currentDataElement = dataElementsIterator.next();
 	}
 
 	while (currentDataElement.getSize() < remainingBytes) {
-	    System.arraycopy(currentDataElement.getArray(), 0, res, length - remainingBytes, currentDataElement.getSize());
+	    System.arraycopy(currentDataElement.getArray(), 0, res, length - remainingBytes,
+		    currentDataElement.getSize());
 	    currentDataElement = dataElementsIterator.next();
 	}
 
-	System.arraycopy(currentDataElement.getArray(0, remainingBytes), 0, res, length - remainingBytes, remainingBytes);
+	System.arraycopy(currentDataElement.getArray(0, remainingBytes), 0, res, length
+		- remainingBytes, remainingBytes);
 
 	return res;
     }
@@ -66,27 +98,36 @@ public class DataGroup implements Data {
 
     @Override
     public int getByteAt(int pos) {
+	int currentPos = 0;
+	Iterator<Data> dataElementsIterator = dataElements.iterator();
+	Data currentDataElement = dataElementsIterator.next();
 
-	
-	return 0;
+	while (currentPos + currentDataElement.getSize() <= pos) {
+	    currentPos += currentDataElement.getSize();
+	}
+
+	return currentDataElement.getByteAt(pos - currentPos);
     }
 
     @Override
     public int getSize() {
-	// TODO Auto-generated method stub
-	return 0;
+	int res = 0;
+
+	for (Data d : dataElements) {
+	    res += d.getSize();
+	}
+	return res;
     }
 
-    @Override
-    public Queue getStream(int from, int length) {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
+    /*
+     * @Override public Queue getStream(int from, int length) { // TODO
+     * Auto-generated method stub return null; }
+     */
     @Override
     public Queue getStream() {
-	// TODO Auto-generated method stub
-	return null;
+	Queue res = new Queue();
+	new Thread(new QueueFeeder(res)).run();
+	return res;
     }
 
 }
