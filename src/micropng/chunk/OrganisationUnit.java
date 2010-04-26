@@ -3,6 +3,7 @@ package micropng.chunk;
 import java.util.Iterator;
 
 import micropng.ChunkSequence;
+import micropng.FourByteConverter;
 
 public class OrganisationUnit implements Comparable<OrganisationUnit> {
 
@@ -36,10 +37,10 @@ public class OrganisationUnit implements Comparable<OrganisationUnit> {
 	return chunks;
     }
 
-    public int getByteAt(int pos) {
+    public int getByteAt(long pos) {
 	Iterator<Chunk> chunksIterator = chunks.iterator();
 
-	int currentPos = 0;
+	long currentPos = 0;
 	Chunk currentChunk = chunksIterator.next();
 	int currentChunkSize = currentChunk.getDataSize();
 
@@ -49,11 +50,11 @@ public class OrganisationUnit implements Comparable<OrganisationUnit> {
 	    currentChunkSize = currentChunk.getDataSize();
 	}
 
-	return currentChunk.getByteAt(pos - currentPos);
+	return currentChunk.getByteAt((int) (pos - currentPos));
     }
 
-    public int getDataSize() {
-	int res = 0;
+    public long getDataSize() {
+	long res = 0;
 	for (Chunk c : chunks) {
 	    res += c.getDataSize();
 	}
@@ -91,7 +92,7 @@ public class OrganisationUnit implements Comparable<OrganisationUnit> {
 
     private int compareContent(OrganisationUnit c) {
 	if (Type.isKnown(type)) {
-	    return ComparatorCorrelations.valueOf(Type.stringValue(type)).getComparator().compare(this, c);
+	    return ComparatorCorrelations.valueOf(FourByteConverter.stringValue(type)).getComparator().compare(this, c);
 	} else {
 	    return SameTypeComparator.ALPHABETICAL_ORDERING.compare(this, c);
 	}

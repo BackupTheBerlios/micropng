@@ -7,6 +7,7 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 
 import micropng.ChunkSequence;
+import micropng.FourByteConverter;
 import micropng.chunk.Chunk;
 
 public class FileWriter {
@@ -41,20 +42,10 @@ public class FileWriter {
 	outputFile.write(PNGProperties.getSignature());
 
 	for (Chunk c : chunkSequence) {
-	    outputFile.write(intToByteArray(c.getDataSize()));
-	    outputFile.write(intToByteArray(c.getType()));
+	    outputFile.write(FourByteConverter.byteArrayValue(c.getDataSize()));
+	    outputFile.write(FourByteConverter.byteArrayValue(c.getType()));
 	    outputFile.write(c.getData().getArray());
-	    outputFile.write(intToByteArray(c.getCrc()));
+	    outputFile.write(FourByteConverter.byteArrayValue(c.getCrc()));
 	}
-    }
-
-    private byte[] intToByteArray(int integer) {
-	byte[] res = new byte[4];
-	int tmp = integer;
-	for (int i = 0; i < 4; i++) {
-	    res[3 - i] = (byte) (tmp & 0xff);
-	    tmp >>= 8;
-	}
-	return res;
     }
 }

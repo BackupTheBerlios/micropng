@@ -4,20 +4,11 @@ import micropng.Queue;
 
 public class CRCCalculator {
 
-    private Queue input;
     private int[] crcTable;
-    private int crc;
 
-    public CRCCalculator(Queue input, int[] type) {
-	this.input = input;
+    public CRCCalculator() {
 	crcTable = new int[256];
-	crc = 0xffffffff;
-
 	makeCrcTable();
-
-	for (int i = 0; i < 4; i++) {
-	    crc = crcTable[(crc ^ type[i]) & 0x000000ff] ^ (crc >>> 8);
-	}
     }
 
     private void makeCrcTable() {
@@ -34,7 +25,13 @@ public class CRCCalculator {
 	}
     }
 
-    public void run() {
+    public int calculate(int[] type, Queue input) {
+	int crc = 0xffffffff;
+
+	for (int i = 0; i < 4; i++) {
+	    crc = crcTable[(crc ^ type[i]) & 0x000000ff] ^ (crc >>> 8);
+	}
+
 	try {
 	    int currentValue = input.take();
 	    while (currentValue != -1) {
@@ -44,13 +41,7 @@ public class CRCCalculator {
 	} catch (InterruptedException e) {
 	    e.printStackTrace();
 	}
-    }
 
-    public int getResult() {
 	return crc ^ 0xffffffff;
-    }
-
-    public boolean compareTo(int referenceValue) {
-	return getResult() == referenceValue;
     }
 }

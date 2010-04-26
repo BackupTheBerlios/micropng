@@ -4,10 +4,10 @@ public enum SameTypeComparator {
     ALPHABETICAL_ORDERING() {
 	@Override
 	public int compare(OrganisationUnit unit0, OrganisationUnit unit1) {
-	    int length0 = unit0.getDataSize();
-	    int length1 = unit1.getDataSize();
-	    int minLength = Math.min(length0, length1);
-	    int pos = 0;
+	    long length0 = unit0.getDataSize();
+	    long length1 = unit1.getDataSize();
+	    long minLength = Math.min(length0, length1);
+	    long pos = 0;
 
 	    while (pos < minLength) {
 		int byte0 = unit0.getByteAt(pos);

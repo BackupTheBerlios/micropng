@@ -2,6 +2,8 @@ package micropng.chunk;
 
 import java.util.ArrayList;
 
+import micropng.FourByteConverter;
+
 public enum Orientation {
     IHDR(null),
     cHRM(Type.IHDR),
@@ -33,7 +35,7 @@ public enum Orientation {
     }
 
     public static Orientation valueOf(int type) {
-	return valueOf(Type.stringValue(type));
+	return valueOf(FourByteConverter.stringValue(type));
     }
 
     public static ArrayList<Type> chainOfOrientation(Type t) {
