@@ -25,17 +25,17 @@ public class OptimizerChunkAggregation {
 		    ArrayList<Data> currentList = new ArrayList<Data>(chunkSequence.size());
 		    int type = Type.IDAT.toInt();
 		    DataGroup data;
-		    CRCCalculator crcCalculator;
 		    int crc;
+		    CRCCalculator crcCalculator = new CRCCalculator();
+		    ChunkSequence seq;
 
 		    for (Chunk c : chunkSequence) {
 			currentList.add(c.getData());
 		    }
 		    data = new DataGroup(currentList);
-		    crcCalculator = new CRCCalculator();
 		    crc = crcCalculator.calculate(FourByteConverter.intArrayValue(type), data.getStream());
 
-		    ChunkSequence seq = new ChunkSequence();
+		    seq = new ChunkSequence();
 		    seq.add(new Chunk(type, data, crc));
 		    
 		    organisationSequence.set(organisationSequence.indexOf(u), new OrganisationUnit(seq, u.getPreviousType()));
