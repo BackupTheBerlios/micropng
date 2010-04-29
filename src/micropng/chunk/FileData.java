@@ -62,20 +62,12 @@ public class FileData implements Data {
     public int getSize() {
 	return size;
     }
-/*
-    @Override
-    public Queue getStream(int from, int length) {
-	Queue res = new Queue();
-	new Thread(new QueueFeeder(res, from, length)).run();
-	return res;
-    }
-*/
+
     @Override
     public Queue getStream() {
 	Queue res = new Queue();
 	new Thread(new QueueFeeder(res)).run();
 	return res;
-//	return getStream(0, size);
     }
 
     @Override

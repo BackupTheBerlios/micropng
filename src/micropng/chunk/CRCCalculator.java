@@ -1,17 +1,20 @@
 package micropng.chunk;
 
+import micropng.FourByteConverter;
 import micropng.Queue;
 
-public class CRCCalculator {
+public enum CRCCalculator {
+    ;
 
-    private int[] crcTable;
+    private final static int[] crcTable;
 
-    public CRCCalculator() {
+    static {
 	crcTable = new int[256];
 	makeCrcTable();
     }
 
-    private void makeCrcTable() {
+
+    private static void makeCrcTable() {
 	for (int i = 0; i < 256; i++) {
 	    int c = i;
 	    for (int j = 0; j < 8; j++) {
@@ -25,11 +28,13 @@ public class CRCCalculator {
 	}
     }
 
-    public int calculate(int[] type, Queue input) {
+    public static int calculate(int type, Data data) {
 	int crc = 0xffffffff;
+	int[] typeArray = FourByteConverter.intArrayValue(type);
+	Queue input = data.getStream();
 
 	for (int i = 0; i < 4; i++) {
-	    crc = crcTable[(crc ^ type[i]) & 0x000000ff] ^ (crc >>> 8);
+	    crc = crcTable[(crc ^ typeArray[i]) & 0x000000ff] ^ (crc >>> 8);
 	}
 
 	try {

@@ -1,44 +1,73 @@
 package micropng.pngoptimization;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import micropng.ChunkSequence;
-import micropng.FourByteConverter;
 import micropng.chunk.CRCCalculator;
 import micropng.chunk.Chunk;
 import micropng.chunk.Data;
 import micropng.chunk.DataGroup;
 import micropng.chunk.OrganisationSequence;
 import micropng.chunk.OrganisationUnit;
+import micropng.chunk.RAMData;
 import micropng.chunk.Type;
+import micropng.pngio.PNGProperties;
 
 public class OptimizerChunkAggregation {
 
     public void optimize(OrganisationSequence organisationSequence) {
-	//TODO: make it handle IDAT sizes >= 1GB correctly
-
 	for (OrganisationUnit u : organisationSequence) {
 	    if (Type.IDAT.equals(u.getType())) {
-		ChunkSequence chunkSequence = u.getChunks();
-		if (chunkSequence.size() > 1) {
-		    //TODO: there is probably a more simple solution
-		    ArrayList<Data> currentList = new ArrayList<Data>(chunkSequence.size());
-		    int type = Type.IDAT.toInt();
-		    DataGroup data;
-		    int crc;
-		    CRCCalculator crcCalculator = new CRCCalculator();
-		    ChunkSequence seq;
+		ChunkSequence inputSequence = u.getChunks();
+		if (inputSequence.size() > 1) {
+		    Iterator<Chunk> inputSequenceIterator = inputSequence.iterator();
+		    Chunk nextChunk;
+		    Data nextData;
 
-		    for (Chunk c : chunkSequence) {
-			currentList.add(c.getData());
+		    int newLength = 0;
+		    int newType = Type.IDAT.toInt();
+		    DataGroup newData;
+		    int newCrc;
+
+		    ArrayList<Data> dataList = new ArrayList<Data>();
+		    ChunkSequence newChunkSequence = new ChunkSequence();
+
+		    while (inputSequenceIterator.hasNext()) {
+			nextChunk = inputSequenceIterator.next();
+			nextData = nextChunk.getData();
+
+			if (nextData.getSize() == 0) {
+			    continue;
+			}
+
+			if ((nextData.getSize() == PNGProperties.getMaxSize()) && (newLength == 0)) {
+			    newChunkSequence.add(nextChunk);
+			    continue;
+			}
+
+			if (nextData.getSize() <= PNGProperties.getMaxSize() - newLength) {
+			    dataList.add(nextData);
+			} else {
+			    int firstPartLength = PNGProperties.getMaxSize() - newLength;
+			    Data firstPart = new RAMData(nextData.getArray(0, firstPartLength));
+			    Data secondPart = new RAMData(nextData.getArray(0, nextData.getSize() - firstPartLength));
+
+			    dataList.add(firstPart);
+			    newData = new DataGroup(dataList);
+			    newCrc = CRCCalculator.calculate(newType, newData);
+			    newChunkSequence.add(new Chunk(newType, newData, newCrc));
+
+			    dataList = new ArrayList<Data>();
+			    dataList.add(secondPart);
+			}
 		    }
-		    data = new DataGroup(currentList);
-		    crc = crcCalculator.calculate(FourByteConverter.intArrayValue(type), data.getStream());
 
-		    seq = new ChunkSequence();
-		    seq.add(new Chunk(type, data, crc));
-		    
-		    organisationSequence.set(organisationSequence.indexOf(u), new OrganisationUnit(seq, u.getPreviousType()));
+		    newData = new DataGroup(dataList);
+		    newCrc = CRCCalculator.calculate(newType, newData);
+		    newChunkSequence.add(new Chunk(newType, newData, newCrc));
+
+		    organisationSequence.set(organisationSequence.indexOf(u), new OrganisationUnit(newChunkSequence, u.getPreviousType()));
 		}
 	    }
 	}
