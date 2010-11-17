@@ -13,7 +13,7 @@ public class DeflateDecoder {
 	    this.output = output;
 	    this.pos = 0;
 	    this.currentByte = input.take();
-	    
+
 	}
 
 	private int readValue() {
@@ -21,10 +21,10 @@ public class DeflateDecoder {
 	}
 
 	private void readHuffmanTrees() {
-	    
+
 	}
 
-	/* 
+	/*
 	 * step to the next input byte
 	 */
 	private void readByte() throws InterruptedException {
@@ -41,7 +41,7 @@ public class DeflateDecoder {
 	    }
 	}
 
-	private int getNextBit () throws InterruptedException {
+	private int getNextBit() throws InterruptedException {
 	    currentByte >>= 1;
 	    pos++;
 
@@ -52,16 +52,50 @@ public class DeflateDecoder {
 	    return currentByte & 0x01;
 	}
 
+	private int getNextByte() throws InterruptedException {
+	    int res = currentByte;
+	    readByte();
+	    return res;
+	}
+
+	private void readUncompressedBlock() throws InterruptedException {
+	    int LEN;
+	    int NLEN;
+	    dropRemainingBitsOfCurrentByte();
+	    LEN = getNextByte();
+	    LEN <<= 8;
+	    LEN |= getNextByte();
+	    NLEN = getNextByte();
+	    LEN <<= 8;
+	    NLEN |= getNextByte();
+
+	    for (int i = 0; i < LEN; i++) {
+		output.put(input.take());
+	    }
+	}
+
 	private boolean readBlock() throws InterruptedException {
+	    boolean res;
 	    int BFINAL;
 	    int BTYPE = 0;
 
 	    BFINAL = getNextBit();
+	    res = BFINAL != 0;
 	    BTYPE = getNextBit();
 	    BTYPE <<= 1;
 	    BTYPE |= getNextBit();
 
-	    return true;
+	    switch (BTYPE) {
+	    case 0x00:
+		readUncompressedBlock();
+		break;
+	    case 0x01:
+		break;
+	    case 0x10:
+		break;
+	    }
+
+	    return res;
 	}
 
 	@Override
