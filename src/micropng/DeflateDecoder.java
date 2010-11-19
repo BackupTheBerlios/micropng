@@ -2,7 +2,15 @@ package micropng;
 
 public class DeflateDecoder {
     private class DeflateDecoderThread implements Runnable {
+	private class HuffmanTree {
 
+	    int[] codeLengths;
+	    int[] codeLengthFrequencies;
+	    
+
+	    public HuffmanTree () {
+	    }
+	}
 	private Queue input;
 	private Queue output;
 	private int pos;
@@ -13,7 +21,6 @@ public class DeflateDecoder {
 	    this.output = output;
 	    this.pos = 0;
 	    this.currentByte = input.take();
-
 	}
 
 	private int readValue() {
@@ -52,6 +59,15 @@ public class DeflateDecoder {
 	    return currentByte & 0x01;
 	}
 
+	private int getNextBits(int numberOfBits) throws InterruptedException {
+	    int res = 0;
+	    for (int i = 0; i < numberOfBits; i++) {
+		res <<= 1;
+		res |= getNextBit();
+	    }
+	    return res;
+	}
+
 	private int getNextByte() throws InterruptedException {
 	    int res = currentByte;
 	    readByte();
@@ -74,6 +90,16 @@ public class DeflateDecoder {
 	    }
 	}
 
+	private void readFixedHuffmanBlock() throws InterruptedException {
+	
+	}
+
+	private void readDynamicHuffmanBlock() throws InterruptedException {
+	    int HLIT = getNextBits(5); // # of Literal/Length codes - 257 (257 - 286)
+            int HDIST = getNextBits(5); // # of Distance codes - 1        (1 - 32)
+            int HCLEN = getNextBits(4); // # of Code Length codes - 4     (4 - 19)
+	}
+
 	private boolean readBlock() throws InterruptedException {
 	    boolean res;
 	    int BFINAL;
@@ -90,8 +116,10 @@ public class DeflateDecoder {
 		readUncompressedBlock();
 		break;
 	    case 0x01:
+		readFixedHuffmanBlock();
 		break;
 	    case 0x10:
+		readDynamicHuffmanBlock();
 		break;
 	    }
 
