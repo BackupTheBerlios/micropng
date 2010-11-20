@@ -4,13 +4,100 @@ public class DeflateDecoder {
     private class DeflateDecoderThread implements Runnable {
 	private class HuffmanTree {
 
-	    int[] codeLengths;
-	    int[] codeLengthFrequencies;
-	    
+	    private class HuffmanNode {
 
-	    public HuffmanTree () {
+		private int value;
+		private HuffmanNode left;
+		private HuffmanNode right;
+
+		public HuffmanNode() {
+
+		}
+
+		public int getValue() {
+		    return value;
+		}
+
+		public void setValue(int value) {
+		    this.value = value;
+		}
+
+		public HuffmanNode getLeft() {
+		    return left;
+		}
+
+		public void setLeft(HuffmanNode left) {
+		    this.left = left;
+		}
+
+		public HuffmanNode getRight() {
+		    return right;
+		}
+
+		public void setRight(HuffmanNode right) {
+		    this.right = right;
+		}
+
+	    }
+
+	    private static final int MAX_BITS = 15;
+
+	    private HuffmanNode root;
+
+	    public HuffmanTree(int[] codeLengths) {
+		root = new HuffmanNode();
+		int[] bl_count = new int[MAX_BITS + 1];
+		int[] next_code = new int[MAX_BITS + 1];
+		int code = 0;
+
+		for (int i : codeLengths) {
+		    bl_count[i]++;
+		}
+
+		bl_count[0] = 0;
+
+		for (int bits = 1; bits <= MAX_BITS; bits++) {
+		    code = (code + bl_count[bits - 1]) << 1;
+		    next_code[bits] = code;
+		}
+
+		for (int n = 0; n <= codeLengths.length; n++) {
+		    int len = codeLengths[n];
+		    if (len != 0) {
+			addCode(n, next_code[len], len);
+			next_code[len]++;
+		    }
+		}
+	    }
+
+	    private void addCode(int value, int code, int length) {
+		HuffmanNode currentNode = root;
+		int mask = 0x01 << length;
+		for (int i = 0; i < length; i++) {
+		    HuffmanNode nextNode;
+		    boolean leftTree;
+		    mask >>= 1;
+		    leftTree = ((mask & code) == 0);
+
+		    if (leftTree) {
+			nextNode = currentNode.getLeft();
+			if (nextNode == null) {
+			    nextNode = new HuffmanNode();
+			    currentNode.setLeft(nextNode);
+			}
+		    } else {
+			nextNode = currentNode.getRight();
+			if (nextNode == null) {
+			    nextNode = new HuffmanNode();
+			    currentNode.setRight(nextNode);
+			}
+		    }
+		    currentNode = nextNode;
+		}
+		currentNode.setValue(value);
 	    }
 	}
+
 	private Queue input;
 	private Queue output;
 	private int pos;
@@ -28,7 +115,7 @@ public class DeflateDecoder {
 	}
 
 	private void readHuffmanTrees() {
-
+	    
 	}
 
 	/*
@@ -91,13 +178,38 @@ public class DeflateDecoder {
 	}
 
 	private void readFixedHuffmanBlock() throws InterruptedException {
-	
+
 	}
 
 	private void readDynamicHuffmanBlock() throws InterruptedException {
-	    int HLIT = getNextBits(5); // # of Literal/Length codes - 257 (257 - 286)
-            int HDIST = getNextBits(5); // # of Distance codes - 1        (1 - 32)
-            int HCLEN = getNextBits(4); // # of Code Length codes - 4     (4 - 19)
+	    int HLIT = getNextBits(5);
+	    int HDIST = getNextBits(5);
+	    int HCLEN = getNextBits(4);
+	    int numberOfLiteralAndLengthCodes = HLIT + 257;
+	    int numberOfDistanceCodes = HDIST + 1;
+	    int numberOfCodeLengthCodes = HCLEN + 4;
+	    int[] codeLengthCodes = new int[19];
+	    int[] codeLengthCodesOrder = { 16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2,
+		    14, 1, 15 };
+	    int numberOfLiteralAndLengthCodesRead = 0;
+	    int numberOfDistanceCodesRead = 0;
+
+	    for (int i = 0; i < numberOfCodeLengthCodes; i++) {
+		codeLengthCodes[codeLengthCodesOrder[i]] = getNextBits(3);
+	    }
+
+	    /*while (numberOfLiteralAndLengthCodesRead < numberOfLiteralAndLengthCodes) {
+		numberOfLiteralAndLengthCodesRead++; //TODO
+	    }
+
+	    while (numberOfDistanceCodesRead < numberOfDistanceCodes) {
+		numberOfDistanceCodesRead++; //TODO
+	    }*/
+	    //argh: The code length repeat codes can cross from HLIT + 257 to the
+	    // HDIST + 1 code lengths.
+    
+	    // read codes while not value == 256
+	    
 	}
 
 	private boolean readBlock() throws InterruptedException {
