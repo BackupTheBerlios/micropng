@@ -165,7 +165,7 @@ public class WinFrame extends JFrame implements ActionListener, ItemListener {
 	gbc.weightx = wx;
 	gbc.weighty = wy;
     }
-    
+
     private void setLookAndFeel() {
 	try {
 	    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -180,29 +180,33 @@ public class WinFrame extends JFrame implements ActionListener, ItemListener {
 	Object source = event.getSource();
 	if (source == open) {
 	    JFileChooser fc = new JFileChooser();
-	    fc.showOpenDialog(null);
-	    File selFile = fc.getSelectedFile();
+	    int val = fc.showOpenDialog(null);
 
-	    String filepath = selFile.getPath();
-	    config.setPath(filepath);
+	    if (val == JFileChooser.APPROVE_OPTION) {
+		File selFile = fc.getSelectedFile();
 
-	    // Dateiname
-	    String filename = selFile.getName();
-	    namefield.setText(filename);
+		String filepath = selFile.getPath();
+		config.setPath(filepath);
 
-	    // Dateigröße
-	    long length = selFile.length();
-	    String len = Long.toString(length);
-	    lengthfield.setText(len);
+		// Dateiname
+		String filename = selFile.getName();
+		namefield.setText(filename);
 
-	    // Änderungsdatum
-	    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy | HH:mm:ss");
-	    changedat.setText(sdf.format(selFile.lastModified()));
+		// Dateigröße
+		long length = selFile.length();
+		String len = Long.toString(length);
+		lengthfield.setText(len);
 
-	    // Pfadangabe
-	    String path = selFile.getParent();
-	    pathfield.setText(path);
+		// Änderungsdatum
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy | HH:mm:ss");
+		changedat.setText(sdf.format(selFile.lastModified()));
 
+		// Pfadangabe
+		String path = selFile.getParent();
+		pathfield.setText(path);
+
+	    } else
+		fc.cancelSelection();
 	} else if (source == info) {
 	    JOptionPane.showMessageDialog(null, inf.getName() + "\n" + inf.getPurpose() + "\n"
 		    + inf.getAuthor() + "\n" + inf.getCreation() + "\n" + inf.getLicence() + "\n"
