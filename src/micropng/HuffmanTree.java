@@ -49,6 +49,14 @@ public class HuffmanTree {
 	public boolean isLeaf() {
 	    return (pos.left == null) && (pos.right == null);
 	}
+
+	public void step(int bit) {
+	    if (bit == 0) {
+		pos = pos.left;
+	    } else {
+		pos = pos.right;
+	    }
+	}
     }
 
     private static final int MAX_BITS = 15;

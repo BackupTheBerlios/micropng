@@ -1,8 +1,9 @@
-package micropng;
+package micropng.userinterface;
 
 public class UserConfiguration {
-    boolean huffbox, idatbox;
-    String path;
+    private boolean huffbox;
+    private boolean idatbox;
+    private String path;
 
     public UserConfiguration() {
 	huffbox = true;

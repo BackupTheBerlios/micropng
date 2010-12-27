@@ -1,12 +1,10 @@
-package micropng;
+package micropng.userinterface.gui;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -30,23 +28,25 @@ import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import micropng.userinterface.UserConfiguration;
+
 public class WinFrame extends JFrame implements ActionListener, ItemListener {
-    Info inf = new Info();
-    UserConfiguration config = new UserConfiguration();
+    private Info inf = new Info();
+    private UserConfiguration config = new UserConfiguration();
 
-    JMenuItem open = new JMenuItem("Öffnen");
-    JMenuItem end = new JMenuItem("Beenden");
-    JMenuItem info = new JMenuItem("Über");
+    private JMenuItem open = new JMenuItem("Öffnen");
+    private JMenuItem end = new JMenuItem("Beenden");
+    private JMenuItem info = new JMenuItem("Über");
 
-    JButton action = new JButton("Ausführen");
+    private JButton action = new JButton("Ausführen");
 
-    JLabel namefield = new JLabel();
-    JLabel lengthfield = new JLabel();
-    JLabel changedat = new JLabel();
-    JLabel pathfield = new JLabel();
+    private JLabel namefield = new JLabel();
+    private JLabel lengthfield = new JLabel();
+    private JLabel changedat = new JLabel();
+    private JLabel pathfield = new JLabel();
 
-    JCheckBox idat = new JCheckBox("IDAT-Blöcke zusammenfassen", config.getIda());
-    JCheckBox huff = new JCheckBox("Huffmanbäume optimieren", config.getHuff());
+    private JCheckBox idat = new JCheckBox("IDAT-Blöcke zusammenfassen", config.getIda());
+    private JCheckBox huff = new JCheckBox("Huffmanbäume optimieren", config.getHuff());
 
     // Konstruktor für das Hauptfenster
     public WinFrame() throws MalformedURLException {
@@ -54,15 +54,23 @@ public class WinFrame extends JFrame implements ActionListener, ItemListener {
 	setLocation(500, 200);
 	setSize(500, 500);
 	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	Container content = getContentPane();
 
+	Container content = getContentPane();
+	// Layout für Panel1 (Dateiinfo)
 	GridBagLayout grid = new GridBagLayout();
+	// Layout für den gesamten Container content
+	GridBagLayout grid2 = new GridBagLayout();
+	// Layout für die Checkboxen
+	GridBagLayout grid3 = new GridBagLayout();
 	GridBagConstraints cons = new GridBagConstraints();
+
 	JPanel panel1 = new JPanel();
-	panel1.setBackground(Color.WHITE);
-	JPanel panel2 = new JPanel(new FlowLayout(FlowLayout.LEADING));
-	JPanel panel3 = new JPanel(new GridLayout(2, 1, 0, 0));
 	panel1.setLayout(grid);
+
+	JPanel panel2 = new JPanel(new FlowLayout(FlowLayout.LEADING));
+
+	JPanel panel3 = new JPanel();
+	panel3.setLayout(grid3);
 
 	// Toolbar
 	JToolBar tool = new JToolBar();
@@ -71,58 +79,55 @@ public class WinFrame extends JFrame implements ActionListener, ItemListener {
 	panel2.add(tool);
 
 	// Dateinamen-Label
-	buildConstraints(cons, 0, 0, 1, 1, 0, 0);
-	cons.fill = GridBagConstraints.NONE;
-	cons.anchor = GridBagConstraints.WEST;
 	JLabel dname = new JLabel("Dateiname:");
+	cons.gridx = 0;
+	cons.gridy = 0;
+	cons.anchor = GridBagConstraints.WEST;
 	grid.setConstraints(dname, cons);
 	panel1.add(dname);
 
 	// Dateinamen-Feld
-	buildConstraints(cons, 1, 0, 1, 1, 0, 0);
-	cons.fill = GridBagConstraints.HORIZONTAL;
+	cons.gridx = 1;
+	cons.gridy = 0;
 	grid.setConstraints(namefield, cons);
 	panel1.add(namefield);
 
 	// Dateigröße - Label
-	buildConstraints(cons, 0, 2, 1, 1, 2, 0);
-	cons.fill = GridBagConstraints.NONE;
-	cons.anchor = GridBagConstraints.WEST;
 	JLabel filelength = new JLabel("Dateigröße (Bytes):");
+	cons.gridx = 0;
+	cons.gridy = 1;
 	grid.setConstraints(filelength, cons);
 	panel1.add(filelength);
 
 	// Dateigröße - Feld
-	buildConstraints(cons, 1, 2, 1, 1, 50, 0);
-	cons.fill = GridBagConstraints.HORIZONTAL;
+	cons.gridx = 1;
+	cons.gridy = 1;
 	grid.setConstraints(lengthfield, cons);
 	panel1.add(lengthfield);
 
 	// Änderungsdatum - Label
-	buildConstraints(cons, 0, 3, 1, 1, 2, 0);
-	cons.fill = GridBagConstraints.NONE;
-	cons.anchor = GridBagConstraints.WEST;
 	JLabel filechange = new JLabel("Änderungsdatum: ");
+	cons.gridx = 0;
+	cons.gridy = 2;
 	grid.setConstraints(filechange, cons);
 	panel1.add(filechange);
 
 	// Änderungdatum - Feld
-	buildConstraints(cons, 1, 3, 1, 1, 50, 0);
-	cons.fill = GridBagConstraints.HORIZONTAL;
+	cons.gridx = 1;
+	cons.gridy = 2;
 	grid.setConstraints(changedat, cons);
 	panel1.add(changedat);
 
 	// Dateipfad - Label
-	buildConstraints(cons, 0, 4, 1, 1, 2, 0);
-	cons.fill = GridBagConstraints.NONE;
-	cons.anchor = GridBagConstraints.WEST;
 	JLabel filepath = new JLabel("Verzeichnis: ");
+	cons.gridx = 0;
+	cons.gridy = 3;
 	grid.setConstraints(filepath, cons);
 	panel1.add(filepath);
 
 	// Dateipfad - Feld
-	buildConstraints(cons, 1, 4, 1, 1, 50, 0);
-	cons.fill = GridBagConstraints.HORIZONTAL;
+	cons.gridx = 1;
+	cons.gridy = 3;
 	grid.setConstraints(pathfield, cons);
 	panel1.add(pathfield);
 
@@ -142,28 +147,44 @@ public class WinFrame extends JFrame implements ActionListener, ItemListener {
 	bar.add(about);
 
 	idat.addItemListener(this);
+	cons.gridx = 0;
+	cons.gridy = 0;
+	cons.anchor = GridBagConstraints.LINE_START;
+	grid3.setConstraints(idat, cons);
+
 	huff.addItemListener(this);
 	panel3.add(idat);
+	cons.gridx = 0;
+	cons.gridy = 1;
+	grid3.setConstraints(huff, cons);
 	panel3.add(huff);
 
 	panel1.setBorder(BorderFactory.createLineBorder(Color.blue, 2));
-	content.add(panel1, BorderLayout.PAGE_START);
-	content.add(panel2, BorderLayout.SOUTH);
-	content.add(panel3, BorderLayout.EAST);
+	content.setLayout(grid2);
+	cons.gridx = 0;
+	cons.gridy = 0;
+	cons.weightx = 10;
+	cons.weighty = 10;
+	cons.anchor = GridBagConstraints.FIRST_LINE_START;
+	grid2.setConstraints(panel1, cons);
+	content.add(panel1);
+
+	cons.gridx = 0;
+	cons.gridy = 2;
+	cons.anchor = GridBagConstraints.LAST_LINE_END;
+	grid2.setConstraints(panel2, cons);
+	content.add(panel2);
+
+	cons.gridx = 0;
+	cons.gridy = 1;
+	cons.anchor = GridBagConstraints.LINE_START;
+	grid2.setConstraints(panel3, cons);
+	content.add(panel3);
 
 	setJMenuBar(bar);
 	setLookAndFeel();
 	setVisible(true);
 
-    }
-
-    private void buildConstraints(GridBagConstraints gbc, int gx, int gy, int gw, int gh, int wx, int wy) {
-	gbc.gridx = gx;
-	gbc.gridy = gy;
-	gbc.gridwidth = gw;
-	gbc.gridheight = gh;
-	gbc.weightx = wx;
-	gbc.weighty = wy;
     }
 
     private void setLookAndFeel() {
@@ -220,16 +241,8 @@ public class WinFrame extends JFrame implements ActionListener, ItemListener {
 
     @Override
     public void itemStateChanged(ItemEvent event) {
-	if (idat.isSelected()) {
-	    config.setIda(true);
-	} else {
-	    config.setIda(false);
-	}
-	if (huff.isSelected()) {
-	    config.setHuff(true);
-	} else {
-	    config.setHuff(false);
-	}
+	    config.setIda(idat.isSelected());
+	    config.setHuff(huff.isSelected());
     }
 
     public static void main(String[] args) throws MalformedURLException {

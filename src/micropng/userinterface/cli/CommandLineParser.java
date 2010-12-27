@@ -1,18 +1,18 @@
-package micropng.cli;
+package micropng.userinterface.cli;
 
-import micropng.Configuration;
+import micropng.userinterface.UserConfiguration;
 
 public class CommandLineParser {
 
     private String[] parameters;
     private int pos;
-    private Configuration res;
+    private UserConfiguration res;
     private boolean filenameHasBeenFound;
 
     public CommandLineParser(String[] parameters) {
 	this.parameters = parameters;
 	pos = 0;
-	res = new Configuration();
+	res = new UserConfiguration();
 	filenameHasBeenFound = false;
     }
 
@@ -25,7 +25,7 @@ public class CommandLineParser {
 	    throw new WrongUsageException("can not take more than one filename: \""
 		    + parameters[pos] + "\"");
 	}
-	res.setFilename(parameters[pos]);
+	res.setPath(parameters[pos]);
 	filenameHasBeenFound = true;
 	pos++;
     }
@@ -38,7 +38,7 @@ public class CommandLineParser {
 	pos++;
     }
 
-    public Configuration parse() throws WrongUsageException {
+    public UserConfiguration parse() throws WrongUsageException {
 
 	while (pos < parameters.length) {
 	    String nextString = parameters[pos];

@@ -1,4 +1,4 @@
-package micropng;
+package micropng.userinterface.gui;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -12,7 +12,7 @@ public class Info {
 
     public Info() throws MalformedURLException {
 	name = "micropng";
-	author = "Katharina Titz, Martin Walch";
+	author = "Martin Walch, Katharina Titz";
 	creation = "2009-2010";
 	licence = "GPLv3";
 	purpose = "PNG-Dateien verkleinern";
