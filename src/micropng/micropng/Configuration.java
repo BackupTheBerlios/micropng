@@ -2,7 +2,7 @@ package micropng.micropng;
 
 public class Configuration implements Cloneable {
 
-    enum Preset {
+    public enum Preset {
 	NOOP, DEFAULT;
 	static {
 	    NOOP.myConfig = new Configuration();
@@ -32,7 +32,7 @@ public class Configuration implements Cloneable {
     private Configuration() {
     }
 
-    public Configuration createNewConfig(Preset p) {
+    public static Configuration createNewConfig(Preset p) {
 	Configuration res = null;
 	try {
 	    res = (Configuration) p.myConfig.clone();
