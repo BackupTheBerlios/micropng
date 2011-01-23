@@ -30,6 +30,7 @@ import javax.swing.UIManager;
 
 import micropng.userinterface.UserConfiguration;
 
+@SuppressWarnings("serial")
 public class WinFrame extends JFrame implements ActionListener, ItemListener {
     private Info inf = new Info();
     private UserConfiguration config = new UserConfiguration();
@@ -184,7 +185,6 @@ public class WinFrame extends JFrame implements ActionListener, ItemListener {
 	setJMenuBar(bar);
 	setLookAndFeel();
 	setVisible(true);
-
     }
 
     private void setLookAndFeel() {
@@ -241,8 +241,8 @@ public class WinFrame extends JFrame implements ActionListener, ItemListener {
 
     @Override
     public void itemStateChanged(ItemEvent event) {
-	    config.setIda(idat.isSelected());
-	    config.setHuff(huff.isSelected());
+	config.setIda(idat.isSelected());
+	config.setHuff(huff.isSelected());
     }
 
     public static void main(String[] args) throws MalformedURLException {
