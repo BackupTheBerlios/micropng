@@ -47,8 +47,8 @@ public class WinFrame extends JFrame implements ActionListener, ItemListener {
     private JLabel changedat = new JLabel();
     private JLabel pathfield = new JLabel();
 
-    private JCheckBox idat = new JCheckBox("IDAT-Blöcke zusammenfassen", config.doAggregateIDAT());
-    private JCheckBox huff = new JCheckBox("Huffmanbäume optimieren", config.doOptimizeHuffmanTrees());
+    private JCheckBox idat = new JCheckBox("IDAT-Blöcke zusammenfassen", config.doesAggregateIDAT());
+    private JCheckBox huff = new JCheckBox("Huffmanbäume optimieren", config.doesOptimizeHuffmanTrees());
 
     // Konstruktor für das Hauptfenster
     public WinFrame() throws MalformedURLException {

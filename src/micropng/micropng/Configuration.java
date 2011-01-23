@@ -73,7 +73,7 @@ public class Configuration implements Cloneable {
 	this.verboseMode = verboseMode;
     }
 
-    public boolean isRemoveAncillaryChunks() {
+    public boolean doesRemoveAncillaryChunks() {
 	return removeAncillaryChunks;
     }
 
@@ -85,7 +85,7 @@ public class Configuration implements Cloneable {
 	this.aggregateIDAT = aggregateIDAT;
     }
 
-    public boolean doAggregateIDAT() {
+    public boolean doesAggregateIDAT() {
 	return aggregateIDAT;
     }
 
@@ -93,7 +93,7 @@ public class Configuration implements Cloneable {
 	this.optimizeHuffmanTrees = optimizeHuffmanTrees;
     }
 
-    public boolean doOptimizeHuffmanTrees() {
+    public boolean doesOptimizeHuffmanTrees() {
 	return optimizeHuffmanTrees;
     }
 }

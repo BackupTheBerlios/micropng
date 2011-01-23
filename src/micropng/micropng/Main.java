@@ -1,3 +1,5 @@
+// deprecated, use micropng.userinterface.* for main
+
 package micropng.micropng;
 
 import java.io.IOException;
@@ -24,7 +26,7 @@ public class Main {
 	Configuration res = null;
 	CommandLineParser parser = new CommandLineParser(args);
 	try {
-	    Configuration u = parser.parse();
+	    Configuration c = parser.parse();
 	} catch (WrongUsageException e) {
 	    //out.error("usage: java micropng.Main <filename>");
 	    System.exit(-1);

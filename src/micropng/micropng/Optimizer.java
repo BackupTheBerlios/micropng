@@ -17,14 +17,11 @@ public class Optimizer {
     private File inputFileObject;
     private File outputFileObject;
 
-    public Optimizer(Configuration configuration) {
-	this.configuration = configuration;
+    public Optimizer(Configuration userConfiguration) {
+	Configurator configurator = new Configurator();
+	this.configuration = configurator.sanitize(userConfiguration);
 	this.ordering = new OptimizerOrdering();
 	this.aggregation = new OptimizerChunkAggregation();
-    }
-
-    public OptimizerOrdering getOptimizerOrdering() {
-	return ordering;
     }
 
     public void run() throws IOException {
