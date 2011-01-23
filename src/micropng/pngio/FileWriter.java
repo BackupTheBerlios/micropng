@@ -6,9 +6,10 @@ import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 
-import micropng.ChunkSequence;
-import micropng.FourByteConverter;
-import micropng.chunk.Chunk;
+import micropng.chunkview.ChunkSequence;
+import micropng.chunkview.chunk.Chunk;
+import micropng.commonlib.FourByteConverter;
+import micropng.fileview.PNGProperties;
 
 public class FileWriter {
 

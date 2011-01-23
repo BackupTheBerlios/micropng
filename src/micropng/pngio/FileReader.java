@@ -4,9 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-import micropng.ChunkSequence;
-import micropng.chunk.Chunk;
-import micropng.chunk.ChunkReader;
+import micropng.chunkview.ChunkSequence;
+import micropng.chunkview.chunk.Chunk;
+import micropng.chunkview.chunk.ChunkReader;
+import micropng.fileview.PNGProperties;
 
 public class FileReader {
 
