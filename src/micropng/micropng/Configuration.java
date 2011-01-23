@@ -32,11 +32,10 @@ public class Configuration implements Cloneable {
     private Configuration() {
     }
 
-    @Override
-    public Configuration clone() {
+    public Configuration createNewConfig(Preset p) {
 	Configuration res = null;
 	try {
-	    res = (Configuration) super.clone();
+	    res = (Configuration) p.myConfig.clone();
 	} catch (CloneNotSupportedException e) {
 	    e.printStackTrace();
 	    throw new RuntimeException(e.getCause());
@@ -44,10 +43,6 @@ public class Configuration implements Cloneable {
 	return res;
     }
 
-    public Configuration createNewConfig(Preset p) {
-	return (Configuration) p.myConfig.clone();
-    }
-    
     public void setFilename(String filename) {
 	this.filename = filename;
     }
