@@ -11,11 +11,15 @@ public class Configuration implements Cloneable {
 	    NOOP.myConfig.path = null;
 	    NOOP.myConfig.infoMode = true;
 	    NOOP.myConfig.verboseMode = false;
+	    NOOP.myConfig.setAggregateIDAT(false);
+	    NOOP.myConfig.setOptimizeHuffmanTrees(false);
 	    NOOP.myConfig.removeAncillaryChunks = false;
 
 	    DEFAULT.myConfig.path = null;
 	    DEFAULT.myConfig.infoMode = false;
 	    DEFAULT.myConfig.verboseMode = false;
+	    NOOP.myConfig.setAggregateIDAT(true);
+	    NOOP.myConfig.setOptimizeHuffmanTrees(true);
 	    DEFAULT.myConfig.removeAncillaryChunks = false;
 
 	}
@@ -25,6 +29,8 @@ public class Configuration implements Cloneable {
     private String path;
     private boolean infoMode;
     private boolean verboseMode;
+    private boolean aggregateIDAT;
+    private boolean optimizeHuffmanTrees;
     private boolean removeAncillaryChunks;
     private int[] ancillaryChunksToKeep;
     private int[] ancillaryChunksToRemove;
@@ -43,11 +49,11 @@ public class Configuration implements Cloneable {
 	return res;
     }
 
-    public void setFilename(String filename) {
-	this.path = filename;
+    public void setPath(String path) {
+	this.path = path;
     }
 
-    public String getFilename() {
+    public String getPath() {
 	return new String(path);
     }
 
@@ -73,5 +79,21 @@ public class Configuration implements Cloneable {
 
     public void setRemoveAncillaryChunks(boolean removeAncillaryChunks) {
 	this.removeAncillaryChunks = removeAncillaryChunks;
+    }
+
+    public void setAggregateIDAT(boolean aggregateIDAT) {
+	this.aggregateIDAT = aggregateIDAT;
+    }
+
+    public boolean doAggregateIDAT() {
+	return aggregateIDAT;
+    }
+
+    public void setOptimizeHuffmanTrees(boolean optimizeHuffmanTrees) {
+	this.optimizeHuffmanTrees = optimizeHuffmanTrees;
+    }
+
+    public boolean doOptimizeHuffmanTrees() {
+	return optimizeHuffmanTrees;
     }
 }

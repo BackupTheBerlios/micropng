@@ -1,18 +1,20 @@
 package micropng.userinterface.cli;
 
-import micropng.userinterface.UserConfiguration;
+import micropng.micropng.Configuration;
+import micropng.micropng.Configuration.Preset;
+
 
 public class CommandLineParser {
 
     private String[] parameters;
     private int pos;
-    private UserConfiguration res;
+    private Configuration res;
     private boolean filenameHasBeenFound;
 
     public CommandLineParser(String[] parameters) {
 	this.parameters = parameters;
 	pos = 0;
-	res = new UserConfiguration();
+	res = Configuration.createNewConfig(Preset.DEFAULT);
 	filenameHasBeenFound = false;
     }
 
@@ -38,7 +40,7 @@ public class CommandLineParser {
 	pos++;
     }
 
-    public UserConfiguration parse() throws WrongUsageException {
+    public Configuration parse() throws WrongUsageException {
 
 	while (pos < parameters.length) {
 	    String nextString = parameters[pos];

@@ -28,14 +28,14 @@ public class Optimizer {
     }
 
     public void run() throws IOException {
-	inputFileObject = new File(configuration.getFilename());
+	inputFileObject = new File(configuration.getPath());
 	FileReader reader = new FileReader();
 	OrganisationSequence chunkOrganisationSequence = new OrganisationSequence(reader.readSequence(inputFileObject));
 
 	ordering.optimize(chunkOrganisationSequence);
 	aggregation.optimize(chunkOrganisationSequence);
 
-	outputFileObject = new File(configuration.getFilename() + "_output.png");
+	outputFileObject = new File(configuration.getPath() + "_output.png");
 	FileWriter writer = new FileWriter();
 	writer.writeSequence(outputFileObject, chunkOrganisationSequence.toChunkSequence());
     }

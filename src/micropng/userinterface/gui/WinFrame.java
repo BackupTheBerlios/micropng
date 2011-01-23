@@ -28,12 +28,13 @@ import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import micropng.userinterface.UserConfiguration;
+import micropng.micropng.Configuration;
+import micropng.micropng.Configuration.Preset;
 
 @SuppressWarnings("serial")
 public class WinFrame extends JFrame implements ActionListener, ItemListener {
     private Info inf = new Info();
-    private UserConfiguration config = new UserConfiguration();
+    private Configuration config = Configuration.createNewConfig(Preset.DEFAULT);
 
     private JMenuItem open = new JMenuItem("Öffnen");
     private JMenuItem end = new JMenuItem("Beenden");
@@ -46,8 +47,8 @@ public class WinFrame extends JFrame implements ActionListener, ItemListener {
     private JLabel changedat = new JLabel();
     private JLabel pathfield = new JLabel();
 
-    private JCheckBox idat = new JCheckBox("IDAT-Blöcke zusammenfassen", config.getIda());
-    private JCheckBox huff = new JCheckBox("Huffmanbäume optimieren", config.getHuff());
+    private JCheckBox idat = new JCheckBox("IDAT-Blöcke zusammenfassen", config.doAggregateIDAT());
+    private JCheckBox huff = new JCheckBox("Huffmanbäume optimieren", config.doOptimizeHuffmanTrees());
 
     // Konstruktor für das Hauptfenster
     public WinFrame() throws MalformedURLException {
@@ -241,8 +242,8 @@ public class WinFrame extends JFrame implements ActionListener, ItemListener {
 
     @Override
     public void itemStateChanged(ItemEvent event) {
-	config.setIda(idat.isSelected());
-	config.setHuff(huff.isSelected());
+	config.setAggregateIDAT(idat.isSelected());
+	config.setOptimizeHuffmanTrees(huff.isSelected());
     }
 
     public static void main(String[] args) throws MalformedURLException {

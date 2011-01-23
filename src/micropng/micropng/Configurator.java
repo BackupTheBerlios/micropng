@@ -13,12 +13,12 @@ public class Configurator {
 
     public Configuration sanitize(Configuration userConfiguration) {
 	Configuration res = Configuration.createNewConfig(Preset.NOOP);
-	File targetFile = new File(userConfiguration.getFilename());
+	File targetFile = new File(userConfiguration.getPath());
 	if (!targetFile.isFile()) {
-	    message(OutputChannel.ERROR, "file not found: " + userConfiguration.getFilename());
+	    message(OutputChannel.ERROR, "file not found: " + userConfiguration.getPath());
 	    return null;
 	}
-	res.setFilename(userConfiguration.getFilename());
+	res.setPath(userConfiguration.getPath());
 	return res;
     }
 
