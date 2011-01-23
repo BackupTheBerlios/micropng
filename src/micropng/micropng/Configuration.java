@@ -8,12 +8,12 @@ public class Configuration implements Cloneable {
 	    NOOP.myConfig = new Configuration();
 	    DEFAULT.myConfig = new Configuration();
 
-	    NOOP.myConfig.filename = null;
+	    NOOP.myConfig.path = null;
 	    NOOP.myConfig.infoMode = true;
 	    NOOP.myConfig.verboseMode = false;
 	    NOOP.myConfig.removeAncillaryChunks = false;
 
-	    DEFAULT.myConfig.filename = null;
+	    DEFAULT.myConfig.path = null;
 	    DEFAULT.myConfig.infoMode = false;
 	    DEFAULT.myConfig.verboseMode = false;
 	    DEFAULT.myConfig.removeAncillaryChunks = false;
@@ -22,7 +22,7 @@ public class Configuration implements Cloneable {
 	private Configuration myConfig;
     }
 
-    private String filename;
+    private String path;
     private boolean infoMode;
     private boolean verboseMode;
     private boolean removeAncillaryChunks;
@@ -44,11 +44,11 @@ public class Configuration implements Cloneable {
     }
 
     public void setFilename(String filename) {
-	this.filename = filename;
+	this.path = filename;
     }
 
     public String getFilename() {
-	return new String(filename);
+	return new String(path);
     }
 
     public boolean isInfoMode() {
