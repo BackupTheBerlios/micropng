@@ -4,16 +4,15 @@ import java.io.IOException;
 
 import micropng.userinterface.UserConfiguration;
 import micropng.userinterface.cli.CommandLineParser;
-import micropng.userinterface.cli.OutputChannel;
 import micropng.userinterface.cli.WrongUsageException;
 
 public class Main {
 
-    OutputChannel out;
+    //OutputChannel out;
     String[] args;
 
     public Main(String[] args) {
-	out = new OutputChannel();
+	//out = new OutputChannel();
 	this.args = args;
     }
 
@@ -28,7 +27,7 @@ public class Main {
 	try {
 	    UserConfiguration u = parser.parse();
 	} catch (WrongUsageException e) {
-	    out.error("usage: java micropng.Main <filename>");
+	    //out.error("usage: java micropng.Main <filename>");
 	    System.exit(-1);
 	}
 	return res;
