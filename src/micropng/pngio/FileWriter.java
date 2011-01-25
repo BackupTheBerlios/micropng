@@ -3,8 +3,6 @@ package micropng.pngio;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.channels.FileChannel;
-import java.nio.channels.FileLock;
 
 import micropng.chunkview.ChunkSequence;
 import micropng.chunkview.chunk.Chunk;
@@ -25,20 +23,12 @@ public class FileWriter {
 
     public void writeSequence(File outputFileObject, ChunkSequence chunkSequence) throws IOException {
 	RandomAccessFile outputFile;
-	FileChannel outputFileChannel;
-	FileLock outputFileLock;
 
 	if (!outputFileObject.createNewFile()) {
 	    throw new CanNotCreateFileException();
 	}
 
 	outputFile = new RandomAccessFile(outputFileObject, "rw");
-	outputFileChannel = outputFile.getChannel();
-	outputFileLock = outputFileChannel.tryLock();
-
-	if (outputFileLock == null) {
-	    throw new ConcurrentLockException();
-	}
 
 	outputFile.write(PNGProperties.getSignature());
 

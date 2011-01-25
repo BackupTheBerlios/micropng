@@ -1,6 +1,51 @@
 package micropng.micropng;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import micropng.chunkview.ChunkSequence;
+import micropng.pngio.FileReader;
+import micropng.userinterface.OutputChannel;
+
 public class Configuration implements Cloneable {
+    private class Configurator {
+	private ArrayList<ConfigurationListener> listeners = new ArrayList<ConfigurationListener>();
+
+	public Configuration sanitize() throws IOException {
+	    Configuration res = Configuration.createNewConfig(Preset.NOOP);
+	    File targetFile = new File(getPath());
+	    FileReader reader;
+
+	    if (!targetFile.isFile()) {
+		message(OutputChannel.ERROR, "no such file: " + getPath());
+		return null;
+	    }
+
+	    res.setPath(getPath());
+
+	    reader = new FileReader(targetFile);
+	    chunkSequence = reader.readSequence();
+
+	    //TODO
+	    
+	    return res;
+	}
+
+	public void addConfigurationListener(ConfigurationListener listener) {
+	    listeners.add(listener);
+	}
+
+	public void removeConfigurationListener(ConfigurationListener listener) {
+	    listeners.remove(listener);
+	}
+
+	private void message(OutputChannel channel, String message) {
+	    for (ConfigurationListener listener : listeners) {
+		listener.configurationMessage(channel, message);
+	    }
+	}
+    }
 
     public enum Preset {
 	NOOP, DEFAULT;
@@ -34,12 +79,13 @@ public class Configuration implements Cloneable {
     private boolean removeAncillaryChunks;
     private int[] ancillaryChunksToKeep;
     private int[] ancillaryChunksToRemove;
+    private ChunkSequence chunkSequence;
 
     private Configuration() {
     }
 
     public static Configuration createNewConfig(Preset p) {
-	Configuration res = null;
+	Configuration res;
 	try {
 	    res = (Configuration) p.myConfig.clone();
 	} catch (CloneNotSupportedException e) {
@@ -47,6 +93,16 @@ public class Configuration implements Cloneable {
 	    throw new RuntimeException(e.getCause());
 	}
 	return res;
+    }
+
+    public Configuration generateInitiatedConfiguration() throws IOException {
+	Configurator configurator = new Configurator();
+	Configuration res = configurator.sanitize();
+	return res;
+    }
+
+    public ChunkSequence getChunkSequence() {
+	return chunkSequence;
     }
 
     public void setPath(String path) {

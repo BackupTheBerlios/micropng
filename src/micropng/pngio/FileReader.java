@@ -1,37 +1,46 @@
 package micropng.pngio;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
 import micropng.chunkview.ChunkSequence;
 import micropng.chunkview.chunk.Chunk;
-import micropng.chunkview.chunk.ChunkReader;
+import micropng.chunkview.chunk.Data;
+import micropng.chunkview.chunk.FileData;
 import micropng.fileview.PNGProperties;
 
 public class FileReader {
 
-    public FileReader() {
+    private File inputFile;
+    private RandomAccessFile input;
+
+    public FileReader(File inputFile) throws FileNotFoundException {
+	this.inputFile = inputFile;
+	input = new RandomAccessFile(inputFile, "r");
     }
 
-    public ChunkSequence readSequence(File inputFileObject) throws IOException {
+    private Chunk readChunk() throws IOException {
+	int length = input.readInt();
+	int type = input.readInt();
+	Data data = new FileData(input, input.getFilePointer(), length);
+	int crc;
+
+	input.seek(input.getFilePointer() + length);
+	crc = input.readInt();
+
+	return new Chunk(type, data, crc);
+    }
+
+    public ChunkSequence readSequence() throws IOException {
 	ChunkSequence res = new ChunkSequence();
-	RandomAccessFile inputFile = new RandomAccessFile(inputFileObject, "r");
-	long filePointerPosition = PNGProperties.getSignature().length;
-	ChunkReader factory = new ChunkReader();
 
-	inputFile.seek(filePointerPosition);
-
+	input.seek(PNGProperties.getSignature().length);
 	do {
-	    Chunk nextChunk = factory.readChunk(inputFile);
-
-	    if (inputFile.getChannel().lock(filePointerPosition, nextChunk.getDataSize() + 12, true) == null) {
-		throw new ConcurrentLockException();
-	    }
-
+	    Chunk nextChunk = readChunk();
 	    res.add(nextChunk);
-	    filePointerPosition = inputFile.getFilePointer();
-	} while (inputFile.getFilePointer() < inputFileObject.length());
+	} while (input.getFilePointer() < inputFile.length());
 
 	return res;
     }
