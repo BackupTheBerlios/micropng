@@ -28,6 +28,10 @@ public class Configuration implements Cloneable {
 	    chunkSequence = reader.readSequence();
 
 	    //TODO
+
+	    // check for unknown mandatory chunks -> set config: do not do anything
+
+	    // check for unknown non-mandatory unsafe-to-copy chunks -> set config: no manipulation of mandatory chunks
 	    
 	    return res;
 	}
