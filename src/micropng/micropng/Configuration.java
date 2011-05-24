@@ -67,8 +67,8 @@ public class Configuration implements Cloneable {
 	    DEFAULT.myConfig.path = null;
 	    DEFAULT.myConfig.infoMode = false;
 	    DEFAULT.myConfig.verboseMode = false;
-	    NOOP.myConfig.setAggregateIDAT(true);
-	    NOOP.myConfig.setOptimizeHuffmanTrees(true);
+	    DEFAULT.myConfig.setAggregateIDAT(true);
+	    DEFAULT.myConfig.setOptimizeHuffmanTrees(true);
 	    DEFAULT.myConfig.removeAncillaryChunks = false;
 
 	}
