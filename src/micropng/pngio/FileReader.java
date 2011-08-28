@@ -7,24 +7,15 @@ import java.io.RandomAccessFile;
 
 import micropng.chunkview.ChunkSequence;
 import micropng.chunkview.chunk.Chunk;
-import micropng.chunkview.chunk.Data;
 import micropng.chunkview.chunk.FileData;
 import micropng.fileview.PNGProperties;
 
 public class FileReader {
 
-    private File inputFile;
-    private RandomAccessFile input;
-
-    public FileReader(File inputFile) throws FileNotFoundException {
-	this.inputFile = inputFile;
-	input = new RandomAccessFile(inputFile, "r");
-    }
-
-    private Chunk readChunk() throws IOException {
+    private Chunk readChunk(RandomAccessFile input) throws IOException {
 	int length = input.readInt();
 	int type = input.readInt();
-	Data data = new FileData(input, input.getFilePointer(), length);
+	FileData data = new FileData(input, input.getFilePointer(), length);
 	int crc;
 
 	input.seek(input.getFilePointer() + length);
@@ -33,12 +24,13 @@ public class FileReader {
 	return new Chunk(type, data, crc);
     }
 
-    public ChunkSequence readSequence() throws IOException {
+    public ChunkSequence readSequence(File inputFile) throws FileNotFoundException, IOException {
 	ChunkSequence res = new ChunkSequence();
+	RandomAccessFile input = new RandomAccessFile(inputFile, "r");
 
 	input.seek(PNGProperties.getSignature().length);
 	do {
-	    Chunk nextChunk = readChunk();
+	    Chunk nextChunk = readChunk(input);
 	    res.add(nextChunk);
 	} while (input.getFilePointer() < inputFile.length());
 

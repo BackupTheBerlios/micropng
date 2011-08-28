@@ -10,13 +10,13 @@ import micropng.pngio.FileWriter;
 
 public class Optimizer {
 
-    private Configuration configuration;
+    private UserConfiguration configuration;
     private OptimizerOrdering ordering;
     private OptimizerChunkAggregation aggregation;
     private File outputFileObject;
     private boolean configurationIsSane;
 
-    public Optimizer(Configuration userConfiguration) throws IOException {
+    public Optimizer(UserConfiguration userConfiguration) throws IOException {
 
 	this.configuration = userConfiguration.generateInitiatedConfiguration();
 

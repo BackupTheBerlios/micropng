@@ -4,8 +4,8 @@ package micropng.micropng;
 
 import java.io.IOException;
 
+import micropng.userinterface.InternalConfiguration;
 import micropng.userinterface.cli.CommandLineParser;
-import micropng.userinterface.cli.WrongUsageException;
 
 public class Main {
 
@@ -18,19 +18,13 @@ public class Main {
     }
 
     public void run() throws IOException {
-	Optimizer optimizer = new Optimizer(configure());
-	optimizer.run();
+
     }
 
-    private Configuration configure() {
-	Configuration res = null;
+    private InternalConfiguration configure() {
+	InternalConfiguration res = null;
 	CommandLineParser parser = new CommandLineParser(args);
-	try {
-	    Configuration c = parser.parse();
-	} catch (WrongUsageException e) {
-	    //out.error("usage: java micropng.Main <filename>");
-	    System.exit(-1);
-	}
+        UserConfiguration c = parser.parse();
 	return res;
     }
 

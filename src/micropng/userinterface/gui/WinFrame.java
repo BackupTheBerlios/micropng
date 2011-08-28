@@ -28,13 +28,13 @@ import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import micropng.micropng.Configuration;
-import micropng.micropng.Configuration.Preset;
+import micropng.userinterface.InternalConfiguration;
+import micropng.userinterface.InternalConfiguration.Preset;
 
 @SuppressWarnings("serial")
 public class WinFrame extends JFrame implements ActionListener, ItemListener {
     private Info inf = new Info();
-    private Configuration config = Configuration.createNewConfig(Preset.DEFAULT);
+    private InternalConfiguration config = InternalConfiguration.createNewConfig(Preset.DEFAULT);
 
     private JMenuItem open = new JMenuItem("Öffnen");
     private JMenuItem end = new JMenuItem("Beenden");
@@ -47,8 +47,10 @@ public class WinFrame extends JFrame implements ActionListener, ItemListener {
     private JLabel changedat = new JLabel();
     private JLabel pathfield = new JLabel();
 
-    private JCheckBox idat = new JCheckBox("IDAT-Blöcke zusammenfassen", config.doesAggregateIDAT());
-    private JCheckBox huff = new JCheckBox("Huffmanbäume optimieren", config.doesOptimizeHuffmanTrees());
+//    private JCheckBox idat = new JCheckBox("IDAT-Blöcke zusammenfassen", config.doesAggregateIDAT());
+//    private JCheckBox huff = new JCheckBox("Huffmanbäume optimieren", config.doesOptimizeHuffmanTrees());
+    private JCheckBox idat = new JCheckBox("IDAT-Blöcke zusammenfassen", true);
+    private JCheckBox huff = new JCheckBox("Huffmanbäume optimieren", true);
 
     // Konstruktor für das Hauptfenster
     public WinFrame() throws MalformedURLException {
@@ -208,7 +210,7 @@ public class WinFrame extends JFrame implements ActionListener, ItemListener {
 		File selFile = fc.getSelectedFile();
 
 		String filepath = selFile.getPath();
-		config.setPath(filepath);
+		//config.setPath(filepath);
 
 		// Dateiname
 		String filename = selFile.getName();
@@ -242,8 +244,8 @@ public class WinFrame extends JFrame implements ActionListener, ItemListener {
 
     @Override
     public void itemStateChanged(ItemEvent event) {
-	config.setAggregateIDAT(idat.isSelected());
-	config.setOptimizeHuffmanTrees(huff.isSelected());
+	//config.setAggregateIDAT(idat.isSelected());
+	//config.setOptimizeHuffmanTrees(huff.isSelected());
     }
 
     public static void main(String[] args) throws MalformedURLException {

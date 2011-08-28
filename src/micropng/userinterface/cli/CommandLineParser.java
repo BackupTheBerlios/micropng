@@ -1,34 +1,25 @@
 package micropng.userinterface.cli;
 
-import micropng.micropng.Configuration;
-import micropng.micropng.Configuration.Preset;
-
+import micropng.micropng.UserConfiguration;
 
 public class CommandLineParser {
 
     private String[] parameters;
     private int pos;
-    private Configuration res;
-    private boolean filenameHasBeenFound;
+    private UserConfiguration res;
 
     public CommandLineParser(String[] parameters) {
 	this.parameters = parameters;
 	pos = 0;
-	res = Configuration.createNewConfig(Preset.DEFAULT);
-	filenameHasBeenFound = false;
+	res = null;
     }
 
     private void parseDrop() {
 	pos++;
     }
 
-    private void parseFilename() throws WrongUsageException {
-	if (filenameHasBeenFound) {
-	    throw new WrongUsageException("can not take more than one filename: \""
-		    + parameters[pos] + "\"");
-	}
+    private void parseFilename() {
 	res.setPath(parameters[pos]);
-	filenameHasBeenFound = true;
 	pos++;
     }
 
@@ -40,7 +31,7 @@ public class CommandLineParser {
 	pos++;
     }
 
-    public Configuration parse() throws WrongUsageException {
+    public UserConfiguration parse() {
 
 	while (pos < parameters.length) {
 	    String nextString = parameters[pos];
@@ -52,27 +43,20 @@ public class CommandLineParser {
 	    case 1:
 		parseFilename();
 		break;
-	    case 2:
-		if ((nextString.charAt(0) == '-') && (nextString.charAt(1) != '-')) {
-		    parseShortOpt();
-		} else {
-		    parseFilename();
-		}
-		break;
 	    default:
 		if (nextString.charAt(0) == '-') {
-		    if (nextString.charAt(1) == '-') {
-			parseLongOpt();
-		    } else {
+		    if (nextString.charAt(1) != '-') {
 			parseShortOpt();
+		    } else {
+			if (nextString.length() > 2) {
+			    parseLongOpt();
+			}
 		    }
 		} else {
 		    parseFilename();
 		}
+		break;
 	    }
-	}
-	if (!filenameHasBeenFound) {
-	    throw new WrongUsageException("no filename given");
 	}
 	return res;
     }
