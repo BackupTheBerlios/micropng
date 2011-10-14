@@ -7,6 +7,7 @@ import micropng.chunkview.chunk.OrganisationSequence;
 import micropng.fileview.OptimizerChunkAggregation;
 import micropng.fileview.OptimizerOrdering;
 import micropng.pngio.FileWriter;
+import micropng.userinterface.UserConfiguration;
 
 public class Optimizer {
 

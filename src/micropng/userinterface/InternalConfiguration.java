@@ -1,49 +1,108 @@
 package micropng.userinterface;
 
-import java.util.Hashtable;
+import micropng.chunkview.ChunkSequence;
 
 public class InternalConfiguration {
-
-    private Hashtable<String, InputConfigurationOption> options;
-
-    private boolean removeAncillaryChunksSwitch;
-    private String[] ancillaryChunksToDrop;
+    private boolean informationalMode;
+    private boolean optimizeHuffmanTrees;
+    private boolean regroupIDATChunks;
+    private boolean removeAncillaryChunks;
+    private boolean sortChunks;
+    private boolean reencodeZlibStreams;
+    private boolean unknownMandatoryChunkInResult;
+    private boolean unknownAncillaryChunkInResult;
+    private int verbosity;
     private String[] ancillaryChunksToKeep;
-    private boolean aggregateIDATSwitch;
-    private boolean optimizeHuffmanTreesSwitch;
+    private ChunkSequence chunkSequence;
 
-    public enum Preset {
-	NOOP, DEFAULT;
-	static {
-	    NOOP.myConfig = new InternalConfiguration();
-	    DEFAULT.myConfig = new InternalConfiguration();
-
-	    NOOP.myConfig.aggregateIDATSwitch = false;
-	    NOOP.myConfig.optimizeHuffmanTreesSwitch = false;
-	    NOOP.myConfig.removeAncillaryChunksSwitch = false;
-
-	    DEFAULT.myConfig.aggregateIDATSwitch = true;
-	    DEFAULT.myConfig.optimizeHuffmanTreesSwitch = true;
-	    DEFAULT.myConfig.removeAncillaryChunksSwitch = false;
-	}
-	private InternalConfiguration myConfig;
+    public InternalConfiguration() {
     }
 
-    private InternalConfiguration() {
-	
+    public boolean unknownMandatoryChunkInResult() {
+	return unknownMandatoryChunkInResult;
     }
 
-    public InternalConfiguration(String[] args) {
+    void setUnknownMandatoryChunkInResult(boolean unknownMandatoryChunkInResult) {
+	this.unknownMandatoryChunkInResult = unknownMandatoryChunkInResult;
     }
-    
-    public static InternalConfiguration createNewConfig(Preset p) {
-	InternalConfiguration res;
-	try {
-	    res = (InternalConfiguration) p.myConfig.clone();
-	} catch (CloneNotSupportedException e) {
-	    e.printStackTrace();
-	    throw new RuntimeException(e.getCause());
-	}
-	return res;
+
+    void setUnknownAncillaryChunkInResult(boolean unknownAncillaryChunkInResult) {
+	this.unknownAncillaryChunkInResult = unknownAncillaryChunkInResult;
+    }
+
+    public boolean unknownAncillaryChunkInResult() {
+	return unknownAncillaryChunkInResult;
+    }
+
+    public boolean informationalMode() {
+	return informationalMode;
+    }
+
+    public boolean optimizeHuffmanTrees() {
+	return optimizeHuffmanTrees;
+    }
+
+    public boolean regroupIDATChunks() {
+	return regroupIDATChunks;
+    }
+
+    public boolean removeAncillaryChunks() {
+	return removeAncillaryChunks;
+    }
+
+    public boolean sortChunks() {
+	return sortChunks;
+    }
+
+    public boolean reencodeZlibStreams() {
+	return reencodeZlibStreams;
+    }
+
+    public int getVerbosity() {
+	return verbosity;
+    }
+
+    void setInformationalMode(boolean informationalMode) {
+	this.informationalMode = informationalMode;
+    }
+
+    void setOptimizeHuffmanTrees(boolean optimizeHuffmanTrees) {
+	this.optimizeHuffmanTrees = optimizeHuffmanTrees;
+    }
+
+    void setRegroupIDATChunks(boolean regroupIDATChunks) {
+	this.regroupIDATChunks = regroupIDATChunks;
+    }
+
+    void setRemoveAncillaryChunks(boolean removeAncillaryChunks) {
+	this.removeAncillaryChunks = removeAncillaryChunks;
+    }
+
+    void setSortChunks(boolean sortChunks) {
+	this.sortChunks = sortChunks;
+    }
+
+    void setReencodeZlibStreams(boolean reencodeZlibStreams) {
+	this.reencodeZlibStreams = reencodeZlibStreams;
+    }
+
+    void setVerbosity(int verbosity) {
+	this.verbosity = verbosity;
+    }
+
+    void setAncillaryChunksToKeep(String[] ancillaryChunksToKeep) {
+	this.ancillaryChunksToKeep = ancillaryChunksToKeep;
+    }
+
+    public String[] getAncillaryChunksToKeep() {
+	return ancillaryChunksToKeep;
+    }
+
+    void setChunkSequence(ChunkSequence chunkSequence) {
+	this.chunkSequence = chunkSequence;
+    }
+
+    public ChunkSequence getChunkSequence() {
+	return chunkSequence;
     }
 }

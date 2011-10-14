@@ -1,6 +1,6 @@
 package micropng.userinterface.cli;
 
-import micropng.micropng.UserConfiguration;
+import micropng.userinterface.UserConfiguration;
 
 public class CommandLineParser {
 

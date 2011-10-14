@@ -28,13 +28,10 @@ import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import micropng.userinterface.InternalConfiguration;
-import micropng.userinterface.InternalConfiguration.Preset;
-
 @SuppressWarnings("serial")
 public class WinFrame extends JFrame implements ActionListener, ItemListener {
     private Info inf = new Info();
-    private InternalConfiguration config = InternalConfiguration.createNewConfig(Preset.DEFAULT);
+    //private InternalConfiguration config = InternalConfiguration.createNewConfig(Preset.DEFAULT);
 
     private JMenuItem open = new JMenuItem("Öffnen");
     private JMenuItem end = new JMenuItem("Beenden");

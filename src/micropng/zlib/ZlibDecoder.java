@@ -1,6 +1,7 @@
 package micropng.zlib;
 
 import micropng.commonlib.Queue;
+import micropng.zlib.deflate.DeflateStreamDecoder;
 
 public class ZlibDecoder {
     private class ZlibDecoderThread implements Runnable {
@@ -15,13 +16,18 @@ public class ZlibDecoder {
 	@Override
 	public void run() {
 	    int CMF;
+	    @SuppressWarnings("unused")
 	    int CM;
+	    @SuppressWarnings("unused")
 	    int CINFO;
 	    int FLG;
+	    @SuppressWarnings("unused")
 	    int FCHECK;
+	    @SuppressWarnings("unused")
 	    int FDICT;
+	    @SuppressWarnings("unused")
 	    int FLEVEL;
-	    int next;
+	    DeflateStreamDecoder deflateDecoder = new DeflateStreamDecoder();
 
 	    // specified in zlib, but prohibited by png spec:
 	    // int DICTID;
@@ -43,11 +49,8 @@ public class ZlibDecoder {
 		// }
 		// }
 
-		next = input.take();
-		while (next != -1) {
-		    output.put(next);
-		    next = input.take();
-		}
+		deflateDecoder.decompress(input, output);
+
 		output.close();
 	    } catch (InterruptedException e) {
 		// TODO Auto-generated catch block

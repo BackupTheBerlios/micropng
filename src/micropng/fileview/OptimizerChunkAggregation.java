@@ -6,7 +6,7 @@ import java.util.Iterator;
 import micropng.chunkview.ChunkSequence;
 import micropng.chunkview.chunk.CRCCalculator;
 import micropng.chunkview.chunk.Chunk;
-import micropng.chunkview.chunk.Data;
+import micropng.chunkview.chunk.DataField;
 import micropng.chunkview.chunk.DataGroup;
 import micropng.chunkview.chunk.OrganisationSequence;
 import micropng.chunkview.chunk.OrganisationUnit;
@@ -23,14 +23,14 @@ public class OptimizerChunkAggregation {
 		if (inputSequence.size() > 1) {
 		    Iterator<Chunk> inputSequenceIterator = inputSequence.iterator();
 		    Chunk nextChunk;
-		    Data nextData;
+		    DataField nextData;
 
 		    int newLength = 0;
 		    int newType = Type.IDAT.toInt();
 		    DataGroup newData;
 		    int newCrc;
 
-		    ArrayList<Data> dataList = new ArrayList<Data>();
+		    ArrayList<DataField> dataList = new ArrayList<DataField>();
 		    ChunkSequence newChunkSequence = new ChunkSequence();
 
 		    while (inputSequenceIterator.hasNext()) {
@@ -50,15 +50,15 @@ public class OptimizerChunkAggregation {
 			    dataList.add(nextData);
 			} else {
 			    int firstPartLength = PNGProperties.getMaxSize() - newLength;
-			    Data firstPart = new RAMData(nextData.getArray(0, firstPartLength));
-			    Data secondPart = new RAMData(nextData.getArray(0, nextData.getSize() - firstPartLength));
+			    DataField firstPart = new RAMData(nextData.getArray(0, firstPartLength));
+			    DataField secondPart = new RAMData(nextData.getArray(0, nextData.getSize() - firstPartLength));
 
 			    dataList.add(firstPart);
 			    newData = new DataGroup(dataList);
 			    newCrc = CRCCalculator.calculate(newType, newData);
 			    newChunkSequence.add(new Chunk(newType, newData, newCrc));
 
-			    dataList = new ArrayList<Data>();
+			    dataList = new ArrayList<DataField>();
 			    dataList.add(secondPart);
 			}
 		    }

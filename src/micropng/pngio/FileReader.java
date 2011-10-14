@@ -28,7 +28,7 @@ public class FileReader {
 	ChunkSequence res = new ChunkSequence();
 	RandomAccessFile input = new RandomAccessFile(inputFile, "r");
 
-	input.seek(PNGProperties.getSignature().length);
+	input.seek(PNGProperties.getSignatureLength());
 	do {
 	    Chunk nextChunk = readChunk(input);
 	    res.add(nextChunk);

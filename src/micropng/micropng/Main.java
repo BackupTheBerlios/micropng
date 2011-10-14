@@ -5,6 +5,7 @@ package micropng.micropng;
 import java.io.IOException;
 
 import micropng.userinterface.InternalConfiguration;
+import micropng.userinterface.UserConfiguration;
 import micropng.userinterface.cli.CommandLineParser;
 
 public class Main {

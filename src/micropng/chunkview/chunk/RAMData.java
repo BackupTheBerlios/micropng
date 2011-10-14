@@ -3,7 +3,7 @@ package micropng.chunkview.chunk;
 import micropng.commonlib.Queue;
 import micropng.micropng.MicropngThread;
 
-public class RAMData implements Data {
+public class RAMData implements DataField {
 
     private class QueueFeeder extends MicropngThread {
 

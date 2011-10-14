@@ -9,6 +9,10 @@ public enum PNGProperties {
 	return sig;
     }
 
+    public static int getSignatureLength() {
+	return sig.length;
+    }
+    
     public static int getMaxSize() {
 	return maxSize;
     }

@@ -1,4 +1,4 @@
-package micropng.micropng;
+package micropng.userinterface;
 
 import java.io.IOException;
 
@@ -23,6 +23,22 @@ public class UserConfiguration {
 
     public ChunkSequence getChunkSequence() {
 	return chunkSequence;
+    }
+
+    void setAncillaryChunksToKeep(int[] ancillaryChunksToKeep) {
+	this.ancillaryChunksToKeep = ancillaryChunksToKeep;
+    }
+
+    void setAncillaryChunksToRemove(int[] ancillaryChunksToRemove) {
+	this.ancillaryChunksToRemove = ancillaryChunksToRemove;
+    }
+
+    public int[] getAncillaryChunksToKeep() {
+	return ancillaryChunksToKeep;
+    }
+
+    public int[] getAncillaryChunksToRemove() {
+	return ancillaryChunksToRemove;
     }
 
     public void setPath(String path) {

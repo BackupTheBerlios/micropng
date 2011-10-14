@@ -6,7 +6,7 @@ import java.io.RandomAccessFile;
 import micropng.commonlib.Queue;
 import micropng.micropng.MicropngThread;
 
-public class FileData implements Data {
+public class FileData implements DataField {
     private class QueueFeeder extends MicropngThread {
 
 	private Queue out;

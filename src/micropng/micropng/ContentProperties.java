@@ -5,11 +5,13 @@ public class ContentProperties {
 	NONE, FULL, ALPHA
     };
 
-    private boolean isCorrupt;
     // theoretically, there could be more colors than fit into long
     private long numberOfColors;
-    private boolean isGreyscale;
+    private boolean greyscale;
     private int bitDepth;
-    private boolean hasUnknownMandatoryChunks;
-    private boolean hasUnknownAncillaryChunks;
+    private boolean unknownMandatoryChunks;
+    private boolean unknownAncillaryChunks;
+    long height;
+    long width;
+    private Transparency transparency;
 }

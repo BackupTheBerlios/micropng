@@ -3,10 +3,10 @@ package micropng.chunkview.chunk;
 public class Chunk {
 
     private int type;
-    private Data data;
+    private DataField data;
     private int crc;
 
-    public Chunk(int type, Data data, int crc) {
+    public Chunk(int type, DataField data, int crc) {
 	this.type = type;
 	this.data = data;
 	this.crc = crc;
@@ -20,7 +20,7 @@ public class Chunk {
 	return type;
     }
 
-    public Data getData() {
+    public DataField getData() {
 	return data;
     }
 

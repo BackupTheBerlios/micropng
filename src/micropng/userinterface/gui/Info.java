@@ -13,7 +13,7 @@ public class Info {
     public Info() throws MalformedURLException {
 	name = "micropng";
 	author = "Martin Walch, Katharina Titz";
-	creation = "2009-2010";
+	creation = "2009-2011";
 	licence = "GPLv3";
 	purpose = "PNG-Dateien verkleinern";
 	logo = new ImageIcon();

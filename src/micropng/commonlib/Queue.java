@@ -32,20 +32,13 @@ public class Queue {
 
 	if (outBlock == null) {
 	    synchronized (this) {
-		if (queue.peek() == null) {
+		while (queue.peek() == null) {
 		    if (closed) {
 			return -1;
-		    } else {
-			wait();
-			// is queue.peek() == null check here really
-			// necessary?
-			if (queue.peek() == null && closed) {
-			    return -1;
-			}
 		    }
+		    wait();
 		}
 	    }
-
 	    outBlock = queue.take();
 	    outPos = 0;
 	}

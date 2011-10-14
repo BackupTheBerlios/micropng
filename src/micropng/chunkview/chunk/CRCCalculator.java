@@ -28,7 +28,7 @@ public enum CRCCalculator {
 	}
     }
 
-    public static int calculate(int type, Data data) {
+    public static int calculate(int type, DataField data) {
 	int crc = 0xffffffff;
 	int[] typeArray = FourByteConverter.intArrayValue(type);
 	Queue input = data.getStream();

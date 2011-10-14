@@ -6,7 +6,7 @@ import java.util.Iterator;
 import micropng.commonlib.Queue;
 import micropng.micropng.MicropngThread;
 
-public class DataGroup implements Data {
+public class DataGroup implements DataField {
 
     private class QueueFeeder extends MicropngThread {
 
@@ -19,7 +19,7 @@ public class DataGroup implements Data {
 	@Override
 	public void run() {
 	    try {
-		for (Data d : dataElements) {
+		for (DataField d : dataElements) {
 		    Queue q = d.getStream();
 		    int value;
 		    value = q.take();
@@ -36,9 +36,9 @@ public class DataGroup implements Data {
 	}
     }
 
-    private ArrayList<Data> dataElements;
+    private ArrayList<DataField> dataElements;
 
-    public DataGroup(ArrayList<Data> dataElements) {
+    public DataGroup(ArrayList<DataField> dataElements) {
 	this.dataElements = dataElements;
     }
 
@@ -48,8 +48,8 @@ public class DataGroup implements Data {
 	int to = from + length;
 	int currentPos = 0;
 	int remainingBytes = length;
-	Iterator<Data> dataElementsIterator = dataElements.iterator();
-	Data currentDataElement = dataElementsIterator.next();
+	Iterator<DataField> dataElementsIterator = dataElements.iterator();
+	DataField currentDataElement = dataElementsIterator.next();
 	int nextElementBorder = currentDataElement.getSize();
 	int firstPosInFirstChunk;
 
@@ -89,7 +89,7 @@ public class DataGroup implements Data {
 	byte[] res = new byte[getSize()];
 	int pos = 0;
 
-	for (Data d : dataElements) {
+	for (DataField d : dataElements) {
 	    System.arraycopy(d.getArray(), 0, res, pos, d.getSize());
 	}
 
@@ -99,8 +99,8 @@ public class DataGroup implements Data {
     @Override
     public int getByteAt(int pos) {
 	int currentPos = 0;
-	Iterator<Data> dataElementsIterator = dataElements.iterator();
-	Data currentDataElement = dataElementsIterator.next();
+	Iterator<DataField> dataElementsIterator = dataElements.iterator();
+	DataField currentDataElement = dataElementsIterator.next();
 
 	while (currentPos + currentDataElement.getSize() <= pos) {
 	    currentPos += currentDataElement.getSize();
@@ -113,7 +113,7 @@ public class DataGroup implements Data {
     public int getSize() {
 	int res = 0;
 
-	for (Data d : dataElements) {
+	for (DataField d : dataElements) {
 	    res += d.getSize();
 	}
 	return res;

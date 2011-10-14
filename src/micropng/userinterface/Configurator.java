@@ -1,19 +1,20 @@
-package micropng.micropng;
+package micropng.userinterface;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import micropng.chunkview.ChunkSequence;
+import micropng.chunkview.chunk.Chunk;
+import micropng.chunkview.chunk.Type;
+import micropng.micropng.ConfigurationListener;
 import micropng.pngio.FileReader;
-import micropng.userinterface.InternalConfiguration;
-import micropng.userinterface.OutputChannel;
 
 public class Configurator {
     private ArrayList<ConfigurationListener> listeners = new ArrayList<ConfigurationListener>();
 
     public InternalConfiguration makeActualConfig(UserConfiguration userConf) throws IOException {
-	InternalConfiguration res = null;
+	InternalConfiguration res;
 	String filePath = userConf.getPath();
 	File targetFile = new File(filePath);
 	FileReader reader;
@@ -24,16 +25,48 @@ public class Configurator {
 	    return null;
 	}
 
+	res = new InternalConfiguration();
 	reader = new FileReader();
 	chunkSequence = reader.readSequence(targetFile);
+	res.setChunkSequence(chunkSequence);
 
-	// TODO
+	for (Chunk c : chunkSequence) {
+	    int type = c.getType();
+	    if (!Type.isKnown(type)) {
+		if (Type.isAncillary(type)) {
+		    if (!Type.isSafeToCopy(type)) {
+			if (ancillaryChunkShallBeKept(userConf, type)) {
+			    res.setUnknownAncillaryChunkInResult(true);
+			}
+		    }
+		} else {
+		    res.setUnknownMandatoryChunkInResult(true);
+		}
+	    }
+	}
 
-	// check for unknown mandatory chunks -> set config: do not do anything
+	return res;
+    }
 
-	// check for unknown non-mandatory unsafe-to-copy chunks -> set config:
-	// no manipulation of mandatory chunks
-
+    private boolean ancillaryChunkShallBeKept(UserConfiguration userConf, int type) {
+	boolean res;
+	if (userConf.doesRemoveAncillaryChunks()) {
+	    res = false;
+	    int[] chunksToKeep = userConf.getAncillaryChunksToKeep();
+	    for (int i : chunksToKeep) {
+		if (type == i) {
+		    res = true;
+		}
+	    }
+	} else {
+	    res = true;
+	    int[] chunksToRemove = userConf.getAncillaryChunksToRemove();
+	    for (int i : chunksToRemove) {
+		if (type == i) {
+		    res = false;
+		}
+	    }
+	}
 	return res;
     }
 
