@@ -28,9 +28,9 @@ public class ZlibDecoder {
 	    @SuppressWarnings("unused")
 	    int FLEVEL;
 	    DeflateStreamDecoder deflateDecoder = new DeflateStreamDecoder();
-
 	    // specified in zlib, but prohibited by png spec:
 	    // int DICTID;
+	    int	ADLER32 = 0;
 	    try {
 		CMF = input.take();
 		CM = CMF & 0x0f; // must be 8
@@ -50,6 +50,11 @@ public class ZlibDecoder {
 		// }
 
 		deflateDecoder.decompress(input, output);
+
+		for (int i = 0; i < 4; i++) {
+		    ADLER32 <<=8;
+		    ADLER32 |= input.take();
+		}
 
 		output.close();
 	    } catch (InterruptedException e) {
