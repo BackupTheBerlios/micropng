@@ -16,8 +16,6 @@ public class Filter {
     private FilterMode filterMode;
     private Queue input;
     private Queue output;
-    private int byteBoundaryOffset;
-    private int offsetBitMask;
     private int numberOfChannels;
     private int bitsPerSample;
 
@@ -32,8 +30,6 @@ public class Filter {
     public void init(long newImageWidth) {
 	long bitsPerScanline = newImageWidth * bitsPerSample;
 	long newScanLineSize = (long) Math.ceil(bitsPerScanline / 8f);
-	byteBoundaryOffset = (int) (bitsPerScanline & 0x07);
-	offsetBitMask = (1 << byteBoundaryOffset) - 1;
 	for (int i = 0; i < numberOfChannels; i++) {
 	    lastScanline[i] = new BigArrayOfInt(newScanLineSize);
 	}

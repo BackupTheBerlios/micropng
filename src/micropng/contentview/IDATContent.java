@@ -7,7 +7,7 @@ import micropng.commonlib.Queue;
 import micropng.micropng.MicropngThread;
 
 public class IDATContent implements Data {
-    private class QueueFeeder extends MicropngThread {
+    private class QueueFeeder implements MicropngThread {
 
 	private Queue out;
 

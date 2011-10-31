@@ -8,7 +8,7 @@ import micropng.micropng.MicropngThread;
 
 public class DataGroup implements DataField {
 
-    private class QueueFeeder extends MicropngThread {
+    private class QueueFeeder implements MicropngThread {
 
 	private Queue out;
 

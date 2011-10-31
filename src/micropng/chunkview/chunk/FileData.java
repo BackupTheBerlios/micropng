@@ -7,7 +7,7 @@ import micropng.commonlib.Queue;
 import micropng.micropng.MicropngThread;
 
 public class FileData implements DataField {
-    private class QueueFeeder extends MicropngThread {
+    private class QueueFeeder implements MicropngThread {
 
 	private Queue out;
 

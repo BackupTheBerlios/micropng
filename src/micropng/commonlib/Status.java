@@ -14,7 +14,7 @@ public class Status {
     }
     
     private Status(StatusID id) {
-    };
+    }
 
     public static Status ok() {
 	return ok;

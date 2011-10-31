@@ -5,7 +5,7 @@ import micropng.micropng.MicropngThread;
 
 public class RAMData implements DataField {
 
-    private class QueueFeeder extends MicropngThread {
+    private class QueueFeeder implements MicropngThread {
 
 	private Queue out;
 
