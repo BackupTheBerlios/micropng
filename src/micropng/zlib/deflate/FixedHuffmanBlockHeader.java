@@ -2,10 +2,10 @@ package micropng.zlib.deflate;
 
 import java.util.ArrayList;
 
-import micropng.commonlib.BitQueue;
 import micropng.commonlib.Queue;
+import micropng.commonlib.StreamFilter;
 
-public class FixedHuffmanBlockHeader implements DataBlockHeader {
+public class FixedHuffmanBlockHeader extends DataBlockHeader {
 
     private final static HuffmanTree defaultLiteralsAndLengthsCodesTree = new HuffmanTree(
 	    new int[] { 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
@@ -24,24 +24,29 @@ public class FixedHuffmanBlockHeader implements DataBlockHeader {
 	    5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
 	    5 });
 
-    private BitQueue input;
+    private Queue input;
     private ArrayList<Integer> originalHeaderBits;
+    private HuffmanStreamDecoder decoder;
 
-    public FixedHuffmanBlockHeader(BitQueue input) {
+    public FixedHuffmanBlockHeader(Queue input) {
 	this.input = input;
 	originalHeaderBits = new ArrayList<Integer>(0);
-    }
-
-    @Override
-    public void decode(Queue output) throws InterruptedException {
-	// TODO Auto-generated method stub
-	HuffmanStreamDecoder decoder = new HuffmanStreamDecoder(defaultLiteralsAndLengthsCodesTree,
+	decoder = new HuffmanStreamDecoder(defaultLiteralsAndLengthsCodesTree,
 		defaultDistancesCodesTree);
-	decoder.decode(input, output);
     }
 
     @Override
     public ArrayList<Integer> getOriginalHeader() {
 	return originalHeaderBits;
+    }
+
+    @Override
+    public void decode() throws InterruptedException {
+	decoder.decode(input);
+    }
+
+    @Override
+    public void connect(StreamFilter nextInChain) {
+	decoder.connect(nextInChain);
     }
 }

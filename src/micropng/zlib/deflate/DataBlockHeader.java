@@ -2,9 +2,10 @@ package micropng.zlib.deflate;
 
 import java.util.ArrayList;
 
-import micropng.commonlib.Queue;
+import micropng.commonlib.StreamFilter;
 
-public interface DataBlockHeader {
-    public void decode(Queue output) throws InterruptedException;
-    public ArrayList<Integer> getOriginalHeader();
+public abstract class DataBlockHeader extends StreamFilter {
+    public abstract void decode() throws InterruptedException;
+
+    public abstract ArrayList<Integer> getOriginalHeader();
 }

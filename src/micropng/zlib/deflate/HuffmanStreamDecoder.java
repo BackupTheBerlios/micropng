@@ -1,11 +1,11 @@
 package micropng.zlib.deflate;
 
-import micropng.commonlib.BitQueue;
 import micropng.commonlib.Queue;
 import micropng.commonlib.RingBuffer;
+import micropng.commonlib.StreamFilter;
 import micropng.zlib.deflate.HuffmanTree.HuffmanTreeWalker;
 
-public class HuffmanStreamDecoder {
+public class HuffmanStreamDecoder extends StreamFilter {
 
     private final static int MAXIMUM_DISTANCE = 32768;
 
@@ -24,13 +24,15 @@ public class HuffmanStreamDecoder {
 
     private HuffmanTree literalsAndLengths;
     private HuffmanTree distances;
+    RingBuffer outputBuffer;
 
     public HuffmanStreamDecoder(HuffmanTree literalsAndLengths, HuffmanTree distances) {
 	this.literalsAndLengths = literalsAndLengths;
 	this.distances = distances;
+	 outputBuffer = new RingBuffer(MAXIMUM_DISTANCE);
     }
 
-    private int readValueFromTree(HuffmanTreeWalker treeWalker, BitQueue input)
+    private int readValueFromTree(HuffmanTreeWalker treeWalker, Queue input)
 	    throws InterruptedException {
 	treeWalker.reset();
 	do {
@@ -40,8 +42,12 @@ public class HuffmanStreamDecoder {
 	return treeWalker.getValue();
     }
 
-    public void decode(BitQueue input, Queue output) throws InterruptedException {
-	RingBuffer outputBuffer = new RingBuffer(output, MAXIMUM_DISTANCE);
+    @Override
+    public void connect(StreamFilter nextInChain) {
+	outputBuffer.connect(nextInChain);
+    }
+
+    public void decode(Queue input) throws InterruptedException {
 	HuffmanTreeWalker literalsAndLengthsTreeWalker = literalsAndLengths.getHuffmanTreeWalker();
 	HuffmanTreeWalker distancesTreeWalker = distances.getHuffmanTreeWalker();
 	int literalOrLengthCode;
@@ -50,17 +56,17 @@ public class HuffmanStreamDecoder {
 	    literalOrLengthCode = readValueFromTree(literalsAndLengthsTreeWalker, input);
 
 	    if (literalOrLengthCode < 256) {
-		outputBuffer.put(literalOrLengthCode);
+		outputBuffer.out(literalOrLengthCode);
 	    } else if (literalOrLengthCode > 256) {
 		int lengthsTableIndex = literalOrLengthCode - 257;
 		int length = lengthsTable[lengthsTableIndex];
 		int numberOfLengthExtraBits = extraBitsForLengthsTable[lengthsTableIndex];
-		int lengthExtraBits = input.take(numberOfLengthExtraBits);
+		int lengthExtraBits = input.takeBits(numberOfLengthExtraBits);
 
 		int distanceCode = readValueFromTree(distancesTreeWalker, input);
 		int distance = distancesTable[distanceCode];
 		int numberOfDistanceExtraBits = extraBitsForDistancesTable[distanceCode];
-		int distanceExtraBits = input.take(numberOfDistanceExtraBits);
+		int distanceExtraBits = input.takeBits(numberOfDistanceExtraBits);
 
 		length <<= numberOfLengthExtraBits;
 		length |= lengthExtraBits;

@@ -1,19 +1,19 @@
 package micropng.encodingview;
 
-import micropng.commonlib.Queue;
+import micropng.micropng.Dimensions;
 import micropng.micropng.MicropngThread;
 
-public class Adam7DeInterlacer implements DeInterlacer {
+public class Adam7DeInterlacer extends DeInterlacer {
     private class FilterFeederThread implements MicropngThread {
 
 	private long width;
 	private long height;
 	private Filter filter;
 
-	public FilterFeederThread(long width, long height, Filter filter) {
+	public FilterFeederThread(Dimensions size, Filter filter) {
 	    super();
-	    this.width = width;
-	    this.height = height;
+	    this.width = size.getWidth();
+	    this.height = size.getHeight();
 	    this.filter = filter;
 	}
 
@@ -39,17 +39,10 @@ public class Adam7DeInterlacer implements DeInterlacer {
     private final static int[] horizontalOffsets = { 0, 4, 0, 2, 0, 1, 0 };
     private final static int[] verticalOffsets = { 0, 0, 4, 0, 2, 0, 1 };
 
-    private Queue input;
-    private Queue output;
-
-    public Adam7DeInterlacer(Queue input, Queue output) {
-	this.input = input;
-	this.output = output;
-    }
-
     @Override
-    public void deInterlace(long width, long height, Filter filter) {
-	new Thread(new FilterFeederThread(width, height, filter)).run();
+    public void deInterlace(Dimensions size, Filter filter) {
+	new Thread(new FilterFeederThread(size, filter)).run();
 
     }
+
 }

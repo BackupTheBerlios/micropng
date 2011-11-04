@@ -1,27 +1,23 @@
 package micropng.encodingview;
 
 import micropng.commonlib.BigArrayOfInt;
-import micropng.commonlib.Queue;
+import micropng.commonlib.StreamFilter;
 
-public class Filter {
-    private enum FilterMode {
+public class Filter extends StreamFilter {
+    private enum FilterTypes {
 	NONE, SUB, UP, AVERAGE, PAETH;
-	public static FilterMode getMode(int i) {
-	    return FilterMode.values()[i];
+	public static FilterTypes getType(int i) {
+	    return FilterTypes.values()[i];
 	}
     }
 
     private final static int BYTE_MASK = 0x0ff;
     private BigArrayOfInt[] lastScanline;
-    private FilterMode filterMode;
-    private Queue input;
-    private Queue output;
+    private FilterTypes filterType;
     private int numberOfChannels;
     private int bitsPerSample;
 
-    public Filter(Queue input, Queue output, int numberOfChannels, int bitsPerSample) {
-	this.input = input;
-	this.output = output;
+    public Filter(int numberOfChannels, int bitsPerSample) {
 	this.bitsPerSample = bitsPerSample;
 	this.numberOfChannels = numberOfChannels;
 	lastScanline = new BigArrayOfInt[numberOfChannels];
@@ -36,9 +32,9 @@ public class Filter {
     }
 
     public void unfilter(long numberOfLines) throws InterruptedException {
-	filterMode = FilterMode.getMode(input.take());
+	filterType = FilterTypes.getType(in());
 
-	switch (filterMode) {
+	switch (filterType) {
 	case NONE:
 	    doNone();
 	    break;
@@ -61,9 +57,9 @@ public class Filter {
 	for (long i = 0; i < lastScanline[0].size; i++) {
 	    int currentValue;
 	    for (BigArrayOfInt channel : lastScanline) {
-		currentValue = input.take();
+		currentValue = in();
 		channel.set(i, currentValue);
-		output.put(currentValue);
+		out(currentValue);
 	    }
 	}
     }
@@ -74,9 +70,9 @@ public class Filter {
 	    int lastValue;
 	    for (BigArrayOfInt channel : lastScanline) {
 		lastValue = currentValue;
-		currentValue = (input.take() + lastValue) & BYTE_MASK;
+		currentValue = (in() + lastValue) & BYTE_MASK;
 		channel.set(i, currentValue);
-		output.put(currentValue);
+		out(currentValue);
 	    }
 	}
     }
@@ -85,9 +81,9 @@ public class Filter {
 	for (long i = 0; i < lastScanline[0].size; i++) {
 	    int currentValue;
 	    for (BigArrayOfInt channel : lastScanline) {
-		currentValue = (input.take() + channel.elementAt(i)) & BYTE_MASK;
+		currentValue = (in() + channel.elementAt(i)) & BYTE_MASK;
 		channel.set(i, currentValue);
-		output.put(currentValue);
+		out(currentValue);
 	    }
 	}
     }
@@ -100,9 +96,9 @@ public class Filter {
 	    for (BigArrayOfInt channel : lastScanline) {
 		lastValue = currentValue;
 		addend = (channel.elementAt(i) + lastValue) >> 1;
-		currentValue = (input.take() + addend) & BYTE_MASK;
+		currentValue = (in() + addend) & BYTE_MASK;
 		channel.set(i, currentValue);
-		output.put(currentValue);
+		out(currentValue);
 	    }
 	}
     }
@@ -118,9 +114,9 @@ public class Filter {
 		last = current;
 		above = channel.elementAt(i);
 		addend = paethPredictor(last, above, lastAbove);
-		current = (input.take() + addend) & BYTE_MASK;
+		current = (in() + addend) & BYTE_MASK;
 		channel.set(i, current);
-		output.put(current);
+		out(current);
 		lastAbove = 0;
 	    }
 	}

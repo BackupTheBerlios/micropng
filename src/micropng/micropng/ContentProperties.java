@@ -11,7 +11,6 @@ public class ContentProperties {
     private int bitDepth;
     private boolean unknownMandatoryChunks;
     private boolean unknownAncillaryChunks;
-    long height;
-    long width;
+    private Dimensions size;
     private Transparency transparency;
 }

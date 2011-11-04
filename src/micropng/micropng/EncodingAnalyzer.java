@@ -4,8 +4,8 @@ import micropng.chunkview.ChunkSequence;
 
 public class EncodingAnalyzer {
 
-    public EncodingProperties analyze(ChunkSequence chunkSequence) {
-	EncodingProperties res = new EncodingProperties();
+    public CodecInfo analyze(ChunkSequence chunkSequence) {
+	CodecInfo res = new CodecInfo();
 	
 	return res;
     }

@@ -1,11 +1,11 @@
 package micropng.encodingview;
 
-import micropng.commonlib.Queue;
+import micropng.commonlib.StreamFilter;
 import micropng.micropng.MicropngThread;
 
-public class SampleSplitter {
+public class SampleSplitter extends StreamFilter {
 
-    private class WorkerThread implements MicropngThread {
+    private class WorkerThread extends StreamFilter implements MicropngThread {
 
 	private long numberOfSamples;
 	private long numberOfLines;
@@ -24,14 +24,14 @@ public class SampleSplitter {
 		    int remainingBits;
 
 		    for (long i = 0; i < numberOfLines; i++) {
-			currentByte = input.take();
+			currentByte = in();
 			remainingBits = 8;
 			for (long j = 0; j < numberOfSamples; j++) {
 			    if (remainingBits == 0) {
-				currentByte = input.take();
+				currentByte = in();
 				remainingBits = 8;
 			    }
-			    output.put((currentByte >> (remainingBits - bitsPerSample)) & mask);
+			    out((currentByte >> (remainingBits - bitsPerSample)) & mask);
 			    remainingBits -= bitsPerSample;
 			}
 		    }
@@ -41,11 +41,11 @@ public class SampleSplitter {
 
 		    for (long i = 0; i < numberOfLines; i++) {
 			for (long j = 0; j < numberOfSamples; j++) {
-			    sample = input.take();
+			    sample = in();
 			    bitsRead = 8;
 			    while (bitsRead < bitsPerSample) {
 				sample <<= 8;
-				sample |= input.take();
+				sample |= in();
 				bitsRead += 8;
 			    }
 			}
@@ -58,13 +58,9 @@ public class SampleSplitter {
 	}
     }
 
-    private Queue input;
-    private Queue output;
     private int bitsPerSample;
 
-    public SampleSplitter(Queue input, Queue output, int bitsPerSample) {
-	this.input = input;
-	this.output = output;
+    public SampleSplitter(int bitsPerSample) {
 	this.bitsPerSample = bitsPerSample;
     }
 

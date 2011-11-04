@@ -1,5 +1,6 @@
 package micropng.commonlib;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ArrayBlockingQueue;
 
@@ -13,6 +14,8 @@ public class Queue {
 
     private int inPos;
     private int outPos;
+    private int remainingBitsInByte;
+    private int currentByte;
 
     public Queue() {
 	queue = new ArrayBlockingQueue<int[]>(2);
@@ -70,6 +73,39 @@ public class Queue {
 		notify();
 	    }
 	}
+    }
+
+    public int takeBit() throws InterruptedException {
+	if (remainingBitsInByte == 0) {
+	    currentByte = take();
+	    remainingBitsInByte = 7;
+	} else {
+	    currentByte >>= 1;
+	    remainingBitsInByte--;
+	}
+
+	return currentByte & 0x01;
+    }
+
+    public int takeBits(int numberOfBits) throws InterruptedException {
+	int res = 0;
+	for (int i = 0; i < numberOfBits; i++) {
+	    res <<= 1;
+	    res |= takeBit();
+	}
+	return res;
+    }
+
+    public ArrayList<Integer> getRemainingBitsOfCurrentByte() throws InterruptedException {
+	ArrayList<Integer> res = new ArrayList<Integer>(remainingBitsInByte);
+
+	while (remainingBitsInByte > 0) {
+	    currentByte >>= 1;
+	    res.add(currentByte & 0x01);
+	    remainingBitsInByte--;
+	}
+
+	return res;
     }
 
     public void close() throws InterruptedException {

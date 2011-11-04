@@ -1,17 +1,11 @@
 package micropng.zlib;
 
-import micropng.commonlib.Queue;
+import micropng.commonlib.StreamFilter;
+import micropng.micropng.MicropngThread;
 import micropng.zlib.deflate.DeflateStreamDecoder;
 
-public class ZlibDecoder {
-    private class ZlibDecoderThread implements Runnable {
-
-	private Queue input, output;
-
-	private ZlibDecoderThread(Queue input, Queue output) {
-	    this.input = input;
-	    this.output = output;
-	}
+public class ZlibDecoder extends StreamFilter {
+    private class ZlibDecoderThread implements MicropngThread {
 
 	@Override
 	public void run() {
@@ -27,49 +21,54 @@ public class ZlibDecoder {
 	    int FDICT;
 	    @SuppressWarnings("unused")
 	    int FLEVEL;
-	    DeflateStreamDecoder deflateDecoder = new DeflateStreamDecoder();
+
 	    // specified in zlib, but prohibited by png spec:
 	    // int DICTID;
-	    int	ADLER32 = 0;
+	    int ADLER32 = 0;
 	    try {
-		CMF = input.take();
+		CMF = in();
 		CM = CMF & 0x0f; // must be 8
 		CINFO = (CMF & 0xf0) >>> 4; // must be 7
-		FLG = input.take();
+		FLG = in();
 		FCHECK = FLG & 0x1f;
 		FDICT = (FLG & 0x20) >>> 5; // must be 0
 		FLEVEL = (FLG & 0xc0) >>> 6;
 
 		// specified in zlib, but prohibited by png spec:
 		// if (FDICT == 1) {
-		// DICTID = input.take();
+		// DICTID = in();
 		// for (int i = 0; i < 3; i++) {
 		// DICTID <<= 8;
-		// DICTID |= input.take();
+		// DICTID |= in();
 		// }
 		// }
 
-		deflateDecoder.decompress(input, output);
+		deflateDecoder.decompress();
 
 		for (int i = 0; i < 4; i++) {
-		    ADLER32 <<=8;
-		    ADLER32 |= input.take();
+		    ADLER32 <<= 8;
+		    ADLER32 |= in();
 		}
 
-		output.close();
+		done();
 	    } catch (InterruptedException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	    }
 	}
     }
+    private DeflateStreamDecoder deflateDecoder;
 
     public ZlibDecoder() {
+	 deflateDecoder = new DeflateStreamDecoder(getInputQueue());
     }
 
-    public Queue decode(Queue input) {
-	Queue res = new Queue();
-	new ZlibDecoderThread(input, res).run();
-	return res;
+    public void decode() {
+	new ZlibDecoderThread().run();
+    }
+
+    @Override
+    public void connect(StreamFilter nextInChain) {
+	deflateDecoder.connect(nextInChain);
     }
 }

@@ -1,6 +1,9 @@
 package micropng.encodingview;
 
-public interface DeInterlacer {
+import micropng.commonlib.StreamFilter;
+import micropng.micropng.Dimensions;
 
-    public void deInterlace(long width, long height, Filter filter) throws InterruptedException;
+public abstract class DeInterlacer extends StreamFilter {
+
+    public abstract void deInterlace(Dimensions size, Filter filter) throws InterruptedException;
 }

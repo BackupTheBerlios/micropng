@@ -3,18 +3,17 @@ package micropng.zlib.deflate;
 import java.util.ArrayList;
 
 import micropng.commonlib.BitArrayListConverter;
-import micropng.commonlib.BitQueue;
 import micropng.commonlib.Queue;
 
-public class UncompressedBlockHeader implements DataBlockHeader {
+public class UncompressedBlockHeader extends DataBlockHeader {
 
-    private BitQueue input;
+    private Queue input;
     private int length;
     private ArrayList<Integer> originalHeaderBits;
     private static final int bitsForLEN = 16;
     private int sizeOfHeaderPadding;
 
-    public UncompressedBlockHeader(BitQueue input) throws InterruptedException {
+    public UncompressedBlockHeader(Queue input) throws InterruptedException {
 	int LEN;
 	@SuppressWarnings("unused")
 	int NLEN;
@@ -27,14 +26,14 @@ public class UncompressedBlockHeader implements DataBlockHeader {
     }
 
     private int readAndStore(int numberOfBits) throws InterruptedException {
-	int res = input.take(numberOfBits);
+	int res = input.takeBits(numberOfBits);
 	BitArrayListConverter.append(res, originalHeaderBits, numberOfBits);
 	return res;
     }
-    
-    public void decode(Queue output) throws InterruptedException {
+
+    public void decode() throws InterruptedException {
 	for (int i = 0; i < length; i++) {
-	    output.put(input.takeByte());
+	    out(input.take());
 	}
     }
 

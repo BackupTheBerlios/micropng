@@ -3,21 +3,22 @@ package micropng.zlib.deflate;
 import java.util.ArrayList;
 
 import micropng.commonlib.BitArrayListConverter;
-import micropng.commonlib.BitQueue;
 import micropng.commonlib.Queue;
+import micropng.commonlib.StreamFilter;
 import micropng.zlib.deflate.HuffmanTree.HuffmanTreeWalker;
 
-public class DynamicHuffmanBlockHeader implements DataBlockHeader {
+public class DynamicHuffmanBlockHeader extends DataBlockHeader {
 
-    private BitQueue input;
+    private Queue input;
     private int HLIT;
     private int HDIST;
     private int HCLEN;
     private HuffmanTree literalsAndLengthsTree;
     private HuffmanTree distancesTree;
     private ArrayList<Integer> originalHeaderBits;
+    private HuffmanStreamDecoder decoder;
 
-    public DynamicHuffmanBlockHeader(BitQueue input) throws InterruptedException {
+    public DynamicHuffmanBlockHeader(Queue input) throws InterruptedException {
 	this.input = input;
 	originalHeaderBits = new ArrayList<Integer>(256);
 	HLIT = readAndStore(5);
@@ -95,23 +96,28 @@ public class DynamicHuffmanBlockHeader implements DataBlockHeader {
 
 	literalsAndLengthsTree = new HuffmanTree(literalAndLengthCodesTable);
 	distancesTree = new HuffmanTree(distanceCodesTable);
+
+	decoder = new HuffmanStreamDecoder(literalsAndLengthsTree, distancesTree);
     }
 
     private int readAndStore(int numberOfBits) throws InterruptedException {
-	int res = input.take(numberOfBits);
+	int res = input.takeBits(numberOfBits);
 	BitArrayListConverter.append(res, originalHeaderBits, numberOfBits);
 	return res;
     }
 
     @Override
-    public void decode(Queue output) throws InterruptedException {
-	HuffmanStreamDecoder decoder;
-	decoder = new HuffmanStreamDecoder(literalsAndLengthsTree, distancesTree);
-	decoder.decode(input, output);
+    public void decode() throws InterruptedException {
+	decoder.decode(input);
     }
 
     @Override
     public ArrayList<Integer> getOriginalHeader() {
 	return originalHeaderBits;
+    }
+
+    @Override
+    public void connect(StreamFilter nextInChain) {
+	decoder.connect(nextInChain);
     }
 }

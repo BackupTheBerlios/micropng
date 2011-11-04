@@ -1,38 +1,47 @@
 package micropng.encodingview;
 
-import micropng.commonlib.Queue;
+import micropng.commonlib.StreamFilter;
+import micropng.micropng.CodecInfo;
 
-public class DeInterlacerMediator {
-    private enum InterlaceMode {
-	NONE, ADAM7;
+public class DeInterlacerMediator extends StreamFilter {
 
-	public static InterlaceMode getMode(int i) {
-	    return InterlaceMode.values()[i];
-	}
+    private StreamFilter endOfQueue;
+
+    public DeInterlacerMediator(StreamFilter input) {
+	endOfQueue = input;
     }
 
-    private Queue input;
-    private Queue output;
-
-    public DeInterlacerMediator(Queue input, Queue output) {
-	super();
-	this.input = input;
-	this.output = output;
-    }
-
-    public void deInterlace(long width, long height, Filter filter, int interlaceMode) throws InterruptedException {
-	InterlaceMode mode = InterlaceMode.getMode(interlaceMode);
+    public void deInterlace(CodecInfo properties) throws InterruptedException {
+	int bitsPerSample = properties.getBitDepth();
+	Filter filter = null;
 	DeInterlacer deInterlacer = null;
 
-	switch (mode) {
+	switch (properties.getFilterMethod()) {
+	case METHOD_0:
+	    filter = new Filter(properties.numberOfChannels(), properties.getBitDepth());
+	    endOfQueue.connect(filter);
+	    endOfQueue = filter;
+	    break;
+	}
+
+	if (bitsPerSample != 8) {
+	    SampleSplitter splitter = new SampleSplitter(bitsPerSample);
+	    endOfQueue.connect(splitter);
+	    endOfQueue = splitter;
+	}
+
+	switch (properties.getInterlaceMethod()) {
 	case NONE:
 	    deInterlacer = new NoneDeInterlacer();
 	    break;
 	case ADAM7:
-	    deInterlacer = new Adam7DeInterlacer(input, output);
+	    deInterlacer = new Adam7DeInterlacer();
 	    break;
 	}
 
-	deInterlacer.deInterlace(height, width, filter);
+	endOfQueue.connect(deInterlacer);
+
+	deInterlacer.deInterlace(properties.getSize(), filter);
     }
+
 }
