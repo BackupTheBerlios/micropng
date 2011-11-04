@@ -2,8 +2,6 @@
 
 package micropng.micropng;
 
-import java.io.IOException;
-
 import micropng.userinterface.InternalConfiguration;
 import micropng.userinterface.UserConfiguration;
 import micropng.userinterface.cli.CommandLineParser;
@@ -18,7 +16,7 @@ public class Main {
 	this.args = args;
     }
 
-    public void run() throws IOException {
+    public void run() {
 
     }
 
@@ -31,9 +29,8 @@ public class Main {
 
     /**
      * @param args
-     * @throws IOException
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 	Main mainProgram = new Main(args);
 	mainProgram.run();
     }
