@@ -17,11 +17,11 @@ public enum SameTypeComparator {
 		}
 		pos++;
 	    }
-	    if (length0 < length1) { 
+	    if (length0 < length1) {
 		return -1;
-	    } 
+	    }
 	    if (length0 > length1) {
-		 return 1;
+		return 1;
 	    }
 	    return 0;
 	}
