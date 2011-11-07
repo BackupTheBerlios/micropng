@@ -15,4 +15,6 @@ public interface ParameterDefinition {
     public char getShortParameterName();
 
     public Status validateAndSet(ArrayList<String> values);
+
+    public boolean takesArgument();
 }

@@ -1,10 +1,10 @@
 package micropng;
 
-import micropng.userinterface.ParametersEvaluator;
+import micropng.userinterface.InvocationLineEvaluator;
 
 public class Main {
     public static void main(String[] args) {
-	ParametersEvaluator parametersEvaluator = new ParametersEvaluator();
+	InvocationLineEvaluator parametersEvaluator = new InvocationLineEvaluator();
 	parametersEvaluator.evaluate(args);
     }
 }

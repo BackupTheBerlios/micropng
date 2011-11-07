@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import micropng.commonlib.Status;
 
 public class InputFilename implements ParameterDefinition {
-
     private static final String longHelp = "Der Pfad zu einer Eingabedatei. Jede Art von Pfad, der von der JVM verarbeitet werden kann, ist erlaubt.";
     private static final String longParameterName = "input-file";
     private static final String shortHelp = "Pfad der Eingabedatei";
@@ -40,5 +39,10 @@ public class InputFilename implements ParameterDefinition {
 	    }
 	}
 	return Status.ok();
+    }
+
+    @Override
+    public boolean takesArgument() {
+	return true;
     }
 }

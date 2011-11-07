@@ -9,12 +9,12 @@ import micropng.commonlib.Status.StatusType;
 import micropng.userinterface.inputoptions.ParameterDefinition;
 import micropng.userinterface.inputoptions.Parameter;
 
-public class ParametersEvaluator {
+public class InvocationLineEvaluator implements OutputHandler {
     private HashMap<String, ParameterDefinition> longParametersTable;
     private HashMap<Character, ParameterDefinition> shortParametersTable;
     private HashMap<ParameterDefinition, ArrayList<String>> parameterValues;
 
-    public ParametersEvaluator() {
+    public InvocationLineEvaluator() {
 	longParametersTable = new HashMap<String, ParameterDefinition>();
 	shortParametersTable = new HashMap<Character, ParameterDefinition>();
 	parameterValues = new HashMap<ParameterDefinition, ArrayList<String>>();
@@ -59,25 +59,29 @@ public class ParametersEvaluator {
 		longParameterName = currentString.substring(2);
 		definition = longParametersTable.get(longParameterName);
 	    }
-	    if (pos >= args.length) {
-		error("fehlender Wert für Parameter " + currentString);
-	    }
+
+	    pos++;
 
 	    if (definition == null) {
 		error("unbekannter Parameter \"" + currentString + "\"");
 	    }
 
-	    pos++;
-	    currentString = args[pos];
+	    if (definition.takesArgument()) {
+		if (pos >= args.length) {
+		    error("fehlender Wert für Parameter " + currentString);
+		}
 
-	    ArrayList<String> values = parameterValues.get(definition);
-	    if (values == null) {
-		values = new ArrayList<String>();
-		parameterValues.put(definition, values);
+		currentString = args[pos];
+
+		ArrayList<String> values = parameterValues.get(definition);
+		if (values == null) {
+		    values = new ArrayList<String>();
+		    parameterValues.put(definition, values);
+		}
+		values.add(currentString);
+
+		pos++;
 	    }
-	    values.add(currentString);
-
-	    pos++;
 	}
     }
 
@@ -95,8 +99,27 @@ public class ParametersEvaluator {
 	validateParameters();
     }
 
+    @Override
     public void error(String message) {
 	System.err.println("Fehler: " + message);
 	System.exit(-1);
+    }
+
+    @Override
+    public void debug(String message) {
+	// TODO Auto-generated method stub
+	
+    }
+
+    @Override
+    public void info(String message) {
+	// TODO Auto-generated method stub
+	
+    }
+
+    @Override
+    public void warn(String message) {
+	// TODO Auto-generated method stub
+	
     }
 }
