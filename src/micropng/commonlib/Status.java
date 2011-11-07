@@ -1,19 +1,21 @@
 package micropng.commonlib;
 
 public class Status {
-    private enum StatusID {
+    public enum StatusType {
 	OK, ERROR;
     }
 
     private String msg;
     private static final Status ok;
+    private StatusType statusType;
     
     static {
-	ok = new Status(StatusID.OK);
+	ok = new Status(StatusType.OK);
 	ok.msg = "OK";
     }
     
-    private Status(StatusID id) {
+    private Status(StatusType statusType) {
+	this.statusType = statusType;
     }
 
     public static Status ok() {
@@ -21,12 +23,16 @@ public class Status {
     }
 
     public static Status error(String msg) {
-	Status res = new Status(StatusID.ERROR);
+	Status res = new Status(StatusType.ERROR);
 	res.msg = msg;
 	return res;
     }
 
     public String message() {
 	return msg;
+    }
+
+    public StatusType getStatusType() {
+	return statusType;
     }
 }
