@@ -206,7 +206,7 @@ public class WinFrame extends JFrame implements ActionListener, ItemListener {
 	    if (val == JFileChooser.APPROVE_OPTION) {
 		File selFile = fc.getSelectedFile();
 
-		String filepath = selFile.getPath();
+		//String filepath = selFile.getPath();
 		//config.setPath(filepath);
 
 		// Dateiname
@@ -246,6 +246,7 @@ public class WinFrame extends JFrame implements ActionListener, ItemListener {
     }
 
     public static void main(String[] args) throws MalformedURLException {
+	@SuppressWarnings("unused")
 	WinFrame wf = new WinFrame();
     }
 

@@ -6,21 +6,21 @@ import java.util.Map.Entry;
 
 import micropng.commonlib.Status;
 import micropng.commonlib.Status.StatusType;
-import micropng.userinterface.inputoptions.ParameterDefinition;
 import micropng.userinterface.inputoptions.Parameter;
+import micropng.userinterface.inputoptions.ParameterType;
 
 public class InvocationLineEvaluator implements OutputHandler {
-    private HashMap<String, ParameterDefinition> longParametersTable;
-    private HashMap<Character, ParameterDefinition> shortParametersTable;
-    private HashMap<ParameterDefinition, ArrayList<String>> parameterValues;
+    private HashMap<String, Parameter> longParametersTable;
+    private HashMap<Character, Parameter> shortParametersTable;
+    private HashMap<Parameter, ArrayList<String>> parameterValues;
 
     public InvocationLineEvaluator() {
-	longParametersTable = new HashMap<String, ParameterDefinition>();
-	shortParametersTable = new HashMap<Character, ParameterDefinition>();
-	parameterValues = new HashMap<ParameterDefinition, ArrayList<String>>();
+	longParametersTable = new HashMap<String, Parameter>();
+	shortParametersTable = new HashMap<Character, Parameter>();
+	parameterValues = new HashMap<Parameter, ArrayList<String>>();
 
-	for (Parameter p : Parameter.values()) {
-	    ParameterDefinition definition = p.getParameterObject();
+	for (ParameterType p : ParameterType.values()) {
+	    Parameter definition = p.getParameterObject();
 	    String keyLongParameter = definition.getLongParameterName();
 	    char keyShortParameter = definition.getShortParameterName();
 
@@ -40,7 +40,7 @@ public class InvocationLineEvaluator implements OutputHandler {
 	int pos = 0;
 	char shortParameterName;
 	String longParameterName;
-	ParameterDefinition definition = null;
+	Parameter parameter = null;
 
 	while (pos < args.length) {
 	    String currentString = args[pos];
@@ -51,32 +51,32 @@ public class InvocationLineEvaluator implements OutputHandler {
 		    error("unverständliches Argument " + pos + ": \"" + currentString + "\"");
 		}
 		shortParameterName = currentString.charAt(1);
-		definition = shortParametersTable.get(shortParameterName);
+		parameter = shortParametersTable.get(shortParameterName);
 	    } else {
 		if (currentString.charAt(0) != '-' || currentString.charAt(1) != '-') {
 		    error("Syntax bei Argument " + pos + ": \"" + currentString + "\"");
 		}
 		longParameterName = currentString.substring(2);
-		definition = longParametersTable.get(longParameterName);
+		parameter = longParametersTable.get(longParameterName);
 	    }
 
 	    pos++;
 
-	    if (definition == null) {
+	    if (parameter == null) {
 		error("unbekannter Parameter \"" + currentString + "\"");
 	    }
 
-	    if (definition.takesArgument()) {
+	    if (parameter.takesArgument()) {
 		if (pos >= args.length) {
 		    error("fehlender Wert für Parameter " + currentString);
 		}
 
 		currentString = args[pos];
 
-		ArrayList<String> values = parameterValues.get(definition);
+		ArrayList<String> values = parameterValues.get(parameter);
 		if (values == null) {
 		    values = new ArrayList<String>();
-		    parameterValues.put(definition, values);
+		    parameterValues.put(parameter, values);
 		}
 		values.add(currentString);
 
@@ -86,7 +86,7 @@ public class InvocationLineEvaluator implements OutputHandler {
     }
 
     private void validateParameters() {
-	for (Entry<ParameterDefinition, ArrayList<String>> map : parameterValues.entrySet()) {
+	for (Entry<Parameter, ArrayList<String>> map : parameterValues.entrySet()) {
 	    Status status = map.getKey().validateAndSet(map.getValue());
 	    if (status.getStatusType() == StatusType.ERROR) {
 		error(status.message());

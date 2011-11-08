@@ -1,15 +1,20 @@
 package micropng.userinterface.inputoptions;
 
-public enum Parameter {
-    INPUT_FILENAME(new InputFilename());
+import java.util.ArrayList;
 
-    private ParameterDefinition parameterObject;
+import micropng.commonlib.Status;
 
-    private Parameter(ParameterDefinition optionObject) {
-	this.parameterObject = optionObject;
-    }
+public interface Parameter {
 
-    public ParameterDefinition getParameterObject() {
-	return parameterObject;
-    }
+    public String getLongHelp();
+
+    public String getLongParameterName();
+
+    public String getShortHelp();
+
+    public char getShortParameterName();
+
+    public Status validateAndSet(ArrayList<String> values);
+
+    public boolean takesArgument();
 }
