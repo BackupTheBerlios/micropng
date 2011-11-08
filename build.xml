@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- thanks to Andreas Gölzer for writing this file -->
+
+<project>
+
+        <target name="clean">
+                <delete dir="build"/>
+        </target>
+
+        <target name="compile">
+                <mkdir dir="build/classes"/>
+                <javac srcdir="src" destdir="build/classes"/>
+        </target>
+
+        <target name="jar">
+                <mkdir dir="build/jar"/>
+                <jar destfile="build/jar/micropng.jar" basedir="build/classes">
+                <manifest>
+                        <attribute name="Main-Class" value="micropng.Main"/>
+                </manifest>
+                </jar>
+        </target>
+
+        <target name="run">
+                <java jar="build/jar/micropng.jar" fork="true"/>
+        </target>
+
+</project>
