@@ -31,6 +31,11 @@ public class InputFilename implements Parameter {
     }
 
     @Override
+    public boolean takesArgument() {
+	return true;
+    }
+
+    @Override
     public Status validateAndSet(ArrayList<String> values) {
 	String path = values.get(0);
 	for (int i = 1; i < values.size(); i++) {
@@ -39,10 +44,5 @@ public class InputFilename implements Parameter {
 	    }
 	}
 	return Status.ok();
-    }
-
-    @Override
-    public boolean takesArgument() {
-	return true;
     }
 }

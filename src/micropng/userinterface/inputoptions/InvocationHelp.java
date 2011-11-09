@@ -5,41 +5,38 @@ import java.util.ArrayList;
 import micropng.commonlib.Status;
 
 public class InvocationHelp implements Parameter {
+    private static final String longHelp = "Eine Übersicht mit knappen Erklärungen der einzelnen Parameter, die das Verhalten des Programms beim Start beeinflussen, wird angezeigt.";
+    private static final String longParameterName = "help";
+    private static final String shortHelp = "kurze Hilfe zum Programmaufruf";
+    private static final char shortParameterName = 'h';
 
     @Override
     public String getLongHelp() {
-	// TODO Auto-generated method stub
-	return null;
+	return longHelp;
     }
 
     @Override
     public String getLongParameterName() {
-	// TODO Auto-generated method stub
-	return null;
+	return longParameterName;
     }
 
     @Override
     public String getShortHelp() {
-	// TODO Auto-generated method stub
-	return null;
+	return shortHelp;
     }
 
     @Override
     public char getShortParameterName() {
-	// TODO Auto-generated method stub
-	return 0;
+	return shortParameterName;
     }
 
     @Override
     public boolean takesArgument() {
-	// TODO Auto-generated method stub
 	return false;
     }
 
     @Override
     public Status validateAndSet(ArrayList<String> values) {
-	// TODO Auto-generated method stub
-	return null;
+	return Status.ok();
     }
-
 }

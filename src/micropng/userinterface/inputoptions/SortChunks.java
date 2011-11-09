@@ -31,12 +31,13 @@ public class SortChunks implements Parameter {
     }
 
     @Override
+    public boolean takesArgument() {
+	return false;
+    }
+
+    @Override
     public Status validateAndSet(ArrayList<String> values) {
 	return Status.ok();
     }
 
-    @Override
-    public boolean takesArgument() {
-	return false;
-    }
 }
