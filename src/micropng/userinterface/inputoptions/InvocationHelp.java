@@ -21,6 +21,11 @@ public class InvocationHelp implements Parameter {
     }
 
     @Override
+    public ParameterGroup getParentGroup() {
+	return ParameterGroup.INVOCATION_LINE;
+    }
+
+    @Override
     public String getShortHelp() {
 	return shortHelp;
     }

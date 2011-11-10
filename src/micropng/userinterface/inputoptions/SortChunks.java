@@ -21,6 +21,11 @@ public class SortChunks implements Parameter {
     }
 
     @Override
+    public ParameterGroup getParentGroup() {
+	return ParameterGroup.CHUNK_VIEW;
+    }
+
+    @Override
     public String getShortHelp() {
 	return shortHelp;
     }
@@ -39,5 +44,4 @@ public class SortChunks implements Parameter {
     public Status validateAndSet(ArrayList<String> values) {
 	return Status.ok();
     }
-
 }

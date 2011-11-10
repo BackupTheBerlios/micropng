@@ -1,16 +1,12 @@
 package micropng.userinterface.inputoptions;
 
 public enum ParameterGroup implements ParameterGroupElement {
-    CORE(null), INVOCATION_LINE(null);
-
-    private ParameterGroup parentGroup;
+    TOP_LEVEL(null),
+    INVOCATION_LINE(TOP_LEVEL),
+    CORE(TOP_LEVEL),
+    CHUNK_VIEW(CORE);
 
     private ParameterGroup(ParameterGroup parentGroup) {
-	this.parentGroup = parentGroup;
-    }
 
-    @Override
-    public ParameterGroup getParentGroup() {
-	return parentGroup;
     }
 }

@@ -21,6 +21,11 @@ public class InputFilename implements Parameter {
     }
 
     @Override
+    public ParameterGroup getParentGroup() {
+	return ParameterGroup.CORE;
+    }
+
+    @Override
     public String getShortHelp() {
 	return shortHelp;
     }
@@ -45,4 +50,5 @@ public class InputFilename implements Parameter {
 	}
 	return Status.ok();
     }
+
 }

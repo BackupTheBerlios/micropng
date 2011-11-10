@@ -9,6 +9,8 @@ public interface Parameter {
     public String getLongHelp();
 
     public String getLongParameterName();
+    
+    public ParameterGroup getParentGroup();
 
     public String getShortHelp();
 
