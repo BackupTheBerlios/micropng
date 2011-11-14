@@ -5,13 +5,13 @@ public enum ParameterType {
     INPUT_FILENAME(new InputFilename()),
     SORT_CHUNKS(new SortChunks());
 
-    private Parameter parameterObject;
+    private ParameterDescription parameterObject;
 
-    private ParameterType(Parameter optionObject) {
+    private ParameterType(ParameterDescription optionObject) {
 	this.parameterObject = optionObject;
     }
 
-    public Parameter getParameterObject() {
+    public ParameterDescription getParameterObject() {
 	return parameterObject;
     }
 }

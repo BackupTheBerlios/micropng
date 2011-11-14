@@ -6,21 +6,21 @@ import java.util.Map.Entry;
 
 import micropng.commonlib.Status;
 import micropng.commonlib.Status.StatusType;
-import micropng.userinterface.inputoptions.Parameter;
+import micropng.userinterface.inputoptions.ParameterDescription;
 import micropng.userinterface.inputoptions.ParameterType;
 
 public class InvocationLineEvaluator implements OutputHandler {
-    private HashMap<String, Parameter> longParametersTable;
-    private HashMap<Character, Parameter> shortParametersTable;
-    private HashMap<Parameter, ArrayList<String>> parameterValues;
+    private HashMap<String, ParameterDescription> longParametersTable;
+    private HashMap<Character, ParameterDescription> shortParametersTable;
+    private HashMap<ParameterDescription, ArrayList<String>> parameterValues;
 
     public InvocationLineEvaluator() {
-	longParametersTable = new HashMap<String, Parameter>();
-	shortParametersTable = new HashMap<Character, Parameter>();
-	parameterValues = new HashMap<Parameter, ArrayList<String>>();
+	longParametersTable = new HashMap<String, ParameterDescription>();
+	shortParametersTable = new HashMap<Character, ParameterDescription>();
+	parameterValues = new HashMap<ParameterDescription, ArrayList<String>>();
 
 	for (ParameterType p : ParameterType.values()) {
-	    Parameter definition = p.getParameterObject();
+	    ParameterDescription definition = p.getParameterObject();
 	    String keyLongParameter = definition.getLongParameterName();
 	    char keyShortParameter = definition.getShortParameterName();
 
@@ -40,7 +40,7 @@ public class InvocationLineEvaluator implements OutputHandler {
 	int pos = 0;
 	char shortParameterName;
 	String longParameterName;
-	Parameter parameter = null;
+	ParameterDescription parameter = null;
 
 	while (pos < args.length) {
 	    String currentString = args[pos];
@@ -86,7 +86,7 @@ public class InvocationLineEvaluator implements OutputHandler {
     }
 
     private void validateParameters() {
-	for (Entry<Parameter, ArrayList<String>> map : parameterValues.entrySet()) {
+	for (Entry<ParameterDescription, ArrayList<String>> map : parameterValues.entrySet()) {
 	    Status status = map.getKey().validateAndSet(map.getValue());
 	    if (status.getStatusType() == StatusType.ERROR) {
 		error(status.message());

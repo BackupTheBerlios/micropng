@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import micropng.commonlib.Status;
 
-public class InvocationHelp implements Parameter {
+public class InvocationHelp implements ParameterDescription {
     private static final String longHelp = "Eine Übersicht mit knappen Erklärungen der einzelnen Parameter, die das Verhalten des Programms beim Start beeinflussen, wird angezeigt.";
     private static final String longParameterName = "help";
     private static final String shortHelp = "kurze Hilfe zum Programmaufruf";
