@@ -1,4 +1,4 @@
-package micropng.userinterface;
+package micropng.userinterface.invocationline;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,6 +6,8 @@ import java.util.Map.Entry;
 
 import micropng.commonlib.Status;
 import micropng.commonlib.Status.StatusType;
+import micropng.userinterface.DuplicateParameterAssignment;
+import micropng.userinterface.OutputHandler;
 import micropng.userinterface.inputoptions.ParameterDescription;
 import micropng.userinterface.inputoptions.ParameterType;
 
@@ -66,37 +68,37 @@ public class InvocationLineEvaluator implements OutputHandler {
 		error("unbekannter Parameter \"" + currentString + "\"");
 	    }
 
-	    if (parameter.takesArgument()) {
-		if (pos >= args.length) {
-		    error("fehlender Wert für Parameter " + currentString);
-		}
-
-		currentString = args[pos];
-
-		ArrayList<String> values = parameterValues.get(parameter);
-		if (values == null) {
-		    values = new ArrayList<String>();
-		    parameterValues.put(parameter, values);
-		}
-		values.add(currentString);
-
-		pos++;
-	    }
+//	    if (parameter.takesArgument()) {
+//		if (pos >= args.length) {
+//		    error("fehlender Wert für Parameter " + currentString);
+//		}
+//
+//		currentString = args[pos];
+//
+//		ArrayList<String> values = parameterValues.get(parameter);
+//		if (values == null) {
+//		    values = new ArrayList<String>();
+//		    parameterValues.put(parameter, values);
+//		}
+//		values.add(currentString);
+//
+//		pos++;
+//	    }
 	}
     }
 
-    private void validateParameters() {
-	for (Entry<ParameterDescription, ArrayList<String>> map : parameterValues.entrySet()) {
-	    Status status = map.getKey().validateAndSet(map.getValue());
-	    if (status.getStatusType() == StatusType.ERROR) {
-		error(status.message());
-	    }
-	}
-    }
+//    private void validateParameters() {
+//	for (Entry<ParameterDescription, ArrayList<String>> map : parameterValues.entrySet()) {
+//	    Status status = map.getKey().validateAndSet(map.getValue());
+//	    if (status.getStatusType() == StatusType.ERROR) {
+//		error(status.message());
+//	    }
+//	}
+//    }
 
     public void evaluate(String[] args) {
 	readParametersFromArgs(args);
-	validateParameters();
+//	validateParameters();
     }
 
     @Override

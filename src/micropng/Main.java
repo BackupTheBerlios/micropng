@@ -1,7 +1,7 @@
 package micropng;
 
-import micropng.userinterface.InvocationLineEvaluator;
 import micropng.userinterface.Runner;
+import micropng.userinterface.invocationline.InvocationLineEvaluator;
 
 public class Main {
     public static void main(String[] args) {

@@ -1,5 +1,7 @@
 package micropng.userinterface.inputoptions;
 
+import micropng.userinterface.invocationline.InvocationHelp;
+
 public enum ParameterType {
     INVOCATION_HELP(new InvocationHelp()),
     INPUT_FILENAME(new InputFilename()),

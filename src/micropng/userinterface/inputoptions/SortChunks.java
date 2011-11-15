@@ -34,14 +34,4 @@ public class SortChunks implements ParameterDescription {
     public char getShortParameterName() {
 	return shortParameterName;
     }
-
-    @Override
-    public boolean takesArgument() {
-	return false;
-    }
-
-    @Override
-    public Status validateAndSet(ArrayList<String> values) {
-	return Status.ok();
-    }
 }

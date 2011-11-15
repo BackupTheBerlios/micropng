@@ -22,7 +22,7 @@ public class InputFilename implements ParameterDescription {
 
     @Override
     public ParameterGroup getParentGroup() {
-	return ParameterGroup.CORE;
+	return ParameterGroup.TOP_LEVEL;
     }
 
     @Override
@@ -35,12 +35,6 @@ public class InputFilename implements ParameterDescription {
 	return shortParameterName;
     }
 
-    @Override
-    public boolean takesArgument() {
-	return true;
-    }
-
-    @Override
     public Status validateAndSet(ArrayList<String> values) {
 	String path = values.get(0);
 	for (int i = 1; i < values.size(); i++) {
