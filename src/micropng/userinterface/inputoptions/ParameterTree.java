@@ -4,6 +4,6 @@ public class ParameterTree {
     private ParameterTreeNode root;
 
     public ParameterTree() {
-	root = new GroupNode();
+	root = ParameterGroupDescription.BASE.instantiate();
     }
 }
