@@ -2,7 +2,7 @@
 
 <!-- thanks to Andreas Gölzer for writing this file -->
 
-<project>
+<project default="compile">
 
         <target name="clean">
                 <delete dir="build"/>
