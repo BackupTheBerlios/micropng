@@ -1,10 +1,13 @@
 package micropng.userinterface.inputoptions;
 
-public enum ParameterGroup implements ParameterGroupElement {
-    TOP_LEVEL(null),
-    CHUNK_VIEW(TOP_LEVEL);
+import java.util.ArrayList;
 
-    private ParameterGroup(ParameterGroup parentGroup) {
+public class ParameterGroup implements ParameterTreeNode {
+    private ParameterGroupDescription description;
+    private ArrayList<ParameterTreeNode> childNodes;
 
+    public ParameterGroup(ParameterGroupDescription description, ArrayList<ParameterTreeNode> childNodes) {
+	this.description = description;
+	this.childNodes = childNodes;
     }
 }
