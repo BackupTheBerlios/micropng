@@ -1,9 +1,11 @@
 package micropng.userinterface.inputoptions;
 
 public class ParameterTree {
+    ParameterTreeDescription description;
     private ParameterTreeNode root;
 
-    public ParameterTree() {
-	root = ParameterGroupDescription.BASE.instantiate();
+    public ParameterTree(ParameterTreeDescription description, ParameterTreeNode root) {
+	this.description = description;
+	this.root = root;
     }
 }
