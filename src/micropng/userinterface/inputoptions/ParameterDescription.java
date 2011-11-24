@@ -1,14 +1,14 @@
 package micropng.userinterface.inputoptions;
 
-public interface ParameterDescription {
+public interface ParameterDescription extends Description {
 
     public String getLongHelp();
 
     public String getLongParameterName();
-    
-    public ParameterGroup getParentGroup();
 
     public String getShortHelp();
 
     public char getShortParameterName();
+
+    public Parameter instantiate();
 }
