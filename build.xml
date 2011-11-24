@@ -2,7 +2,7 @@
 
 <!-- thanks to Andreas Gölzer for writing this file -->
 
-<project default="compile">
+<project default="jar">
 
         <target name="clean">
                 <delete dir="build"/>
@@ -13,7 +13,7 @@
                 <javac srcdir="src" destdir="build/classes"/>
         </target>
 
-        <target name="jar">
+        <target name="jar" depends="compile">
                 <mkdir dir="build/jar"/>
                 <jar destfile="build/jar/micropng.jar" basedir="build/classes">
                 <manifest>
@@ -21,9 +21,4 @@
                 </manifest>
                 </jar>
         </target>
-
-        <target name="run">
-                <java jar="build/jar/micropng.jar" fork="true"/>
-        </target>
-
 </project>
