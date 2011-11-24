@@ -21,11 +21,6 @@ public class InputFilename implements ParameterDescription {
     }
 
     @Override
-    public ParameterGroup getParentGroup() {
-	return ParameterGroup.TOP_LEVEL;
-    }
-
-    @Override
     public String getShortHelp() {
 	return shortHelp;
     }
@@ -45,4 +40,10 @@ public class InputFilename implements ParameterDescription {
 	return Status.ok();
     }
 
+    @Override
+    public Parameter instantiate() {
+	Path value = new Path();
+	Parameter res = new Parameter(this, value);
+	return res;
+    }
 }
