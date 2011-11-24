@@ -2,14 +2,16 @@ package micropng.userinterface.invocationline;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map.Entry;
 
 import micropng.commonlib.Status;
 import micropng.commonlib.Status.StatusType;
 import micropng.userinterface.DuplicateParameterAssignment;
 import micropng.userinterface.OutputHandler;
+import micropng.userinterface.inputoptions.Parameter;
 import micropng.userinterface.inputoptions.ParameterDescription;
-import micropng.userinterface.inputoptions.ParameterType;
+import micropng.userinterface.inputoptions.ParameterGroup;
+import micropng.userinterface.inputoptions.ParameterTree;
+import micropng.userinterface.inputoptions.ParameterTreeDescription;
 
 public class InvocationLineEvaluator implements OutputHandler {
     private HashMap<String, ParameterDescription> longParametersTable;
@@ -20,9 +22,12 @@ public class InvocationLineEvaluator implements OutputHandler {
 	longParametersTable = new HashMap<String, ParameterDescription>();
 	shortParametersTable = new HashMap<Character, ParameterDescription>();
 	parameterValues = new HashMap<ParameterDescription, ArrayList<String>>();
+	ParameterTree tree = ParameterTreeDescription.DEFAULT.instantiate();
 
-	for (ParameterType p : ParameterType.values()) {
-	    ParameterDescription definition = p.getParameterObject();
+	ArrayList<Parameter> parametersList = tree.getRootNode().getAllDependingParameters();
+
+	for (Parameter p : parametersList) {
+	    ParameterDescription definition = p.getDescription();
 	    String keyLongParameter = definition.getLongParameterName();
 	    char keyShortParameter = definition.getShortParameterName();
 
@@ -67,38 +72,11 @@ public class InvocationLineEvaluator implements OutputHandler {
 	    if (parameter == null) {
 		error("unbekannter Parameter \"" + currentString + "\"");
 	    }
-
-//	    if (parameter.takesArgument()) {
-//		if (pos >= args.length) {
-//		    error("fehlender Wert für Parameter " + currentString);
-//		}
-//
-//		currentString = args[pos];
-//
-//		ArrayList<String> values = parameterValues.get(parameter);
-//		if (values == null) {
-//		    values = new ArrayList<String>();
-//		    parameterValues.put(parameter, values);
-//		}
-//		values.add(currentString);
-//
-//		pos++;
-//	    }
 	}
     }
 
-//    private void validateParameters() {
-//	for (Entry<ParameterDescription, ArrayList<String>> map : parameterValues.entrySet()) {
-//	    Status status = map.getKey().validateAndSet(map.getValue());
-//	    if (status.getStatusType() == StatusType.ERROR) {
-//		error(status.message());
-//	    }
-//	}
-//    }
-
     public void evaluate(String[] args) {
 	readParametersFromArgs(args);
-//	validateParameters();
     }
 
     @Override
@@ -110,18 +88,18 @@ public class InvocationLineEvaluator implements OutputHandler {
     @Override
     public void debug(String message) {
 	// TODO Auto-generated method stub
-	
+
     }
 
     @Override
     public void info(String message) {
 	// TODO Auto-generated method stub
-	
+
     }
 
     @Override
     public void warn(String message) {
 	// TODO Auto-generated method stub
-	
+
     }
 }
