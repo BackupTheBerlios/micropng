@@ -2,32 +2,34 @@ package micropng.userinterface.inputoptions;
 
 import java.util.ArrayList;
 
-public enum ParameterGroupDescription implements Description {
+public enum ParameterGroupDescription {
     BASE, FILE_VIEW;
 
-    private ParameterDescription[] parameters;
-    private ParameterGroupDescription[] subGroups;
+    private ParameterDescription[] parameterDescriptions;
+    private ParameterGroupDescription[] subGroupsDescriptions;
 
     static {
-	BASE.parameters = new ParameterDescription[] { new InputFilename() };
-	BASE.subGroups = new ParameterGroupDescription[] { FILE_VIEW };
+	BASE.parameterDescriptions = new ParameterDescription[] { new InputFilename() };
+	BASE.subGroupsDescriptions = new ParameterGroupDescription[] { FILE_VIEW };
 
-	FILE_VIEW.parameters = new ParameterDescription[] { new SortChunks(), new CondenseIDATChunks() };
-	FILE_VIEW.subGroups = new ParameterGroupDescription[] {};
+	FILE_VIEW.parameterDescriptions = new ParameterDescription[] { new SortChunks(),
+		new CondenseIDATChunks() };
+	FILE_VIEW.subGroupsDescriptions = new ParameterGroupDescription[] {};
     }
 
     public ParameterGroup instantiate() {
-	ArrayList<ParameterTreeNode> instantiatedNodes = new ArrayList<ParameterTreeNode>();
+	ArrayList<Parameter> parameters = new ArrayList<Parameter>();
+	ArrayList<ParameterGroup> subGroups = new ArrayList<ParameterGroup>();
 
-	for (ParameterGroupDescription description : subGroups) {
-	    instantiatedNodes.add(description.instantiate());
+	for (ParameterDescription description : parameterDescriptions) {
+	    parameters.add(description.instantiate());
 	}
 
-	for (ParameterDescription description : parameters) {
-	    instantiatedNodes.add(description.instantiate());
+	for (ParameterGroupDescription description : subGroupsDescriptions) {
+	    subGroups.add(description.instantiate());
 	}
 
-	ParameterGroup res = new ParameterGroup(this, instantiatedNodes);
+	ParameterGroup res = new ParameterGroup(this, parameters, subGroups);
 	return res;
     }
 }
