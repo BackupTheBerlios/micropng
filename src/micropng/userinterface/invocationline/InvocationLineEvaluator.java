@@ -3,13 +3,10 @@ package micropng.userinterface.invocationline;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import micropng.commonlib.Status;
-import micropng.commonlib.Status.StatusType;
 import micropng.userinterface.DuplicateParameterAssignment;
 import micropng.userinterface.OutputHandler;
 import micropng.userinterface.inputoptions.Parameter;
 import micropng.userinterface.inputoptions.ParameterDescription;
-import micropng.userinterface.inputoptions.ParameterGroup;
 import micropng.userinterface.inputoptions.ParameterTree;
 import micropng.userinterface.inputoptions.ParameterTreeDescription;
 
@@ -72,6 +69,21 @@ public class InvocationLineEvaluator implements OutputHandler {
 	    if (parameter == null) {
 		error("unbekannter Parameter \"" + currentString + "\"");
 	    }
+
+	    if (pos >= args.length) {
+		error("fehlender Wert für Parameter " + currentString);
+	    }
+
+	    currentString = args[pos];
+
+	    ArrayList<String> values = parameterValues.get(parameter);
+	    if (values == null) {
+		values = new ArrayList<String>();
+		parameterValues.put(parameter, values);
+	    }
+	    values.add(currentString);
+
+	    pos++;
 	}
     }
 
