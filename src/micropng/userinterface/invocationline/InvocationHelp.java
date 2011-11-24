@@ -1,10 +1,8 @@
 package micropng.userinterface.invocationline;
 
-import java.util.ArrayList;
-
-import micropng.commonlib.Status;
+import micropng.userinterface.inputoptions.Parameter;
 import micropng.userinterface.inputoptions.ParameterDescription;
-import micropng.userinterface.inputoptions.ParameterGroup;
+import micropng.userinterface.inputoptions.YesNoSwitch;
 
 public class InvocationHelp implements ParameterDescription {
     private static final String longHelp = "Eine Übersicht mit knappen Erklärungen der einzelnen Parameter, die das Verhalten des Programms beim Start beeinflussen, wird angezeigt.";
@@ -23,12 +21,6 @@ public class InvocationHelp implements ParameterDescription {
     }
 
     @Override
-    public ParameterGroup getParentGroup() {
-	//return ParameterGroup.INVOCATION_LINE;
-	return null;
-    }
-
-    @Override
     public String getShortHelp() {
 	return shortHelp;
     }
@@ -38,7 +30,11 @@ public class InvocationHelp implements ParameterDescription {
 	return shortParameterName;
     }
 
-    public Status validateAndSet(ArrayList<String> values) {
-	return Status.ok();
+    @Override
+    public Parameter instantiate() {
+	YesNoSwitch value = new YesNoSwitch();
+	Parameter res = new Parameter(this, value);
+	value.trySetting(false);
+	return res;
     }
 }
