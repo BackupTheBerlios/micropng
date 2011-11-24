@@ -1,9 +1,5 @@
 package micropng.userinterface.inputoptions;
 
-import java.util.ArrayList;
-
-import micropng.commonlib.Status;
-
 public class SortChunks implements ParameterDescription {
     private static final String longHelp = "Vorhandene und ggf. neue Chunks werden nach implementierungsspezifischen Regeln sortiert. In einigen Fällen kann auf diese Weise die Kompression einer späteren Archivierung verbessert werden, insbesondere wenn mehrere png-Dateien zusammen gepackt werden.";
     private static final String longParameterName = "sort-chunks";
@@ -21,11 +17,6 @@ public class SortChunks implements ParameterDescription {
     }
 
     @Override
-    public ParameterGroup getParentGroup() {
-	return ParameterGroup.CHUNK_VIEW;
-    }
-
-    @Override
     public String getShortHelp() {
 	return shortHelp;
     }
@@ -33,5 +24,13 @@ public class SortChunks implements ParameterDescription {
     @Override
     public char getShortParameterName() {
 	return shortParameterName;
+    }
+
+    @Override
+    public Parameter instantiate() {
+	YesNoSwitch value = new YesNoSwitch();
+	Parameter res = new Parameter(this, value);
+	value.trySetting(true);
+	return res;
     }
 }
