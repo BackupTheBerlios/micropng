@@ -87,8 +87,13 @@ public class InvocationLineEvaluator implements OutputHandler {
 	}
     }
 
+    private void transformValues() {
+	
+    }
+
     public void evaluate(String[] args) {
 	readParametersFromArgs(args);
+	transformValues();
     }
 
     @Override
