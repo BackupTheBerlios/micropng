@@ -1,7 +1,9 @@
 package micropng.userinterface.invocationline;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import micropng.commonlib.Status;
 import micropng.userinterface.DuplicateParameterAssignment;
@@ -10,7 +12,6 @@ import micropng.userinterface.inputoptions.Parameter;
 import micropng.userinterface.inputoptions.ParameterDescription;
 import micropng.userinterface.inputoptions.ParameterTree;
 import micropng.userinterface.inputoptions.ParameterTreeDescription;
-import micropng.userinterface.inputoptions.ParameterValue;
 import micropng.userinterface.inputoptions.Path;
 import micropng.userinterface.inputoptions.YesNoSwitch;
 
@@ -52,6 +53,8 @@ public class InvocationLineEvaluator implements OutputHandler {
 
 	while (pos < args.length) {
 	    String currentString = args[pos];
+	    ArrayList<String> values;
+
 	    if (currentString.length() < 2) {
 		error("unverständliches Argument " + pos + ": \"" + currentString + "\"");
 	    } else if (currentString.length() == 2) {
@@ -80,7 +83,7 @@ public class InvocationLineEvaluator implements OutputHandler {
 
 	    currentString = args[pos];
 
-	    ArrayList<String> values = parameterValues.get(parameter);
+	    values = parameterValues.get(parameter);
 	    if (values == null) {
 		values = new ArrayList<String>();
 		parameterValues.put(parameter, values);
@@ -91,12 +94,27 @@ public class InvocationLineEvaluator implements OutputHandler {
 	}
     }
 
-    private Status parseFile(String[] input, Path value) {
+    private Status parseValue(ArrayList<String> input, Path value) {
+	File resultingValue = null;
+	for (String s : input) {
+	    File newResultingValue = new File(s);
+	    newResultingValue = newResultingValue.getAbsoluteFile();
 
+	    if ((resultingValue != null) && (!resultingValue.equals(newResultingValue))) {
+		return Status.error("Wert " + s
+			+ " kann nicht mit vorangegangenem Wert vereinigt werden");
+	    }
+
+	    else {
+		resultingValue = newResultingValue;
+	    }
+	}
+
+	value.trySetting(resultingValue);
 	return null;
     }
 
-    private Status parseSwitch(String[] input, YesNoSwitch value) {
+    private Status parseValue(ArrayList<String> input, YesNoSwitch value) {
 	Boolean resultingValue = null;
 	String[] trueLiterals = new String[] { "yes", "y", "1", "true" };
 	String[] falseLiterals = new String[] { "no", "n", "0", "false" };
@@ -115,7 +133,7 @@ public class InvocationLineEvaluator implements OutputHandler {
 	    } else {
 		Boolean newResultingValue = literalsInterpretations.get(lowerCaseString);
 		if ((resultingValue != null) && (!resultingValue.equals(newResultingValue))) {
-		    return Status.error("widersprüchliche Werte");
+		    return Status.error("Wert " + s + " widerspricht vorangegangenem Wert");
 		} else {
 		    resultingValue = newResultingValue;
 		}
@@ -127,7 +145,6 @@ public class InvocationLineEvaluator implements OutputHandler {
     }
 
     private void transformValues() {
-
     }
 
     public void evaluate(String[] args) {
