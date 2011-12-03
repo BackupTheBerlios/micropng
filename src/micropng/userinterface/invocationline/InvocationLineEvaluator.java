@@ -3,12 +3,16 @@ package micropng.userinterface.invocationline;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import micropng.commonlib.Status;
 import micropng.userinterface.DuplicateParameterAssignment;
 import micropng.userinterface.OutputHandler;
 import micropng.userinterface.inputoptions.Parameter;
 import micropng.userinterface.inputoptions.ParameterDescription;
 import micropng.userinterface.inputoptions.ParameterTree;
 import micropng.userinterface.inputoptions.ParameterTreeDescription;
+import micropng.userinterface.inputoptions.ParameterValue;
+import micropng.userinterface.inputoptions.Path;
+import micropng.userinterface.inputoptions.YesNoSwitch;
 
 public class InvocationLineEvaluator implements OutputHandler {
     private HashMap<String, ParameterDescription> longParametersTable;
@@ -87,8 +91,43 @@ public class InvocationLineEvaluator implements OutputHandler {
 	}
     }
 
+    private Status parseFile(String[] input, Path value) {
+
+	return null;
+    }
+
+    private Status parseSwitch(String[] input, YesNoSwitch value) {
+	Boolean resultingValue = null;
+	String[] trueLiterals = new String[] { "yes", "y", "1", "true" };
+	String[] falseLiterals = new String[] { "no", "n", "0", "false" };
+	HashMap<String, Boolean> literalsInterpretations = new HashMap<String, Boolean>();
+	for (String literal : trueLiterals) {
+	    literalsInterpretations.put(literal, Boolean.TRUE);
+	}
+	for (String literal : falseLiterals) {
+	    literalsInterpretations.put(literal, Boolean.FALSE);
+	}
+
+	for (String s : input) {
+	    String lowerCaseString = s.toLowerCase();
+	    if (!literalsInterpretations.containsKey(lowerCaseString)) {
+		return Status.error("Wert " + s + " nicht verstanden");
+	    } else {
+		Boolean newResultingValue = literalsInterpretations.get(lowerCaseString);
+		if ((resultingValue != null) && (!resultingValue.equals(newResultingValue))) {
+		    return Status.error("widersprüchliche Werte");
+		} else {
+		    resultingValue = newResultingValue;
+		}
+	    }
+	}
+
+	value.trySetting(resultingValue);
+	return Status.ok();
+    }
+
     private void transformValues() {
-	
+
     }
 
     public void evaluate(String[] args) {
