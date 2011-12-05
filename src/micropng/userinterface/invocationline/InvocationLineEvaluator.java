@@ -49,6 +49,9 @@ public class InvocationLineEvaluator implements OutputHandler {
 	    case YES_NO_SWITCH:
 		valueParser = new YesNoSwitchParser((YesNoSwitch) parameter.getValue());
 		break;
+	    case NONE:
+		valueParser = null;
+		break;
 	    default:
 		throw new MissingParserException();
 	    }
@@ -99,20 +102,23 @@ public class InvocationLineEvaluator implements OutputHandler {
 		error("unbekannter Parameter \"" + currentString + "\"");
 	    }
 
-	    if (pos >= args.length) {
-		error("fehlender Wert für Parameter " + currentString);
+	    if (parameter.getValueType() != ValueType.NONE) {
+
+		if (pos >= args.length) {
+		    error("fehlender Wert für Parameter " + currentString);
+		}
+
+		currentString = args[pos];
+
+		values = parameterLiterals.get(parameter);
+		if (values == null) {
+		    values = new ArrayList<String>();
+		    parameterLiterals.put(parameter, values);
+		}
+		values.add(currentString);
+
+		pos++;
 	    }
-
-	    currentString = args[pos];
-
-	    values = parameterLiterals.get(parameter);
-	    if (values == null) {
-		values = new ArrayList<String>();
-		parameterLiterals.put(parameter, values);
-	    }
-	    values.add(currentString);
-
-	    pos++;
 	}
     }
 
