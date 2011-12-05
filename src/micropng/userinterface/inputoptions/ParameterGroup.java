@@ -29,6 +29,7 @@ public class ParameterGroup implements ParameterTreeNode {
     public ArrayList<Parameter> getAllDependingParameters() {
 	ArrayList<Parameter> res = new ArrayList<Parameter>();
 	res.addAll(parameters);
+
 	for (ParameterGroup g : subGroups) {
 	    res.addAll(g.getAllDependingParameters());
 	}

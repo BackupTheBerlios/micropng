@@ -7,6 +7,11 @@ public class YesNoSwitch implements ParameterValue<Boolean> {
     private Boolean value;
 
     @Override
+    public ValueType getType() {
+	return ValueType.YES_NO_SWITCH;
+    }
+
+    @Override
     public Boolean getValue() {
 	return value;
     }

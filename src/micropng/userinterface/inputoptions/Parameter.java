@@ -5,15 +5,19 @@ public class Parameter implements ParameterTreeNode {
     private ParameterValue<?> value;
 
     public Parameter(ParameterDescription description, ParameterValue<?> value) {
-	this.description = description;
-	this.value = value;
+        this.description = description;
+        this.value = value;
     }
 
     public ParameterDescription getDescription() {
-	return description;
+        return description;
     }
 
     public ParameterValue<?> getValue() {
-	return value;
+        return value;
+    }
+
+    public ValueType getValueType() {
+	return value.getType();
     }
 }

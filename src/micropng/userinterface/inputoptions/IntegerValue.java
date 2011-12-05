@@ -19,6 +19,11 @@ public class IntegerValue implements ParameterValue<Long> {
     }
 
     @Override
+    public ValueType getType() {
+	return ValueType.INTEGER_VALUE;
+    }
+
+    @Override
     public Long getValue() {
 	return value;
     }

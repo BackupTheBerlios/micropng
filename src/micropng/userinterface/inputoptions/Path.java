@@ -14,6 +14,11 @@ public class Path implements ParameterValue<File> {
     }
 
     @Override
+    public ValueType getType() {
+	return ValueType.PATH;
+    }
+
+    @Override
     public File getValue() {
 	return value;
     }
@@ -25,7 +30,8 @@ public class Path implements ParameterValue<File> {
 		return Status.error("der Pfad führt zu keiner Datei");
 	    }
 	} catch (IOException e) {
-	    return Status.error("das System meldete einen Fehler beim Zugriff auf den Pfad: „" + e.getMessage() + "“");
+	    return Status.error("das System meldete einen Fehler beim Zugriff auf den Pfad: „"
+		    + e.getMessage() + "“");
 	}
 	value = value.getAbsoluteFile();
 	return Status.ok();

@@ -1,37 +1,57 @@
 package micropng.userinterface.invocationline;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import micropng.commonlib.Status;
 import micropng.userinterface.DuplicateParameterAssignment;
 import micropng.userinterface.OutputHandler;
+import micropng.userinterface.inputoptions.IntegerValue;
 import micropng.userinterface.inputoptions.Parameter;
 import micropng.userinterface.inputoptions.ParameterDescription;
 import micropng.userinterface.inputoptions.ParameterTree;
 import micropng.userinterface.inputoptions.ParameterTreeDescription;
 import micropng.userinterface.inputoptions.Path;
+import micropng.userinterface.inputoptions.ValueType;
 import micropng.userinterface.inputoptions.YesNoSwitch;
 
 public class InvocationLineEvaluator implements OutputHandler {
-    private HashMap<String, ParameterDescription> longParametersTable;
-    private HashMap<Character, ParameterDescription> shortParametersTable;
-    private HashMap<ParameterDescription, ArrayList<String>> parameterValues;
+    private ParameterTree tree;
+    private ArrayList<Parameter> parametersList;
+    private HashMap<String, Parameter> longParametersTable;
+    private HashMap<Character, Parameter> shortParametersTable;
+    private HashMap<Parameter, ArrayList<String>> parameterLiterals;
+    private HashMap<Parameter, ValueParser> parserTable;
 
     public InvocationLineEvaluator() {
-	longParametersTable = new HashMap<String, ParameterDescription>();
-	shortParametersTable = new HashMap<Character, ParameterDescription>();
-	parameterValues = new HashMap<ParameterDescription, ArrayList<String>>();
-	ParameterTree tree = ParameterTreeDescription.DEFAULT.instantiate();
+	tree = ParameterTreeDescription.DEFAULT.instantiate();
+	parametersList = tree.getRootNode().getAllDependingParameters();
+	longParametersTable = new HashMap<String, Parameter>();
+	shortParametersTable = new HashMap<Character, Parameter>();
+	parameterLiterals = new HashMap<Parameter, ArrayList<String>>();
+	parserTable = new HashMap<Parameter, ValueParser>();
 
-	ArrayList<Parameter> parametersList = tree.getRootNode().getAllDependingParameters();
-
-	for (Parameter p : parametersList) {
-	    ParameterDescription definition = p.getDescription();
+	for (Parameter parameter : parametersList) {
+	    ParameterDescription definition = parameter.getDescription();
 	    String keyLongParameter = definition.getLongParameterName();
 	    char keyShortParameter = definition.getShortParameterName();
+	    ValueType valueType = parameter.getValueType();
+	    ValueParser valueParser;
+	    switch (valueType) {
+	    case INTEGER_VALUE:
+		valueParser = new IntegerValueParser((IntegerValue) parameter.getValue());
+		break;
+	    case PATH:
+		valueParser = new PathParser((Path) parameter.getValue());
+		break;
+	    case YES_NO_SWITCH:
+		valueParser = new YesNoSwitchParser((YesNoSwitch) parameter.getValue());
+		break;
+	    default:
+		throw new MissingParserException();
+	    }
+
+	    parserTable.put(parameter, valueParser);
 
 	    if (longParametersTable.containsKey(keyLongParameter)) {
 		throw new DuplicateParameterAssignment();
@@ -40,8 +60,8 @@ public class InvocationLineEvaluator implements OutputHandler {
 		throw new DuplicateParameterAssignment();
 	    }
 
-	    longParametersTable.put(keyLongParameter, definition);
-	    shortParametersTable.put(keyShortParameter, definition);
+	    longParametersTable.put(keyLongParameter, parameter);
+	    shortParametersTable.put(keyShortParameter, parameter);
 	}
     }
 
@@ -49,7 +69,7 @@ public class InvocationLineEvaluator implements OutputHandler {
 	int pos = 0;
 	char shortParameterName;
 	String longParameterName;
-	ParameterDescription parameter = null;
+	Parameter parameter = null;
 
 	while (pos < args.length) {
 	    String currentString = args[pos];
@@ -83,10 +103,10 @@ public class InvocationLineEvaluator implements OutputHandler {
 
 	    currentString = args[pos];
 
-	    values = parameterValues.get(parameter);
+	    values = parameterLiterals.get(parameter);
 	    if (values == null) {
 		values = new ArrayList<String>();
-		parameterValues.put(parameter, values);
+		parameterLiterals.put(parameter, values);
 	    }
 	    values.add(currentString);
 
@@ -94,57 +114,12 @@ public class InvocationLineEvaluator implements OutputHandler {
 	}
     }
 
-    private Status parseValue(ArrayList<String> input, Path value) {
-	File resultingValue = null;
-	for (String s : input) {
-	    File newResultingValue = new File(s);
-	    newResultingValue = newResultingValue.getAbsoluteFile();
-
-	    if ((resultingValue != null) && (!resultingValue.equals(newResultingValue))) {
-		return Status.error("Wert " + s
-			+ " kann nicht mit vorangegangenem Wert vereinigt werden");
-	    }
-
-	    else {
-		resultingValue = newResultingValue;
-	    }
-	}
-
-	value.trySetting(resultingValue);
-	return null;
-    }
-
-    private Status parseValue(ArrayList<String> input, YesNoSwitch value) {
-	Boolean resultingValue = null;
-	String[] trueLiterals = new String[] { "yes", "y", "1", "true" };
-	String[] falseLiterals = new String[] { "no", "n", "0", "false" };
-	HashMap<String, Boolean> literalsInterpretations = new HashMap<String, Boolean>();
-	for (String literal : trueLiterals) {
-	    literalsInterpretations.put(literal, Boolean.TRUE);
-	}
-	for (String literal : falseLiterals) {
-	    literalsInterpretations.put(literal, Boolean.FALSE);
-	}
-
-	for (String s : input) {
-	    String lowerCaseString = s.toLowerCase();
-	    if (!literalsInterpretations.containsKey(lowerCaseString)) {
-		return Status.error("Wert " + s + " nicht verstanden");
-	    } else {
-		Boolean newResultingValue = literalsInterpretations.get(lowerCaseString);
-		if ((resultingValue != null) && (!resultingValue.equals(newResultingValue))) {
-		    return Status.error("Wert " + s + " widerspricht vorangegangenem Wert");
-		} else {
-		    resultingValue = newResultingValue;
-		}
-	    }
-	}
-
-	value.trySetting(resultingValue);
-	return Status.ok();
-    }
-
     private void transformValues() {
+	for (Map.Entry<Parameter, ArrayList<String>> entry : parameterLiterals.entrySet()) {
+	    Parameter parameter = entry.getKey();
+	    ValueParser parser = parserTable.get(parameter);
+	    parser.parseValue(entry.getValue());
+	}
     }
 
     public void evaluate(String[] args) {
