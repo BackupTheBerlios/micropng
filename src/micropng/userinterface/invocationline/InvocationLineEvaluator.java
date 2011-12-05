@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import micropng.commonlib.Status;
+import micropng.commonlib.Status.StatusType;
 import micropng.userinterface.DuplicateParameterAssignment;
 import micropng.userinterface.OutputHandler;
 import micropng.userinterface.inputoptions.IntegerValue;
@@ -118,7 +120,11 @@ public class InvocationLineEvaluator implements OutputHandler {
 	for (Map.Entry<Parameter, ArrayList<String>> entry : parameterLiterals.entrySet()) {
 	    Parameter parameter = entry.getKey();
 	    ValueParser parser = parserTable.get(parameter);
-	    parser.parseValue(entry.getValue());
+	    Status status = parser.parseValue(entry.getValue());
+
+	    if (status.getStatusType() == StatusType.ERROR) {
+		error(status.message());
+	    }
 	}
     }
 
