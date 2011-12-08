@@ -169,11 +169,11 @@ public class InvocationLineEvaluator implements OutputHandler {
 	}
 	info(variableLengthSpace.toString());
 
-	nextChunk.append(splitText[splitTextPosition]);
-	splitTextPosition++;
-
 	do {
 	    nextChunk = new StringBuffer();
+	    nextChunk.append(splitText[splitTextPosition]);
+	    splitTextPosition++;
+
 	    while ((splitTextPosition < splitText.length)
 		    && (nextChunk.length() + splitText[splitTextPosition].length() < helpTextMaximumWidth)) {
 		nextChunk.append(" ");
