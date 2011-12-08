@@ -4,7 +4,7 @@ import micropng.userinterface.inputoptions.Parameter;
 import micropng.userinterface.inputoptions.ParameterDescription;
 import micropng.userinterface.inputoptions.YesNoSwitch;
 
-public class InvocationHelp implements ParameterDescription {
+public class InvocationShortHelp implements ParameterDescription {
     private static final String longHelp = "Eine Übersicht mit knappen Erklärungen der einzelnen Parameter, die das Verhalten des Programms beim Start beeinflussen, wird angezeigt.";
     private static final String longParameterName = "help";
     private static final String shortHelp = "kurze Hilfe zum Programmaufruf";

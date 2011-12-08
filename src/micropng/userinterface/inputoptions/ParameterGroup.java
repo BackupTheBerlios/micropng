@@ -2,7 +2,7 @@ package micropng.userinterface.inputoptions;
 
 import java.util.ArrayList;
 
-public class ParameterGroup implements ParameterTreeNode {
+public class ParameterGroup {
     private ParameterGroupDescription description;
     private ArrayList<Parameter> parameters;
     private ArrayList<ParameterGroup> subGroups;

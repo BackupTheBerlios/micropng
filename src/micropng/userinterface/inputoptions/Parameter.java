@@ -1,6 +1,6 @@
 package micropng.userinterface.inputoptions;
 
-public class Parameter implements ParameterTreeNode {
+public class Parameter {
     private ParameterDescription description;
     private ParameterValue<?> value;
 

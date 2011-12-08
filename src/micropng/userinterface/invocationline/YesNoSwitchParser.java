@@ -12,7 +12,7 @@ public class YesNoSwitchParser implements ValueParser {
     private static HashMap<String, Boolean> literalsInterpretations;
 
     static {
-	HashMap<String, Boolean> literalsInterpretations = new HashMap<String, Boolean>();
+	literalsInterpretations = new HashMap<String, Boolean>();
 	for (String literal : trueLiterals) {
 	    literalsInterpretations.put(literal, Boolean.TRUE);
 	}
