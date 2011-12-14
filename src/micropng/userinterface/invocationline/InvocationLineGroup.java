@@ -10,8 +10,8 @@ public enum InvocationLineGroup {
     private static Parameter longHelp = InvocationLongHelp.instance();
 
     static {
-	String baseGroupName = "allgemeine Steuerung des Programms";
-	Parameter[] baseGroupParameters = new Parameter[] { longHelp, shortHelp };
+	String baseGroupName = "programmzeilenspezifische Parameter";
+	Parameter[] baseGroupParameters = new Parameter[] { shortHelp, longHelp };
 	ParameterGroup[] baseGroupSubgroups = new ParameterGroup[] {};
 
 	base = new ParameterGroup(baseGroupName, baseGroupParameters, baseGroupSubgroups);
