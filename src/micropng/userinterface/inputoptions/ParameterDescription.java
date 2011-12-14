@@ -9,6 +9,4 @@ public interface ParameterDescription {
     public String getShortHelp();
 
     public char getShortParameterName();
-
-    public Parameter instantiate();
 }

@@ -28,10 +28,9 @@ public class CondenseIDATChunks implements ParameterDescription {
 	return shortParameterName;
     }
 
-    @Override
-    public Parameter instantiate() {
+    public static Parameter instance() {
 	YesNoSwitch value = new YesNoSwitch();
-	Parameter res = new Parameter(this, value);
+	Parameter res = new Parameter(new CondenseIDATChunks(), value);
 	value.trySetting(true);
 	return res;
     }

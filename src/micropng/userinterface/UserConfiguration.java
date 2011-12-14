@@ -1,91 +1,47 @@
 package micropng.userinterface;
 
-import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
 
-import micropng.chunkview.ChunkSequence;
+import micropng.userinterface.inputoptions.Parameter;
+import micropng.userinterface.inputoptions.ParameterGroup;
 
-public class UserConfiguration {
-    private String path;
-    private boolean infoMode;
-    private boolean verboseMode;
-    private boolean aggregateIDAT;
-    private boolean optimizeHuffmanTrees;
-    private boolean removeAncillaryChunks;
-    private int[] ancillaryChunksToKeep;
-    private int[] ancillaryChunksToRemove;
-    private ChunkSequence chunkSequence;
+public class UserConfiguration implements Iterable<Parameter> {
+ 
+    private ParameterGroup myGroup;
+    private HashMap<String, Parameter> longParametersTable;
+    private HashMap<Character, Parameter> shortParametersTable;
 
-    public UserConfiguration generateInitiatedConfiguration() throws IOException {
-	Configurator configurator = new Configurator();
-	UserConfiguration res = null;
-	return res;
+    public UserConfiguration(ParameterGroup parameterGroup) {
+	myGroup = parameterGroup;
+	longParametersTable = new HashMap<String, Parameter>();
+	shortParametersTable = new HashMap<Character, Parameter>();
+	for (Parameter parameter : myGroup) {
+	    String keyLongParameter = parameter.getLongParameterName();
+	    char keyShortParameter = parameter.getShortParameterName();
+
+	    if (longParametersTable.containsKey(keyLongParameter)) {
+		throw new DuplicateParameterAssignment();
+	    }
+	    if (shortParametersTable.containsKey(keyShortParameter)) {
+		throw new DuplicateParameterAssignment();
+	    }
+
+	    longParametersTable.put(keyLongParameter, parameter);
+	    shortParametersTable.put(keyShortParameter, parameter);
+	}
     }
 
-    public ChunkSequence getChunkSequence() {
-	return chunkSequence;
+    public Parameter getByLongName(String longName) {
+	return longParametersTable.get(longName);
     }
 
-    void setAncillaryChunksToKeep(int[] ancillaryChunksToKeep) {
-	this.ancillaryChunksToKeep = ancillaryChunksToKeep;
+    public Parameter getByShortName(char shortName) {
+	return longParametersTable.get(shortName);
     }
 
-    void setAncillaryChunksToRemove(int[] ancillaryChunksToRemove) {
-	this.ancillaryChunksToRemove = ancillaryChunksToRemove;
-    }
-
-    public int[] getAncillaryChunksToKeep() {
-	return ancillaryChunksToKeep;
-    }
-
-    public int[] getAncillaryChunksToRemove() {
-	return ancillaryChunksToRemove;
-    }
-
-    public void setPath(String path) {
-	this.path = path;
-    }
-
-    public String getPath() {
-	return new String(path);
-    }
-
-    public boolean isInfoMode() {
-	return infoMode;
-    }
-
-    public void setInfoMode(boolean infoMode) {
-	this.infoMode = infoMode;
-    }
-
-    public boolean isVerboseMode() {
-	return verboseMode;
-    }
-
-    public void setVerboseMode(boolean verboseMode) {
-	this.verboseMode = verboseMode;
-    }
-
-    public boolean doesRemoveAncillaryChunks() {
-	return removeAncillaryChunks;
-    }
-
-    public void setRemoveAncillaryChunks(boolean removeAncillaryChunks) {
-	this.removeAncillaryChunks = removeAncillaryChunks;
-    }
-
-    public void setAggregateIDAT(boolean aggregateIDAT) {
-	this.aggregateIDAT = aggregateIDAT;
-    }
-
-    public boolean doesAggregateIDAT() {
-	return aggregateIDAT;
-    }
-
-    public void setOptimizeHuffmanTrees(boolean optimizeHuffmanTrees) {
-	this.optimizeHuffmanTrees = optimizeHuffmanTrees;
-    }
-
-    public boolean doesOptimizeHuffmanTrees() {
-	return optimizeHuffmanTrees;
+    @Override
+    public Iterator<Parameter> iterator() {
+	return myGroup.iterator();
     }
 }

@@ -6,45 +6,25 @@ import java.util.Map;
 
 import micropng.commonlib.Status;
 import micropng.commonlib.Status.StatusType;
-import micropng.userinterface.DuplicateParameterAssignment;
 import micropng.userinterface.OutputHandler;
+import micropng.userinterface.UserConfiguration;
+import micropng.userinterface.inputoptions.CoreGroup;
 import micropng.userinterface.inputoptions.IntegerValue;
 import micropng.userinterface.inputoptions.Parameter;
-import micropng.userinterface.inputoptions.ParameterDescription;
 import micropng.userinterface.inputoptions.ParameterGroup;
-import micropng.userinterface.inputoptions.ParameterGroupDescription;
-import micropng.userinterface.inputoptions.ParameterTree;
-import micropng.userinterface.inputoptions.ParameterTreeDescription;
 import micropng.userinterface.inputoptions.Path;
 import micropng.userinterface.inputoptions.ValueType;
 import micropng.userinterface.inputoptions.YesNoSwitch;
 
 public class InvocationLineEvaluator implements OutputHandler {
-    private ParameterTree tree;
-    private ArrayList<Parameter> parametersList;
-    private HashMap<String, Parameter> longParametersTable;
-    private HashMap<Character, Parameter> shortParametersTable;
-    private HashMap<Parameter, ArrayList<String>> parameterLiterals;
-    private HashMap<Parameter, ValueParser> parserTable;
-    private Parameter invocationShortHelpInstance;
-    private Parameter invocationLongHelpInstance;
+    private class ParserTable {
+	private HashMap<Parameter, ValueParser> parserTable;
 
-    public InvocationLineEvaluator() {
-	tree = ParameterTreeDescription.DEFAULT.instantiate();
-	invocationShortHelpInstance = new InvocationShortHelp().instantiate();
-	invocationLongHelpInstance = new InvocationLongHelp().instantiate();
-	parametersList = tree.getRootNode().getAllDependingParameters();
-	parametersList.add(invocationShortHelpInstance);
-	parametersList.add(invocationLongHelpInstance);
-	longParametersTable = new HashMap<String, Parameter>();
-	shortParametersTable = new HashMap<Character, Parameter>();
-	parameterLiterals = new HashMap<Parameter, ArrayList<String>>();
-	parserTable = new HashMap<Parameter, ValueParser>();
+	public ParserTable() {
+	    parserTable = new HashMap<Parameter, ValueParser>();
+	}
 
-	for (Parameter parameter : parametersList) {
-	    ParameterDescription definition = parameter.getDescription();
-	    String keyLongParameter = definition.getLongParameterName();
-	    char keyShortParameter = definition.getShortParameterName();
+	public void registerParameter(Parameter parameter) {
 	    ValueType valueType = parameter.getValueType();
 	    ValueParser valueParser;
 	    switch (valueType) {
@@ -60,72 +40,114 @@ public class InvocationLineEvaluator implements OutputHandler {
 	    default:
 		throw new MissingParserException();
 	    }
-
 	    parserTable.put(parameter, valueParser);
+	}
 
-	    if (longParametersTable.containsKey(keyLongParameter)) {
-		throw new DuplicateParameterAssignment();
-	    }
-	    if (shortParametersTable.containsKey(keyShortParameter)) {
-		throw new DuplicateParameterAssignment();
-	    }
+	public ValueParser get(Parameter parameter) {
+	    return parserTable.get(parameter);
+	}
+    }
 
-	    longParametersTable.put(keyLongParameter, parameter);
-	    shortParametersTable.put(keyShortParameter, parameter);
+    private ParameterGroup coreGroup;
+    private UserConfiguration userConfiguration;
+    private ParameterGroup invocationLineGroup;
+    private HashMap<String, Parameter> longNameLookUpTable;
+    private HashMap<Character, Parameter> shortNameLookUpTable;
+    private ParserTable parserTable;
+    private HashMap<Parameter, ArrayList<String>> parameterValuesLiterals;
+
+    public InvocationLineEvaluator() {
+	coreGroup = CoreGroup.BASE.getGroup();
+	userConfiguration = new UserConfiguration(coreGroup);
+	invocationLineGroup = InvocationLineGroup.INVOCATION.getGroup();
+	longNameLookUpTable = new HashMap<String, Parameter>();
+	shortNameLookUpTable = new HashMap<Character, Parameter>();
+	parameterValuesLiterals = new HashMap<Parameter, ArrayList<String>>();
+	parserTable = new ParserTable();
+
+	for (Parameter parameter : userConfiguration) {
+	    parserTable.registerParameter(parameter);
+	    longNameLookUpTable.put(parameter.getLongParameterName(), parameter);
+	    shortNameLookUpTable.put(parameter.getShortParameterName(), parameter);
+	}
+	for (Parameter parameter : invocationLineGroup) {
+	    parserTable.registerParameter(parameter);
+	    longNameLookUpTable.put(parameter.getLongParameterName(), parameter);
+	    shortNameLookUpTable.put(parameter.getShortParameterName(), parameter);
+	}
+    }
+
+    private void addLiteralToParam(Parameter parameter, String literal) {
+	ArrayList<String> values = parameterValuesLiterals.get(parameter);
+	if (values == null) {
+	    values = new ArrayList<String>();
+	    parameterValuesLiterals.put(parameter, values);
+	}
+	values.add(literal);
+    }
+
+    private Parameter lookUpShortName(char shortName) {
+	Parameter res = shortNameLookUpTable.get(shortName);
+	if (res == null) {
+	    error("unbekannter Parameter \"" + shortName + "\"");
+	}
+	return res;
+    }
+
+    private Parameter lookUpLongName(String longName) {
+	Parameter res = longNameLookUpTable.get(longName);
+	if (res == null) {
+	    error("unbekannter Parameter \"" + longName + "\"");
+	}
+	return res;
+    }
+
+    private void evaluateBooleanDefault(Parameter parameter) {
+	if (parameter.getValueType() == ValueType.YES_NO_SWITCH) {
+	    addLiteralToParam(parameter, "yes");
+	} else {
+	    error("Parameter -" + parameter.getShortParameterName() + ", --"
+		    + parameter.getLongParameterName() + " benötigt einen Wert");
 	}
     }
 
     private void readParametersFromArgs(String[] args) {
 	int pos = 0;
-	char shortParameterName;
-	String longParameterName;
 	Parameter parameter = null;
 
 	while (pos < args.length) {
 	    String currentString = args[pos];
-	    ArrayList<String> values;
+	    String[] splitStrings = currentString.split("=", 2);
+	    String name = splitStrings[0];
 
-	    if (currentString.length() < 2) {
+	    if (name.length() < 2 || name.charAt(0) != '-') {
 		error("unverständliches Argument " + pos + ": \"" + currentString + "\"");
-	    } else if (currentString.length() == 2) {
-		if (currentString.charAt(0) != '-' || currentString.charAt(1) == '-') {
-		    error("unverständliches Argument " + pos + ": \"" + currentString + "\"");
+	    } else if (name.charAt(1) != '-') {
+		int index = 1;
+
+		while (index < name.length() - 1) {
+		    parameter = lookUpShortName(name.charAt(index));
+		    evaluateBooleanDefault(parameter);
+		    index++;
 		}
-		shortParameterName = currentString.charAt(1);
-		parameter = shortParametersTable.get(shortParameterName);
+
+		parameter = lookUpShortName(name.charAt(index));
 	    } else {
-		if (currentString.charAt(0) != '-' || currentString.charAt(1) != '-') {
-		    error("Syntax bei Argument " + pos + ": \"" + currentString + "\"");
-		}
-		longParameterName = currentString.substring(2);
-		parameter = longParametersTable.get(longParameterName);
+		parameter = lookUpLongName(name.substring(2));
 	    }
 
-	    pos++;
-
-	    if (parameter == null) {
-		error("unbekannter Parameter \"" + currentString + "\"");
+	    if (splitStrings.length == 1) {
+		evaluateBooleanDefault(parameter);
+	    } else {
+		addLiteralToParam(parameter, splitStrings[1]);
 	    }
-
-	    if (pos >= args.length) {
-		error("fehlender Wert für Parameter " + currentString);
-	    }
-
-	    currentString = args[pos];
-
-	    values = parameterLiterals.get(parameter);
-	    if (values == null) {
-		values = new ArrayList<String>();
-		parameterLiterals.put(parameter, values);
-	    }
-	    values.add(currentString);
 
 	    pos++;
 	}
     }
 
     private void transformValues() {
-	for (Map.Entry<Parameter, ArrayList<String>> entry : parameterLiterals.entrySet()) {
+	for (Map.Entry<Parameter, ArrayList<String>> entry : parameterValuesLiterals.entrySet()) {
 	    Parameter parameter = entry.getKey();
 	    ValueParser parser = parserTable.get(parameter);
 	    Status status = parser.parseValue(entry.getValue());
@@ -137,8 +159,7 @@ public class InvocationLineEvaluator implements OutputHandler {
     }
 
     private void printHelpGroup(ParameterGroup group, boolean longHelp) {
-	ParameterGroupDescription groupDescription = group.getDescription();
-	info("\n" + groupDescription.getGroupName() + "\n");
+	info("\n" + group.getName() + "\n");
 	for (Parameter parameter : group.getParameters()) {
 	    printHelpParameter(parameter, longHelp);
 	}
@@ -148,21 +169,20 @@ public class InvocationLineEvaluator implements OutputHandler {
     }
 
     private void printHelpParameter(Parameter parameter, boolean longHelp) {
-	ParameterDescription description = parameter.getDescription();
 	int parameterNamesWidth = 24;
 	int consoleLineWidth = 80;
 	int helpTextMaximumWidth = consoleLineWidth - parameterNamesWidth - 1;
 	String spaceAsWidthAsParameterNames = "                        ";
-	int longNameLength = description.getLongParameterName().length();
+	int longNameLength = parameter.getLongParameterName().length();
 	int spaceLength = parameterNamesWidth - 9 - longNameLength;
-	String helpText = longHelp ? description.getLongHelp() : description.getShortHelp();
+	String helpText = longHelp ? parameter.getLongHelp() : parameter.getShortHelp();
 	String[] splitText = helpText.split(" ");
 	int splitTextPosition = 0;
 	StringBuffer nextChunk = new StringBuffer();
 	StringBuffer variableLengthSpace = new StringBuffer();
 
-	info(" -" + description.getShortParameterName() + ", ");
-	info(" --" + description.getLongParameterName() + ":");
+	info(" -" + parameter.getShortParameterName() + ", ");
+	info(" --" + parameter.getLongParameterName() + ":");
 
 	for (int i = 0; i < spaceLength; i++) {
 	    variableLengthSpace.append(' ');
@@ -191,19 +211,22 @@ public class InvocationLineEvaluator implements OutputHandler {
     }
 
     private void usageIfRequested() {
-	if (((YesNoSwitch) invocationShortHelpInstance.getValue()).getValue()) {
+	Parameter longHelp = InvocationLineGroup.getLongHelpInstance();
+	Parameter shortHelp = InvocationLineGroup.getShortHelpInstance();
+	boolean longHelpSet = ((YesNoSwitch) longHelp.getValue()).getValue();
+	boolean shortHelpSet = ((YesNoSwitch) shortHelp.getValue()).getValue();
+
+	if (shortHelpSet) {
 	    info("Kurzhilfe zum Aufruf von micropng\n\n");
 	    info("Parameter, spezifisch für den Programmaufruf\n");
-	    printHelpParameter(invocationShortHelpInstance, false);
-	    printHelpParameter(invocationLongHelpInstance, false);
-	    printHelpGroup(tree.getRootNode(), false);
+	    printHelpGroup(invocationLineGroup, false);
+	    printHelpGroup(coreGroup, false);
 	}
-	if (((YesNoSwitch) invocationLongHelpInstance.getValue()).getValue()) {
+	if (longHelpSet) {
 	    info("ausführliche Hilfe zum Aufruf von micropng\n\n");
 	    info("Parameter, spezifisch für den Programmaufruf\n");
-	    printHelpParameter(invocationShortHelpInstance, true);
-	    printHelpParameter(invocationLongHelpInstance, true);
-	    printHelpGroup(tree.getRootNode(), true);
+	    printHelpGroup(invocationLineGroup, true);
+	    printHelpGroup(coreGroup, false);
 	}
     }
 

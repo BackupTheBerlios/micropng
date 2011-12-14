@@ -30,10 +30,9 @@ public class InvocationLongHelp implements ParameterDescription {
 	return shortParameterName;
     }
 
-    @Override
-    public Parameter instantiate() {
+    public static Parameter instance() {
 	YesNoSwitch value = new YesNoSwitch();
-	Parameter res = new Parameter(this, value);
+	Parameter res = new Parameter(new InvocationLongHelp(), value);
 	value.trySetting(false);
 	return res;
     }

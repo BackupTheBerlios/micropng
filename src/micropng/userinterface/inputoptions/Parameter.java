@@ -5,16 +5,28 @@ public class Parameter {
     private ParameterValue<?> value;
 
     public Parameter(ParameterDescription description, ParameterValue<?> value) {
-        this.description = description;
-        this.value = value;
+	this.description = description;
+	this.value = value;
     }
 
-    public ParameterDescription getDescription() {
-        return description;
+    public String getLongHelp() {
+	return description.getLongHelp();
+    }
+
+    public String getLongParameterName() {
+	return description.getLongParameterName();
+    }
+
+    public String getShortHelp() {
+	return description.getShortHelp();
+    }
+
+    public char getShortParameterName() {
+	return description.getShortParameterName();
     }
 
     public ParameterValue<?> getValue() {
-        return value;
+	return value;
     }
 
     public ValueType getValueType() {

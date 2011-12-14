@@ -18,8 +18,7 @@ public class Optimizer {
     private boolean configurationIsSane;
 
     public Optimizer(UserConfiguration userConfiguration) throws IOException {
-
-	this.configuration = userConfiguration.generateInitiatedConfiguration();
+	this.configuration = userConfiguration;
 
 	this.ordering = new OptimizerOrdering();
 	this.aggregation = new OptimizerChunkAggregation();
@@ -29,13 +28,13 @@ public class Optimizer {
 	if (!configurationIsSane) {
 	    return;
 	}
-	OrganisationSequence chunkOrganisationSequence = new OrganisationSequence(configuration.getChunkSequence());
+	//OrganisationSequence chunkOrganisationSequence = new OrganisationSequence(configuration.getChunkSequence());
 
-	ordering.optimize(chunkOrganisationSequence);
-	aggregation.optimize(chunkOrganisationSequence);
+	//ordering.optimize(chunkOrganisationSequence);
+	//aggregation.optimize(chunkOrganisationSequence);
 
-	outputFileObject = new File(configuration.getPath() + "_output.png");
+	//outputFileObject = new File(configuration.getPath() + "_output.png");
 	FileWriter writer = new FileWriter();
-	writer.writeSequence(outputFileObject, chunkOrganisationSequence.toChunkSequence());
+	//writer.writeSequence(outputFileObject, chunkOrganisationSequence.toChunkSequence());
     }
 }

@@ -1,9 +1,5 @@
 package micropng.userinterface.inputoptions;
 
-import java.util.ArrayList;
-
-import micropng.commonlib.Status;
-
 public class InputFilename implements ParameterDescription {
     private static final String longHelp = "Der Pfad zu einer Eingabedatei. Jede Art von Pfad, der von der JVM verarbeitet werden kann, ist erlaubt.";
     private static final String longParameterName = "input-file";
@@ -30,20 +26,9 @@ public class InputFilename implements ParameterDescription {
 	return shortParameterName;
     }
 
-    public Status validateAndSet(ArrayList<String> values) {
-	String path = values.get(0);
-	for (int i = 1; i < values.size(); i++) {
-	    if (values.get(i).compareTo(path) != 0) {
-		return Status.error("Mehrere verschiedene Pfade als Eingabe angegeben.");
-	    }
-	}
-	return Status.ok();
-    }
-
-    @Override
-    public Parameter instantiate() {
+    public static Parameter instance() {
 	Path value = new Path();
-	Parameter res = new Parameter(this, value);
+	Parameter res = new Parameter(new InputFilename(), value);
 	return res;
     }
 }
