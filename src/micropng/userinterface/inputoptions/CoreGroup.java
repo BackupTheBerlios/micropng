@@ -8,8 +8,8 @@ public enum CoreGroup {
 
     static {
 	String fileViewName = "Sicht auf die gesamte Datei";
-	Parameter[] fileViewParameters = new Parameter[] { new Parameter(new SortChunks()),
-		new Parameter(new CondenseIDATChunks()) };
+	Parameter[] fileViewParameters = new Parameter[] { new Parameter(new CondenseIDATChunks()),
+		new Parameter(new SortChunks()) };
 	ParameterGroup[] fileViewSubgroups = new ParameterGroup[] {};
 	fileView = new ParameterGroup(fileViewName, fileViewParameters, fileViewSubgroups);
 
