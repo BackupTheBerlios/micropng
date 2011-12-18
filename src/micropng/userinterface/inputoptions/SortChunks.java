@@ -5,6 +5,10 @@ public class SortChunks implements ParameterDescription {
     private static final String longParameterName = "sort-chunks";
     private static final String shortHelp = "Chunks sortieren";
     private static final char shortParameterName = 's';
+    private static final YesNoSwitch defaultValue = new YesNoSwitch();
+    static {
+	defaultValue.trySetting(true);
+    }
 
     @Override
     public String getLongHelp() {
@@ -26,10 +30,8 @@ public class SortChunks implements ParameterDescription {
 	return shortParameterName;
     }
 
-    public static Parameter instance() {
-	YesNoSwitch value = new YesNoSwitch();
-	Parameter res = new Parameter(new SortChunks(), value);
-	value.trySetting(true);
-	return res;
+    @Override
+    public ParameterValue<?> defaultValue() {
+	return defaultValue.clone();
     }
 }

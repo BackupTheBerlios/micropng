@@ -1,7 +1,7 @@
 package micropng.userinterface.invocationline;
 
-import micropng.userinterface.inputoptions.Parameter;
 import micropng.userinterface.inputoptions.ParameterDescription;
+import micropng.userinterface.inputoptions.ParameterValue;
 import micropng.userinterface.inputoptions.YesNoSwitch;
 
 public class InvocationLongHelp implements ParameterDescription {
@@ -9,6 +9,10 @@ public class InvocationLongHelp implements ParameterDescription {
     private static final String longParameterName = "long-help";
     private static final String shortHelp = "ausführliche Hilfe zum Programmaufruf";
     private static final char shortParameterName = 'l';
+    private static final YesNoSwitch defaultValue = new YesNoSwitch();
+    static {
+	defaultValue.trySetting(false);
+    }
 
     @Override
     public String getLongHelp() {
@@ -30,10 +34,8 @@ public class InvocationLongHelp implements ParameterDescription {
 	return shortParameterName;
     }
 
-    public static Parameter instance() {
-	YesNoSwitch value = new YesNoSwitch();
-	Parameter res = new Parameter(new InvocationLongHelp(), value);
-	value.trySetting(false);
-	return res;
+    @Override
+    public ParameterValue<?> defaultValue() {
+	return defaultValue.clone();
     }
 }

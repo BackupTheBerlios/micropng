@@ -29,6 +29,11 @@ public class IntegerValue implements ParameterValue<Long> {
     }
 
     @Override
+    public String toString() {
+	return Long.toString(value);
+    }
+    
+    @Override
     public Status trySetting(Long value) {
 	if (value < lowerBound) {
 	    return Status.error("Wert zu klein");

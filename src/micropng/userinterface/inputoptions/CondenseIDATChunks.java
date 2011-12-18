@@ -7,6 +7,10 @@ public class CondenseIDATChunks implements ParameterDescription {
     private static final String longParameterName = "condense-idat";
     private static final String shortHelp = "IDAT-Chunks zusammenfassen";
     private static final char shortParameterName = 'a';
+    private static final YesNoSwitch defaultValue = new YesNoSwitch();
+    static {
+	defaultValue.trySetting(true);
+    }
 
     @Override
     public String getLongHelp() {
@@ -28,10 +32,7 @@ public class CondenseIDATChunks implements ParameterDescription {
 	return shortParameterName;
     }
 
-    public static Parameter instance() {
-	YesNoSwitch value = new YesNoSwitch();
-	Parameter res = new Parameter(new CondenseIDATChunks(), value);
-	value.trySetting(true);
-	return res;
+    public ParameterValue<Boolean> defaultValue() {
+	return defaultValue.clone();
     }
 }

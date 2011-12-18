@@ -17,8 +17,26 @@ public class YesNoSwitch implements ParameterValue<Boolean> {
     }
 
     @Override
+    public String toString() {
+	return value.booleanValue()? "y" : "n";
+    }
+
+    @Override
     public Status trySetting(Boolean value) {
 	this.value = value;
 	return Status.ok();
+    }
+
+    @Override
+    public YesNoSwitch clone() {
+	YesNoSwitch res = null;
+	try {
+	    res = (YesNoSwitch) super.clone();
+	} catch (CloneNotSupportedException e) {
+	    e.printStackTrace();
+	    System.exit(-1);
+	}
+	res.value = value.booleanValue();
+	return res;
     }
 }

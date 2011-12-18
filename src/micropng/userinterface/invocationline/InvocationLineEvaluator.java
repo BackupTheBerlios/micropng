@@ -169,25 +169,47 @@ public class InvocationLineEvaluator implements OutputHandler {
     }
 
     private void printHelpParameter(Parameter parameter, boolean longHelp) {
-	int parameterNamesWidth = 24;
 	int consoleLineWidth = 80;
+	int parameterNamesWidth = 24;
 	int helpTextMaximumWidth = consoleLineWidth - parameterNamesWidth - 1;
+	int paddingLength;
+	StringBuffer paddingSpace = new StringBuffer();
+	String shortNamePrefix = " -";
+	StringBuffer shortNameString = new StringBuffer();
+	String delimiter = ", ";
+	String longNamePrefix = " --";
+	StringBuffer longNameString = new StringBuffer();
+	StringBuffer fullNameString = new StringBuffer();
 	String spaceAsWidthAsParameterNames = "                        ";
-	int longNameLength = parameter.getLongParameterName().length();
-	int spaceLength = parameterNamesWidth - 9 - longNameLength;
 	String helpText = longHelp ? parameter.getLongHelp() : parameter.getShortHelp();
-	String[] splitText = helpText.split(" ");
+	StringBuffer fullTextString = new StringBuffer(helpText);
+	String[] splitText;
 	int splitTextPosition = 0;
-	StringBuffer nextChunk = new StringBuffer();
-	StringBuffer variableLengthSpace = new StringBuffer();
+	StringBuffer nextChunk;
 
-	info(" -" + parameter.getShortParameterName() + ", ");
-	info(" --" + parameter.getLongParameterName() + ":");
+	fullTextString.append(" [");
+	fullTextString.append(parameter.defaultValue());
+	fullTextString.append(']');
+	splitText = fullTextString.toString().split(" ");
+	
+	shortNameString.append(shortNamePrefix);
+	shortNameString.append(parameter.getShortParameterName());
 
-	for (int i = 0; i < spaceLength; i++) {
-	    variableLengthSpace.append(' ');
+	longNameString.append(longNamePrefix);
+	longNameString.append(parameter.getLongParameterName());
+
+	fullNameString.append(shortNameString);
+	fullNameString.append(delimiter);
+	fullNameString.append(longNameString);
+
+	paddingLength = parameterNamesWidth - fullNameString.length();
+
+	info(fullNameString.toString());
+
+	for (int i = 0; i < paddingLength; i++) {
+	    paddingSpace.append(' ');
 	}
-	info(variableLengthSpace.toString());
+	info(paddingSpace.toString());
 
 	do {
 	    nextChunk = new StringBuffer();
@@ -196,18 +218,17 @@ public class InvocationLineEvaluator implements OutputHandler {
 
 	    while ((splitTextPosition < splitText.length)
 		    && (nextChunk.length() + splitText[splitTextPosition].length() < helpTextMaximumWidth)) {
-		nextChunk.append(" ");
+		nextChunk.append(' ');
 		nextChunk.append(splitText[splitTextPosition]);
 		splitTextPosition++;
 	    }
 
-	    nextChunk.append("\n");
+	    nextChunk.append('\n');
 	    info(nextChunk.toString());
 	    if (splitTextPosition < splitText.length) {
 		info(spaceAsWidthAsParameterNames);
 	    }
 	} while (splitTextPosition < splitText.length);
-
     }
 
     private void usageIfRequested() {
@@ -217,16 +238,19 @@ public class InvocationLineEvaluator implements OutputHandler {
 	boolean shortHelpSet = ((YesNoSwitch) shortHelp.getValue()).getValue();
 
 	if (shortHelpSet) {
-	    info("Kurzhilfe zum Aufruf von micropng\n\n");
-	    info("Parameter, spezifisch für den Programmaufruf\n");
+	    info("Benutzung: <java-Aufruf> [<Parameter>=<Wert>] ...\n");
 	    printHelpGroup(invocationLineGroup, false);
 	    printHelpGroup(coreGroup, false);
 	}
 	if (longHelpSet) {
-	    info("ausführliche Hilfe zum Aufruf von micropng\n\n");
-	    info("Parameter, spezifisch für den Programmaufruf\n");
+	    info("Benutzung: <java-Aufruf> [<Parameter>=<Wert>] ...\n");
 	    printHelpGroup(invocationLineGroup, true);
-	    printHelpGroup(coreGroup, false);
+	    printHelpGroup(coreGroup, true);
+	    info("\nPositive Wahrheitswerte von einfachen Schaltern können weggelassen werden.\n");
+	    info("Beispiel: -h=y ist gleichbedeutend mit -h.\n\n");
+	    info("Außerdem können Parameter in ihrer Kurzform aggregiert werden, sofern alle\n");
+	    info("bis auf den letzten einfache Schalter sind, die auf wahr gesetzt werden.\n");
+	    info("Beispiel: -a=y -s=y -i=input.png ist äquivalent zu -asi=input.png\n");
 	}
     }
 

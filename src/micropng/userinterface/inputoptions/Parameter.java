@@ -4,9 +4,9 @@ public class Parameter {
     private ParameterDescription description;
     private ParameterValue<?> value;
 
-    public Parameter(ParameterDescription description, ParameterValue<?> value) {
+    public Parameter(ParameterDescription description) {
 	this.description = description;
-	this.value = value;
+	this.value = description.defaultValue();
     }
 
     public String getLongHelp() {
@@ -31,5 +31,9 @@ public class Parameter {
 
     public ValueType getValueType() {
 	return value.getType();
+    }
+
+    public ParameterValue<?> defaultValue() {
+	return description.defaultValue();
     }
 }

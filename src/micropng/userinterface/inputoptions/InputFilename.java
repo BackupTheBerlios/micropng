@@ -5,6 +5,10 @@ public class InputFilename implements ParameterDescription {
     private static final String longParameterName = "input-file";
     private static final String shortHelp = "Pfad der Eingabedatei";
     private static final char shortParameterName = 'i';
+    private static final Path defaultValue = new Path();
+    static {
+	defaultValue.trySetting(null);
+    }
 
     @Override
     public String getLongHelp() {
@@ -26,9 +30,8 @@ public class InputFilename implements ParameterDescription {
 	return shortParameterName;
     }
 
-    public static Parameter instance() {
-	Path value = new Path();
-	Parameter res = new Parameter(new InputFilename(), value);
-	return res;
+    @Override
+    public ParameterValue<?> defaultValue() {
+	return defaultValue.clone();
     }
 }

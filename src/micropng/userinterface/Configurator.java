@@ -15,7 +15,7 @@ public class Configurator {
 
     public InternalConfiguration makeActualConfig(UserConfiguration userConf) throws IOException {
 	InternalConfiguration res;
-	//String filePath = userConf.getPath();
+	//File filePath = userConf.getPath();
 	//File targetFile = new File(filePath);
 	FileReader reader;
 	ChunkSequence chunkSequence;
