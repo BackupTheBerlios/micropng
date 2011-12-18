@@ -255,7 +255,7 @@ public class InvocationLineEvaluator implements OutputHandler {
 	    info("Beispiel: -h=y ist gleichbedeutend mit -h.\n\n");
 	    info("Außerdem können Parameter in ihrer Kurzform aggregiert werden, sofern alle\n");
 	    info("bis auf den letzten einfache Schalter sind, die auf wahr gesetzt werden.\n");
-	    info("Beispiel: -a=y -s=y -i=input.png ist äquivalent zu -asi=input.png\n");
+	    info("Beispiel: -c=y -s=y -i=input.png ist äquivalent zu -csi=input.png\n");
 	}
     }
 
