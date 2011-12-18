@@ -3,8 +3,7 @@ package micropng.userinterface.inputoptions;
 import micropng.commonlib.Status;
 
 public class YesNoSwitch implements ParameterValue<Boolean> {
-
-    private Boolean value;
+    private boolean value;
 
     @Override
     public ValueType getType() {
@@ -18,7 +17,7 @@ public class YesNoSwitch implements ParameterValue<Boolean> {
 
     @Override
     public String toString() {
-	return value.booleanValue()? "y" : "n";
+	return value? "y" : "n";
     }
 
     @Override
@@ -36,7 +35,6 @@ public class YesNoSwitch implements ParameterValue<Boolean> {
 	    e.printStackTrace();
 	    System.exit(-1);
 	}
-	res.value = value.booleanValue();
 	return res;
     }
 }
