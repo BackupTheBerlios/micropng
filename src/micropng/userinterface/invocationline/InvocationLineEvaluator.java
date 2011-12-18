@@ -89,7 +89,7 @@ public class InvocationLineEvaluator implements OutputHandler {
     private Parameter lookUpShortName(char shortName) {
 	Parameter res = shortNameLookUpTable.get(shortName);
 	if (res == null) {
-	    error("unbekannter Parameter \"" + shortName + "\"");
+	    wrongUsage("unbekannter Parameter \"" + shortName + "\"");
 	}
 	return res;
     }
@@ -97,16 +97,20 @@ public class InvocationLineEvaluator implements OutputHandler {
     private Parameter lookUpLongName(String longName) {
 	Parameter res = longNameLookUpTable.get(longName);
 	if (res == null) {
-	    error("unbekannter Parameter \"" + longName + "\"");
+	    wrongUsage("unbekannter Parameter \"" + longName + "\"");
 	}
 	return res;
+    }
+
+    private void wrongUsage(String msg) {
+	error(msg + "\nHinweis: --help erklärt den Aufruf des Programms.");
     }
 
     private void evaluateBooleanDefault(Parameter parameter) {
 	if (parameter.getValueType() == ValueType.YES_NO_SWITCH) {
 	    addLiteralToParam(parameter, "yes");
 	} else {
-	    error("Parameter -" + parameter.getShortParameterName() + ", --"
+	    wrongUsage("Parameter -" + parameter.getShortParameterName() + ", --"
 		    + parameter.getLongParameterName() + " benötigt einen Wert");
 	}
     }
@@ -121,7 +125,7 @@ public class InvocationLineEvaluator implements OutputHandler {
 	    String name = splitStrings[0];
 
 	    if (name.length() < 2 || name.charAt(0) != '-') {
-		error("unverständliches Argument " + pos + ": \"" + currentString + "\"");
+		wrongUsage("unverständliches Argument " + pos + ": \"" + currentString + "\"");
 	    } else if (name.charAt(1) != '-') {
 		int index = 1;
 
@@ -248,6 +252,7 @@ public class InvocationLineEvaluator implements OutputHandler {
 	    printHelpGroup(coreGroup, false);
 	}
 	if (longHelpSet) {
+	    info("micropng, 2009 bis 2011, von Martin Walch, http://micropng.berlios.de/\n");
 	    info("Benutzung: <java-Aufruf> [<Parameter>=<Wert>] ...\n");
 	    printHelpGroup(invocationLineGroup, true);
 	    printHelpGroup(coreGroup, true);
