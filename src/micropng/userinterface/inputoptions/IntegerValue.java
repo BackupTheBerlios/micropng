@@ -3,7 +3,6 @@ package micropng.userinterface.inputoptions;
 import micropng.commonlib.Status;
 
 public class IntegerValue implements ParameterValue<Long> {
-
     private long value;
     private long lowerBound;
     private long upperBound;
@@ -44,5 +43,17 @@ public class IntegerValue implements ParameterValue<Long> {
 
 	this.value = value;
 	return Status.ok();
+    }
+
+    @Override
+    public IntegerValue clone() {
+	IntegerValue res = null;
+	try {
+	    res = (IntegerValue) super.clone();
+	} catch (CloneNotSupportedException e) {
+	    e.printStackTrace();
+	    System.exit(-1);
+	}
+	return res;
     }
 }
