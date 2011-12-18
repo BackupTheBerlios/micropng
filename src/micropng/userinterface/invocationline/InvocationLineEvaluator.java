@@ -178,6 +178,9 @@ public class InvocationLineEvaluator implements OutputHandler {
 	StringBuffer shortNameString = new StringBuffer();
 	String delimiter = ", ";
 	String longNamePrefix = " --";
+	String defaultValuePrefix = " [";
+	String defaultValue = parameter.defaultValue().toString();
+	String defaultValueSuffix = "]";
 	StringBuffer longNameString = new StringBuffer();
 	StringBuffer fullNameString = new StringBuffer();
 	String spaceAsWidthAsParameterNames = "                        ";
@@ -187,11 +190,13 @@ public class InvocationLineEvaluator implements OutputHandler {
 	int splitTextPosition = 0;
 	StringBuffer nextChunk;
 
-	fullTextString.append(" [");
-	fullTextString.append(parameter.defaultValue());
-	fullTextString.append(']');
+	if (defaultValue.length() != 0) {
+	    fullTextString.append(defaultValuePrefix);
+	    fullTextString.append(defaultValue);
+	    fullTextString.append(defaultValueSuffix);
+	}
 	splitText = fullTextString.toString().split(" ");
-	
+
 	shortNameString.append(shortNamePrefix);
 	shortNameString.append(parameter.getShortParameterName());
 
