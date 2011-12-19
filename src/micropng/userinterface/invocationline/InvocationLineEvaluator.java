@@ -250,11 +250,6 @@ public class InvocationLineEvaluator implements OutputHandler {
 	boolean longHelpSet = ((YesNoSwitch) longHelp.getValue()).getValue();
 	boolean shortHelpSet = ((YesNoSwitch) shortHelp.getValue()).getValue();
 
-	if (shortHelpSet) {
-	    info("Benutzung: <java-Aufruf> [<Parameter>=<Wert>] ...\n");
-	    printHelpGroup(invocationLineGroup, false);
-	    printHelpGroup(coreGroup, false);
-	}
 	if (longHelpSet) {
 	    info("micropng, 2009 bis 2011, von Martin Walch, http://micropng.berlios.de/\n");
 	    info("Benutzung: <java-Aufruf> [<Parameter>=<Wert>] ...\n");
@@ -265,6 +260,13 @@ public class InvocationLineEvaluator implements OutputHandler {
 	    info("Außerdem können Parameter in ihrer Kurzform aggregiert werden, sofern alle\n");
 	    info("bis auf den letzten einfache Schalter sind, die auf wahr gesetzt werden.\n");
 	    info("Beispiel: -c=y -s=y -i=input.png ist äquivalent zu -csi=input.png\n");
+	    System.exit(0);
+	}
+	if (shortHelpSet) {
+	    info("Benutzung: <java-Aufruf> [<Parameter>=<Wert>] ...\n");
+	    printHelpGroup(invocationLineGroup, false);
+	    printHelpGroup(coreGroup, false);
+	    System.exit(0);
 	}
     }
 
