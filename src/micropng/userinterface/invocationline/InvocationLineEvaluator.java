@@ -10,6 +10,7 @@ import micropng.userinterface.OutputHandler;
 import micropng.userinterface.UserConfiguration;
 import micropng.userinterface.inputoptions.CoreGroup;
 import micropng.userinterface.inputoptions.IntegerValue;
+import micropng.userinterface.inputoptions.OneOfMany;
 import micropng.userinterface.inputoptions.Parameter;
 import micropng.userinterface.inputoptions.ParameterGroup;
 import micropng.userinterface.inputoptions.Path;
@@ -30,6 +31,9 @@ public class InvocationLineEvaluator implements OutputHandler {
 	    switch (valueType) {
 	    case INTEGER_VALUE:
 		valueParser = new IntegerValueParser((IntegerValue) parameter.getValue());
+		break;
+	    case ONE_OF_MANY:
+		valueParser = new OneOfManyParser((OneOfMany) parameter.getValue());
 		break;
 	    case PATH:
 		valueParser = new PathParser((Path) parameter.getValue());
@@ -264,10 +268,11 @@ public class InvocationLineEvaluator implements OutputHandler {
 	}
     }
 
-    public void evaluate(String[] args) {
+    public UserConfiguration evaluate(String[] args) {
 	readParametersFromArgs(args);
 	transformValues();
 	usageIfRequested();
+	return userConfiguration;
     }
 
     @Override

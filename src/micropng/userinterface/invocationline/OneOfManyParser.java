@@ -1,24 +1,23 @@
 package micropng.userinterface.invocationline;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import micropng.commonlib.Status;
-import micropng.userinterface.inputoptions.Path;
+import micropng.userinterface.inputoptions.OneOfMany;
 
-public class PathParser implements ValueParser {
-    private Path value;
+public class OneOfManyParser implements ValueParser {
+    private OneOfMany value;
 
-    public PathParser(Path value) {
+    public OneOfManyParser(OneOfMany value) {
 	this.value = value;
     }
 
     @Override
     public Status parseValue(ArrayList<String> input) {
-	File resultingValue = null;
+	String resultingValue = null;
+
 	for (String currentString : input) {
-	    File newResultingValue = new File(currentString);
-	    newResultingValue = newResultingValue.getAbsoluteFile();
+	    String newResultingValue = currentString.toLowerCase();
 
 	    if ((resultingValue != null) && (!resultingValue.equals(newResultingValue))) {
 		return Status.error("Wert " + currentString
@@ -27,7 +26,6 @@ public class PathParser implements ValueParser {
 		resultingValue = newResultingValue;
 	    }
 	}
-
 	return value.trySetting(resultingValue);
     }
 }

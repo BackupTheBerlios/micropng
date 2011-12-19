@@ -15,7 +15,8 @@ public enum CoreGroup {
 
 	String baseGroupName = "allgemeine Steuerung des Programms";
 	Parameter[] baseGroupParameters = new Parameter[] { new Parameter(new InputFilename()),
-		new Parameter(new OutputFilename()), new Parameter(new Verbose()) };
+		new Parameter(new OutputFilename()), new Parameter(new OperationalMode()),
+		new Parameter(new UserInterface()), new Parameter(new Verbose()) };
 	ParameterGroup[] baseGroupSubgroups = new ParameterGroup[] { fileView };
 	base = new ParameterGroup(baseGroupName, baseGroupParameters, baseGroupSubgroups);
     }

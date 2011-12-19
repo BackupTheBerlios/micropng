@@ -1,9 +1,18 @@
 package micropng.userinterface.inputoptions;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import micropng.commonlib.Status;
 
-public class OneOfMany implements ParameterValue<Enum<?>> {
-    Enum<?> value;
+public class OneOfMany implements ParameterValue<String> {
+    private ArrayList<String> possibleValues;
+    private String value;
+
+    public OneOfMany(String[] possibleValues) {
+	this.possibleValues = new ArrayList<String> ();
+	Collections.addAll(this.possibleValues, possibleValues);
+    }
 
     @Override
     public ValueType getType() {
@@ -11,13 +20,23 @@ public class OneOfMany implements ParameterValue<Enum<?>> {
     }
 
     @Override
-    public Enum<?> getValue() {
+    public String getValue() {
 	return value;
     }
 
     @Override
-    public Status trySetting(Enum<?> value) {
+    public String toString() {
+	return value;
+    }
 
+    @Override
+    public Status trySetting(String value) {
+	int newValuePosition = possibleValues.indexOf(value);
+	if (newValuePosition != -1) {
+	    this.value = possibleValues.get(newValuePosition);
+	} else {
+	    return Status.error("ungültiger Wert „" + value + "“");
+	}
 	return Status.ok();
     }
 
@@ -30,7 +49,7 @@ public class OneOfMany implements ParameterValue<Enum<?>> {
 	    e.printStackTrace();
 	    System.exit(-1);
 	}
-	res.value = value;
+	res.value = new String(value);
 	return res;
     }
 }

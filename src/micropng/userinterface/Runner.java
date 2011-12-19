@@ -3,11 +3,8 @@ package micropng.userinterface;
 import micropng.commonlib.Status;
 
 public class Runner {
-    public Runner() {
-	
-    }
-
-    public Status launch() {
+    public Status launch(UserConfiguration inputConfiguration) {
+	inputConfiguration.getByLongName("");
 	return Status.ok();
     }
 }
