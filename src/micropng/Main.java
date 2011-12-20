@@ -6,10 +6,10 @@ import micropng.userinterface.invocationline.InvocationLineEvaluator;
 
 public class Main {
     public static void main(String[] args) {
-	UserConfiguration userConfiguration;
 	InvocationLineEvaluator invocationLineEvaluator = new InvocationLineEvaluator();
+	UserConfiguration userConfiguration = invocationLineEvaluator.evaluate(args);
 	Runner runner = new Runner();
-	userConfiguration = invocationLineEvaluator.evaluate(args);
-	runner.launch(userConfiguration);
+
+	runner.launchInterface(userConfiguration);
     }
 }

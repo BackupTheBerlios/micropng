@@ -29,6 +29,13 @@ public class Parameter {
 	return value;
     }
 
+    public <U> U take() {
+	// suppress warning in preliminary solution, not really satisfying
+	@SuppressWarnings("unchecked")
+	U res = (U) value.getValue();
+	return res;
+    }
+
     public ValueType getValueType() {
 	return value.getType();
     }

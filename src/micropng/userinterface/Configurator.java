@@ -9,15 +9,16 @@ import micropng.chunkview.chunk.Chunk;
 import micropng.chunkview.chunk.Type;
 import micropng.micropng.ConfigurationListener;
 import micropng.pngio.FileReader;
+import micropng.userinterface.inputoptions.Parameter;
 
 public class Configurator {
     private ArrayList<ConfigurationListener> listeners = new ArrayList<ConfigurationListener>();
 
     public InternalConfiguration makeActualConfig(UserConfiguration userConf) throws IOException {
-	InternalConfiguration res;
-	//File filePath = userConf.getPath();
-	//File targetFile = new File(filePath);
-	FileReader reader;
+	InternalConfiguration res = new InternalConfiguration();
+	Parameter filePath = userConf.getByLongName("input-file");
+	File targetFile = filePath.<File>take();
+	FileReader reader = new FileReader();
 	ChunkSequence chunkSequence;
 
 //	if (!targetFile.isFile()) {
@@ -25,8 +26,6 @@ public class Configurator {
 //	    return null;
 //	}
 
-	res = new InternalConfiguration();
-	reader = new FileReader();
 //	chunkSequence = reader.readSequence(targetFile);
 //	res.setChunkSequence(chunkSequence);
 

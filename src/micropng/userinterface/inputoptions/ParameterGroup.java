@@ -1,7 +1,6 @@
 package micropng.userinterface.inputoptions;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 
 public class ParameterGroup implements Iterable<Parameter> {
@@ -32,13 +31,11 @@ public class ParameterGroup implements Iterable<Parameter> {
     private ArrayList<Parameter> parameters;
     private ArrayList<ParameterGroup> subGroups;
 
-    public ParameterGroup(String name, Parameter[] parameters,
-	    ParameterGroup[] subGroups) {
+    public ParameterGroup(String name, ArrayList<Parameter> parameters,
+	    ArrayList<ParameterGroup> subGroups) {
 	this.name = name;
-	this.parameters = new ArrayList<Parameter>();
-	Collections.addAll(this.parameters, parameters);
-	this.subGroups = new ArrayList<ParameterGroup>();
-	Collections.addAll(this.subGroups, subGroups);
+	this.parameters = parameters;
+	this.subGroups = subGroups;
     }
 
     public String getName() {

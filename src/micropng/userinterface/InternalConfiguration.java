@@ -15,9 +15,6 @@ public class InternalConfiguration {
     private String[] ancillaryChunksToKeep;
     private ChunkSequence chunkSequence;
 
-    public InternalConfiguration() {
-    }
-
     public boolean unknownMandatoryChunkInResult() {
 	return unknownMandatoryChunkInResult;
     }
