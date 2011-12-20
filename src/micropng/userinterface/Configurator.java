@@ -16,7 +16,6 @@ public class Configurator {
     private ArrayList<ConfigurationListener> listeners = new ArrayList<ConfigurationListener>();
 
     public Status makeActualConfig(UserConfiguration userConf, InternalConfiguration internalConfiguration) throws IOException {
-	InternalConfiguration res = new InternalConfiguration();
 	Parameter filePath = userConf.getByLongName("input-file");
 	File inputFile = filePath.<File>take();
 	FileReader reader = new FileReader();
@@ -31,8 +30,7 @@ public class Configurator {
 	}
 
 	chunkSequence = reader.readSequence(inputFile);
-
-//	res.setChunkSequence(chunkSequence);
+	internalConfiguration.setChunkSequence(chunkSequence);
 
 //	for (Chunk c : chunkSequence) {
 //	    int type = c.getType();
@@ -40,11 +38,11 @@ public class Configurator {
 //		if (Type.isAncillary(type)) {
 //		    if (!Type.isSafeToCopy(type)) {
 //			if (ancillaryChunkShallBeKept(userConf, type)) {
-//			    res.setUnknownAncillaryChunkInResult(true);
+//			    internalConfiguration.setUnknownAncillaryChunkInResult(true);
 //			}
 //		    }
 //		} else {
-//		    res.setUnknownMandatoryChunkInResult(true);
+//		    internalConfiguration.setUnknownMandatoryChunkInResult(true);
 //		}
 //	    }
 //	}
@@ -80,11 +78,5 @@ public class Configurator {
 
     public void removeConfigurationListener(ConfigurationListener listener) {
 	listeners.remove(listener);
-    }
-
-    private void message(OutputChannel channel, String message) {
-	for (ConfigurationListener listener : listeners) {
-	    listener.configurationMessage(channel, message);
-	}
     }
 }
