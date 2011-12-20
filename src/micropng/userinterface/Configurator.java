@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import micropng.chunkview.ChunkSequence;
 import micropng.chunkview.chunk.Chunk;
 import micropng.chunkview.chunk.Type;
+import micropng.commonlib.Status;
 import micropng.micropng.ConfigurationListener;
 import micropng.pngio.FileReader;
 import micropng.userinterface.inputoptions.Parameter;
@@ -14,19 +15,23 @@ import micropng.userinterface.inputoptions.Parameter;
 public class Configurator {
     private ArrayList<ConfigurationListener> listeners = new ArrayList<ConfigurationListener>();
 
-    public InternalConfiguration makeActualConfig(UserConfiguration userConf) throws IOException {
+    public Status makeActualConfig(UserConfiguration userConf, InternalConfiguration internalConfiguration) throws IOException {
 	InternalConfiguration res = new InternalConfiguration();
 	Parameter filePath = userConf.getByLongName("input-file");
-	File targetFile = filePath.<File>take();
+	File inputFile = filePath.<File>take();
 	FileReader reader = new FileReader();
 	ChunkSequence chunkSequence;
 
-//	if (!targetFile.isFile()) {
-//	    message(OutputChannel.ERROR, "no such file: " + filePath);
-//	    return null;
-//	}
+	if (!inputFile.isFile()) {
+	    return Status.error("Der Pfad „" + inputFile + "“ zeigt auf keine normale Datei.");
+	}
 
-//	chunkSequence = reader.readSequence(targetFile);
+	if (!inputFile.canRead()) {
+	    return Status.error("Der Datei „" + inputFile + "“ kann nicht gelesen werden.");
+	}
+
+	chunkSequence = reader.readSequence(inputFile);
+
 //	res.setChunkSequence(chunkSequence);
 
 //	for (Chunk c : chunkSequence) {
@@ -44,7 +49,7 @@ public class Configurator {
 //	    }
 //	}
 
-	return res;
+	return Status.ok();
     }
 
 //    private boolean ancillaryChunkShallBeKept(UserConfiguration userConf, int type) {
