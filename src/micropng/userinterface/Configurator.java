@@ -32,20 +32,20 @@ public class Configurator {
 	chunkSequence = reader.readSequence(inputFile);
 	internalConfiguration.setChunkSequence(chunkSequence);
 
-//	for (Chunk c : chunkSequence) {
-//	    int type = c.getType();
-//	    if (!Type.isKnown(type)) {
-//		if (Type.isAncillary(type)) {
+	for (Chunk c : chunkSequence) {
+	    int type = c.getType();
+	    if (!Type.isKnown(type)) {
+		if (Type.isAncillary(type)) {
 //		    if (!Type.isSafeToCopy(type)) {
 //			if (ancillaryChunkShallBeKept(userConf, type)) {
 //			    internalConfiguration.setUnknownAncillaryChunkInResult(true);
 //			}
-//		    }
-//		} else {
-//		    internalConfiguration.setUnknownMandatoryChunkInResult(true);
-//		}
+		    }
+		} else {
+		    internalConfiguration.setUnknownMandatoryChunkInResult(true);
+		}
 //	    }
-//	}
+	}
 
 	return Status.ok();
     }
