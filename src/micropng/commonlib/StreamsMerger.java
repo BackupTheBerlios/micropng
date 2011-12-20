@@ -22,7 +22,7 @@ public class StreamsMerger extends StreamFilter {
 			    if (done) {
 				maybeMoreWork = false;
 			    } else {
-				wait();
+				workerThread.wait();
 			    }
 			} else {
 			    currentStream = buffer.poll();
@@ -56,7 +56,7 @@ public class StreamsMerger extends StreamFilter {
     public void add(StreamFilter stream) {
 	synchronized (workerThread) {
 	    buffer.addLast(stream);
-	    notify();
+	    workerThread.notify();
 	}
     }
 
@@ -64,7 +64,7 @@ public class StreamsMerger extends StreamFilter {
     public void done() throws InterruptedException {
 	synchronized (workerThread) {
 	    done = true;
-	    notify();
+	    workerThread.notify();
 	}
 	workerThread.join();
 	super.done();
