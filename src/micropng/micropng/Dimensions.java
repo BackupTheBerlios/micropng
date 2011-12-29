@@ -17,5 +17,4 @@ public class Dimensions {
     public long getHeight() {
 	return height;
     }
-
 }

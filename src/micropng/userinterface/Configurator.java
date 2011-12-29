@@ -9,6 +9,7 @@ import micropng.chunkview.chunk.Chunk;
 import micropng.chunkview.chunk.Type;
 import micropng.commonlib.Status;
 import micropng.micropng.ConfigurationListener;
+import micropng.micropng.EncodingAnalyzer;
 import micropng.pngio.FileReader;
 import micropng.userinterface.inputoptions.Parameter;
 
@@ -20,13 +21,14 @@ public class Configurator {
 	File inputFile = filePath.<File>take();
 	FileReader reader = new FileReader();
 	ChunkSequence chunkSequence;
+	EncodingAnalyzer encodingAnalyzer = new EncodingAnalyzer();
 
 	if (!inputFile.isFile()) {
 	    return Status.error("Der Pfad „" + inputFile + "“ zeigt auf keine normale Datei.");
 	}
 
 	if (!inputFile.canRead()) {
-	    return Status.error("Der Datei „" + inputFile + "“ kann nicht gelesen werden.");
+	    return Status.error("Die Datei „" + inputFile + "“ kann nicht gelesen werden.");
 	}
 
 	chunkSequence = reader.readSequence(inputFile);
@@ -46,6 +48,8 @@ public class Configurator {
 		}
 //	    }
 	}
+
+	encodingAnalyzer.analyze(chunkSequence);
 
 	return Status.ok();
     }

@@ -83,4 +83,12 @@ public class ChunkSequence implements Collection<Chunk> {
 	return chunkList.toArray(a);
     }
 
+    public Chunk getChunk(int type) {
+	for (Chunk c : chunkList) {
+	    if (c.getType() == type) {
+		return c;
+	    }
+	}
+	return null;
+    }
 }
