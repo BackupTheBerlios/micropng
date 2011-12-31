@@ -49,8 +49,6 @@ public class ZlibDecoder extends StreamFilter {
 		    ADLER32 <<= 8;
 		    ADLER32 |= in();
 		}
-
-		done();
 	    } catch (InterruptedException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
@@ -61,10 +59,7 @@ public class ZlibDecoder extends StreamFilter {
 
     public ZlibDecoder() {
 	 deflateDecoder = new DeflateStreamDecoder(getInputQueue());
-    }
-
-    public void decode() {
-	new ZlibDecoderThread().run();
+	 new Thread(new ZlibDecoderThread()).run();
     }
 
     @Override
