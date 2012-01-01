@@ -18,7 +18,7 @@ public class DynamicHuffmanBlockHeader extends DataBlockHeader {
     private ArrayList<Integer> originalHeaderBits;
     private HuffmanStreamDecoder decoder;
 
-    public DynamicHuffmanBlockHeader(Queue input) throws InterruptedException {
+    public DynamicHuffmanBlockHeader(Queue input) {
 	this.input = input;
 	originalHeaderBits = new ArrayList<Integer>(256);
 	HLIT = readAndStore(5);
@@ -100,14 +100,14 @@ public class DynamicHuffmanBlockHeader extends DataBlockHeader {
 	decoder = new HuffmanStreamDecoder(literalsAndLengthsTree, distancesTree);
     }
 
-    private int readAndStore(int numberOfBits) throws InterruptedException {
+    private int readAndStore(int numberOfBits)  {
 	int res = input.takeBits(numberOfBits);
 	BitArrayListConverter.append(res, originalHeaderBits, numberOfBits);
 	return res;
     }
 
     @Override
-    public void decode() throws InterruptedException {
+    public void decode() {
 	decoder.decode(input);
     }
 

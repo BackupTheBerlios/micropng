@@ -23,8 +23,6 @@ public class FileData implements DataField {
 		    out.put(file.readByte());
 		}
 		out.close();
-	    } catch (InterruptedException e) {
-		e.printStackTrace();
 	    } catch (IOException e) {
 		e.printStackTrace();
 	    }

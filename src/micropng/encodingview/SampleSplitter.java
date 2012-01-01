@@ -16,43 +16,38 @@ public class SampleSplitter extends StreamFilter {
 
 	@Override
 	public void run() {
-	    try {
-		if (bitsPerSample < 8) {
-		    int mask = (1 << bitsPerSample) - 1;
-		    int currentByte;
-		    int remainingBits;
+	    if (bitsPerSample < 8) {
+		int mask = (1 << bitsPerSample) - 1;
+		int currentByte;
+		int remainingBits;
 
-		    for (long i = 0; i < numberOfLines; i++) {
-			currentByte = in();
-			remainingBits = 8;
-			for (long j = 0; j < numberOfSamples; j++) {
-			    if (remainingBits == 0) {
-				currentByte = in();
-				remainingBits = 8;
-			    }
-			    out((currentByte >> (remainingBits - bitsPerSample)) & mask);
-			    remainingBits -= bitsPerSample;
+		for (long i = 0; i < numberOfLines; i++) {
+		    currentByte = in();
+		    remainingBits = 8;
+		    for (long j = 0; j < numberOfSamples; j++) {
+			if (remainingBits == 0) {
+			    currentByte = in();
+			    remainingBits = 8;
 			}
+			out((currentByte >> (remainingBits - bitsPerSample)) & mask);
+			remainingBits -= bitsPerSample;
 		    }
-		} else {
-		    int sample;
-		    int bitsRead;
+		}
+	    } else {
+		int sample;
+		int bitsRead;
 
-		    for (long i = 0; i < numberOfLines; i++) {
-			for (long j = 0; j < numberOfSamples; j++) {
-			    sample = in();
-			    bitsRead = 8;
-			    while (bitsRead < bitsPerSample) {
-				sample <<= 8;
-				sample |= in();
-				bitsRead += 8;
-			    }
+		for (long i = 0; i < numberOfLines; i++) {
+		    for (long j = 0; j < numberOfSamples; j++) {
+			sample = in();
+			bitsRead = 8;
+			while (bitsRead < bitsPerSample) {
+			    sample <<= 8;
+			    sample |= in();
+			    bitsRead += 8;
 			}
 		    }
 		}
-	    } catch (InterruptedException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
 	    }
 	}
     }

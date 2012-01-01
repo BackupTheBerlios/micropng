@@ -18,17 +18,12 @@ public class Adam7DeInterlacer extends DeInterlacer {
 
 	@Override
 	public void run() {
-	    try {
-		for (int i = 0; i < horizontalStepSizes.length; i++) {
-		    long currentWidth = (width + horizontalOffsets[i] - 1) / horizontalStepSizes[i];
-		    long currentHeight = (height + verticalOffsets[i] - 1) / verticalStepSizes[i];
-		    filter.init(currentWidth);
-		    filter.unfilter(currentHeight);
-		}
 
-	    } catch (InterruptedException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+	    for (int i = 0; i < horizontalStepSizes.length; i++) {
+		long currentWidth = (width + horizontalOffsets[i] - 1) / horizontalStepSizes[i];
+		long currentHeight = (height + verticalOffsets[i] - 1) / verticalStepSizes[i];
+		filter.init(currentWidth);
+		filter.unfilter(currentHeight);
 	    }
 	}
     }

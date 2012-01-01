@@ -17,21 +17,16 @@ public class DataGroup implements DataField {
 
 	@Override
 	public void run() {
-	    try {
-		for (DataField d : dataElements) {
-		    Queue q = d.getStream();
-		    int value;
+	    for (DataField d : dataElements) {
+		Queue q = d.getStream();
+		int value;
+		value = q.take();
+		while (value != -1) {
+		    out.put(value);
 		    value = q.take();
-		    while (value != -1) {
-			out.put(value);
-			value = q.take();
-		    }
 		}
-		out.close();
-	    } catch (InterruptedException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
 	    }
+	    out.close();
 	}
     }
 

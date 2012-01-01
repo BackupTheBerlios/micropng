@@ -5,5 +5,5 @@ import micropng.micropng.Dimensions;
 
 public abstract class DeInterlacer extends StreamFilter {
 
-    public abstract void deInterlace(Dimensions size, Filter filter) throws InterruptedException;
+    public abstract void deInterlace(Dimensions size, Filter filter);
 }

@@ -24,33 +24,28 @@ public class ZlibDecoder extends StreamFilter {
 	    // specified in zlib, but prohibited by png spec:
 	    // int DICTID;
 	    int ADLER32 = 0;
-	    try {
-		CMF = in();
-		CM = CMF & 0x0f; // must be 8
-		CINFO = (CMF & 0xf0) >>> 4; // must be 7
-		FLG = in();
-		FCHECK = FLG & 0x1f;
-		FDICT = (FLG & 0x20) >>> 5; // must be 0
-		FLEVEL = (FLG & 0xc0) >>> 6;
+	    CMF = in();
+	    CM = CMF & 0x0f; // must be 8
+	    CINFO = (CMF & 0xf0) >>> 4; // must be 7
+	    FLG = in();
+	    FCHECK = FLG & 0x1f;
+	    FDICT = (FLG & 0x20) >>> 5; // must be 0
+	    FLEVEL = (FLG & 0xc0) >>> 6;
 
-		// specified in zlib, but prohibited by png spec:
-		// if (FDICT == 1) {
-		// DICTID = in();
-		// for (int i = 0; i < 3; i++) {
-		// DICTID <<= 8;
-		// DICTID |= in();
-		// }
-		// }
+	    // specified in zlib, but prohibited by png spec:
+	    // if (FDICT == 1) {
+	    // DICTID = in();
+	    // for (int i = 0; i < 3; i++) {
+	    // DICTID <<= 8;
+	    // DICTID |= in();
+	    // }
+	    // }
 
-		deflateDecoder.start();
+	    deflateDecoder.start();
 
-		for (int i = 0; i < 4; i++) {
-		    ADLER32 <<= 8;
-		    ADLER32 |= in();
-		}
-	    } catch (InterruptedException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+	    for (int i = 0; i < 4; i++) {
+		ADLER32 <<= 8;
+		ADLER32 |= in();
 	    }
 	}
     }
@@ -60,16 +55,10 @@ public class ZlibDecoder extends StreamFilter {
 
     public ZlibDecoder() {
 	deflateDecoder = new DeflateStreamDecoder();
-	super.connect(deflateDecoder);
 	zlibDecoderThread = new ZlibDecoderThread();
     }
 
     public void start() {
 	new Thread(zlibDecoderThread).start();
-    }
-
-    @Override
-    public void connect(StreamFilter nextInChain) {
-	deflateDecoder.connect(nextInChain);
     }
 }

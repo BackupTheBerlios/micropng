@@ -6,15 +6,10 @@ public class DummyFilter extends StreamFilter {
 
 	@Override
 	public void run() {
-	    try {
-		int next = in();
-		while (next != -1) {
-		    out(next);
-		    next = in();
-		}
-	    } catch (InterruptedException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+	    int next = in();
+	    while (next != -1) {
+		out(next);
+		next = in();
 	    }
 	}
     }

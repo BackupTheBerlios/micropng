@@ -31,7 +31,7 @@ public class Filter extends StreamFilter {
 	}
     }
 
-    public void unfilter(long numberOfLines) throws InterruptedException {
+    public void unfilter(long numberOfLines) {
 	filterType = FilterTypes.getType(in());
 
 	switch (filterType) {
@@ -53,7 +53,7 @@ public class Filter extends StreamFilter {
 	}
     }
 
-    private void doNone() throws InterruptedException {
+    private void doNone() {
 	for (long i = 0; i < lastScanline[0].size; i++) {
 	    int currentValue;
 	    for (BigArrayOfInt channel : lastScanline) {
@@ -64,7 +64,7 @@ public class Filter extends StreamFilter {
 	}
     }
 
-    private void doSub() throws InterruptedException {
+    private void doSub() {
 	for (long i = 0; i < lastScanline[0].size; i++) {
 	    int currentValue = 0;
 	    int lastValue;
@@ -77,7 +77,7 @@ public class Filter extends StreamFilter {
 	}
     }
 
-    private void doUp() throws InterruptedException {
+    private void doUp() {
 	for (long i = 0; i < lastScanline[0].size; i++) {
 	    int currentValue;
 	    for (BigArrayOfInt channel : lastScanline) {
@@ -88,7 +88,7 @@ public class Filter extends StreamFilter {
 	}
     }
 
-    private void doAverage() throws InterruptedException {
+    private void doAverage() {
 	for (long i = 0; i < lastScanline[0].size; i++) {
 	    int currentValue = 0;
 	    int lastValue;
@@ -103,7 +103,7 @@ public class Filter extends StreamFilter {
 	}
     }
 
-    private void doPaeth() throws InterruptedException {
+    private void doPaeth() {
 	for (long i = 0; i < lastScanline[0].size; i++) {
 	    int current = 0;
 	    int last;

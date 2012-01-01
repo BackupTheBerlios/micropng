@@ -10,7 +10,7 @@ public class RingBuffer extends StreamFilter {
     }
 
     // TODO: this can be much faster
-    public void repeat(int distance, int length) throws InterruptedException {
+    public void repeat(int distance, int length) {
 	int sourcePointer = (outBufferPointer - length) % outBuffer.length;
 	for (int i = 0; i < length; i++) {
 	    out(outBuffer[sourcePointer]);
@@ -18,7 +18,7 @@ public class RingBuffer extends StreamFilter {
 	}
     }
 
-    public void out(int value) throws InterruptedException {
+    public void out(int value) {
 	outBuffer[outBufferPointer] = value;
 	outBufferPointer = (outBufferPointer + 1) % outBuffer.length;
 	super.out(value);

@@ -18,18 +18,12 @@ public class NoneDeInterlacer extends DeInterlacer {
 
 	@Override
 	public void run() {
-	    try {
-		filter.init(width);
-		filter.unfilter(height);
-	    } catch (InterruptedException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
+	    filter.init(width);
+	    filter.unfilter(height);
 	}
-
     }
 
-    public void deInterlace(Dimensions size, Filter filter) throws InterruptedException {
+    public void deInterlace(Dimensions size, Filter filter) {
 	new Thread(new WorkerThread(size, filter)).start();
     }
 }

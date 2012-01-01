@@ -29,10 +29,8 @@ public class Queue {
      * Close for input: buffers will be internally transferred to output, and
      * put() may not be called any more on this Queue. Any call of put() on this
      * Queue after close() triggers undefined behaviour.
-     * 
-     * @throws InterruptedException
      */
-    public void close() throws InterruptedException {
+    public void close() {
 	flush();
 	synchronized (this) {
 	    closed = true;
@@ -51,7 +49,7 @@ public class Queue {
 	}
     }
 
-    public ArrayList<Integer> getRemainingBitsOfCurrentByte() throws InterruptedException {
+    public ArrayList<Integer> getRemainingBitsOfCurrentByte() {
 	ArrayList<Integer> res = new ArrayList<Integer>(remainingBitsInByte);
 
 	while (remainingBitsInByte > 0) {
@@ -72,9 +70,8 @@ public class Queue {
      * @param value
      *            The byte to append on this Queue, stored in the LSB of the
      *            primitive int.
-     * @throws InterruptedException
      */
-    public void put(int value) throws InterruptedException {
+    public void put(int value) {
 
 	if (inBlock == null) {
 	    inBlock = new int[blockSize];
@@ -99,10 +96,9 @@ public class Queue {
      * <b>not</b> automatically close the target Queue.
      * 
      * @param target
-     * @throws InterruptedException
      */
 
-    public void shortCut(Queue target) throws InterruptedException {
+    public void shortCut(Queue target) {
 	target.flush();
 	synchronized (this) {
 	    target.queue.addAll(queue);
@@ -117,9 +113,8 @@ public class Queue {
      * stream is closed.
      * 
      * @return the next value in stream or -1 when nothing is left
-     * @throws InterruptedException
      */
-    public int take() throws InterruptedException {
+    public int take() {
 	int res;
 
 	while (outBlock == null) {
@@ -129,7 +124,12 @@ public class Queue {
 		    if (closed) {
 			return -1;
 		    } else {
-			wait();
+			try {
+			    wait();
+			} catch (InterruptedException e) {
+			    // swallow this. There is no interruption. Period.
+			    e.printStackTrace();
+			}
 		    }
 		} else {
 		    outPos = 0;
@@ -154,9 +154,8 @@ public class Queue {
      * 
      * @return 1 if the next bit is 1, 0 if the next bit is 0, and -1 if nothing
      *         is left in the Queue and the input is closed.
-     * @throws InterruptedException
      */
-    public int takeBit() throws InterruptedException {
+    public int takeBit() {
 	if (remainingBitsInByte == 0) {
 	    currentByte = take();
 	    if (currentByte == -1) {
@@ -181,9 +180,8 @@ public class Queue {
      *            from 0 to 31. The behaviour for other values is undefined.
      * @return {@code numberOfBits} bits from the head of the Queue or -1 if
      *         there are not enough available and input is closed.
-     * @throws InterruptedException
      */
-    public int takeBits(int numberOfBits) throws InterruptedException {
+    public int takeBits(int numberOfBits) {
 	int res = 0;
 	for (int i = 0; i < numberOfBits; i++) {
 	    int nextBit = takeBit();

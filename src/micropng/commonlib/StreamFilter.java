@@ -15,19 +15,23 @@ public abstract class StreamFilter {
 	nextInChain.input = connection;
     }
 
-    public int in() throws InterruptedException {
+    public int in() {
 	return input.take();
     }
 
-    public void out(int value) throws InterruptedException {
+    public void out(int value) {
 	output.put(value);
     }
 
-    public void done() throws InterruptedException {
+    public void done() {
 	output.close();
     }
 
     public Queue getInputQueue() {
 	return input;
+    }
+
+    public void shortCut() {
+	input.shortCut(output);
     }
 }

@@ -11,7 +11,7 @@ public class DeInterlacerMediator extends StreamFilter {
 	endOfQueue = input;
     }
 
-    public void deInterlace(CodecInfo properties) throws InterruptedException {
+    public void deInterlace(CodecInfo properties) {
 	int bitsPerSample = properties.getBitDepth();
 	Filter filter = null;
 	DeInterlacer deInterlacer = null;

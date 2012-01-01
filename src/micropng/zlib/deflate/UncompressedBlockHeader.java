@@ -13,7 +13,7 @@ public class UncompressedBlockHeader extends DataBlockHeader {
     private static final int bitsForLEN = 16;
     private int sizeOfHeaderPadding;
 
-    public UncompressedBlockHeader(Queue input) throws InterruptedException {
+    public UncompressedBlockHeader(Queue input) {
 	int LEN;
 	@SuppressWarnings("unused")
 	int NLEN;
@@ -25,13 +25,13 @@ public class UncompressedBlockHeader extends DataBlockHeader {
 	length = LEN;
     }
 
-    private int readAndStore(int numberOfBits) throws InterruptedException {
+    private int readAndStore(int numberOfBits) {
 	int res = input.takeBits(numberOfBits);
 	BitArrayListConverter.append(res, originalHeaderBits, numberOfBits);
 	return res;
     }
 
-    public void decode() throws InterruptedException {
+    public void decode() {
 	for (int i = 0; i < length; i++) {
 	    out(input.take());
 	}

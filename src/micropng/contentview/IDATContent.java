@@ -10,20 +10,16 @@ public class IDATContent extends StreamFilter {
 	// TODO: make this faster
 	@Override
 	public void run() {
-	    try {
-		for (Chunk c : chunkSequence) {
-		    Queue in = c.getData().getStream();
+	    for (Chunk c : chunkSequence) {
+		Queue in = c.getData().getStream();
 
-		    int next = in.take();
-		    while (next != -1) {
-			out(next);
-			next = in.take();
-		    }
+		int next = in.take();
+		while (next != -1) {
+		    out(next);
+		    next = in.take();
 		}
-		done();
-	    } catch (InterruptedException e) {
-		e.printStackTrace();
 	    }
+	    done();
 	}
     }
 

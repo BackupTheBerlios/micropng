@@ -6,17 +6,11 @@ public class DataDumper extends StreamFilter {
 	@Override
 	public void run() {
 	    int in;
-	    try {
+	    in = in();
+	    while (in != -1) {
+		System.err.print(in);
 		in = in();
-		while (in != -1) {
-		    System.err.print(in);
-		    in = in();
-		}
-	    } catch (InterruptedException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
 	    }
-
 	}
     }
 

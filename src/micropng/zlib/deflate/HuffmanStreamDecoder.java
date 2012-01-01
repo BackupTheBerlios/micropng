@@ -32,8 +32,7 @@ public class HuffmanStreamDecoder extends StreamFilter {
 	 outputBuffer = new RingBuffer(MAXIMUM_DISTANCE);
     }
 
-    private int readValueFromTree(HuffmanTreeWalker treeWalker, Queue input)
-	    throws InterruptedException {
+    private int readValueFromTree(HuffmanTreeWalker treeWalker, Queue input) {
 	treeWalker.reset();
 	do {
 	    treeWalker.step(input.take());
@@ -47,7 +46,7 @@ public class HuffmanStreamDecoder extends StreamFilter {
 	outputBuffer.connect(nextInChain);
     }
 
-    public void decode(Queue input) throws InterruptedException {
+    public void decode(Queue input) {
 	HuffmanTreeWalker literalsAndLengthsTreeWalker = literalsAndLengths.getHuffmanTreeWalker();
 	HuffmanTreeWalker distancesTreeWalker = distances.getHuffmanTreeWalker();
 	int literalOrLengthCode;

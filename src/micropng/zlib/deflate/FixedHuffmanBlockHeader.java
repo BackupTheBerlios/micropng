@@ -41,7 +41,7 @@ public class FixedHuffmanBlockHeader extends DataBlockHeader {
     }
 
     @Override
-    public void decode() throws InterruptedException {
+    public void decode() {
 	decoder.decode(input);
     }
 

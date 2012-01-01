@@ -13,7 +13,6 @@ public enum CRCCalculator {
 	makeCrcTable();
     }
 
-
     private static void makeCrcTable() {
 	for (int i = 0; i < 256; i++) {
 	    int c = i;
@@ -37,14 +36,10 @@ public enum CRCCalculator {
 	    crc = crcTable[(crc ^ typeArray[i]) & 0x000000ff] ^ (crc >>> 8);
 	}
 
-	try {
-	    int currentValue = input.take();
-	    while (currentValue != -1) {
-		crc = crcTable[(crc ^ currentValue) & 0x000000ff] ^ (crc >>> 8);
-		currentValue = input.take();
-	    }
-	} catch (InterruptedException e) {
-	    e.printStackTrace();
+	int currentValue = input.take();
+	while (currentValue != -1) {
+	    crc = crcTable[(crc ^ currentValue) & 0x000000ff] ^ (crc >>> 8);
+	    currentValue = input.take();
 	}
 
 	return crc ^ 0xffffffff;

@@ -15,11 +15,7 @@ public class RAMData implements DataField {
 	@Override
 	public void run() {
 	    for (int i = 0; i < data.length; i++) {
-		try {
-		    out.put(data[i]);
-		} catch (InterruptedException e) {
-		    e.printStackTrace();
-		}
+		out.put(data[i]);
 	    }
 	}
     }

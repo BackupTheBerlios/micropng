@@ -9,7 +9,7 @@ public class DeflateStreamDecoder extends StreamFilter {
 	private int BFINAL;
 	private int BTYPE;
 
-	public DeflateBlockHeader() throws InterruptedException {
+	public DeflateBlockHeader() {
 	    BFINAL = input.takeBit();
 	    BTYPE = input.takeBits(2);
 	}
@@ -18,7 +18,7 @@ public class DeflateStreamDecoder extends StreamFilter {
 	    return BFINAL != 0;
 	}
 
-	public DataBlockHeader getDataBlockHeader() throws InterruptedException {
+	public DataBlockHeader getDataBlockHeader() {
 	    switch (BTYPE) {
 	    case 0x00:
 		return new UncompressedBlockHeader(input);
@@ -36,21 +36,16 @@ public class DeflateStreamDecoder extends StreamFilter {
 
 	@Override
 	public void run() {
-	    try {
-		DeflateBlockHeader currentDeflateBlockHeader;
-		DataBlockHeader currentDataBlockHeader;
-		do {
-		    currentDeflateBlockHeader = new DeflateBlockHeader();
-		    currentDataBlockHeader = currentDeflateBlockHeader.getDataBlockHeader();
-		    merger.append(currentDataBlockHeader, currentDeflateBlockHeader.isLast());
-		    currentDataBlockHeader.decode();
-		} while (!currentDeflateBlockHeader.isLast());
+	    DeflateBlockHeader currentDeflateBlockHeader;
+	    DataBlockHeader currentDataBlockHeader;
+	    do {
+		currentDeflateBlockHeader = new DeflateBlockHeader();
+		currentDataBlockHeader = currentDeflateBlockHeader.getDataBlockHeader();
+		merger.append(currentDataBlockHeader, currentDeflateBlockHeader.isLast());
+		currentDataBlockHeader.decode();
+	    } while (!currentDeflateBlockHeader.isLast());
 
-		done();
-	    } catch (InterruptedException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
+	    done();
 	}
     }
 
@@ -64,7 +59,7 @@ public class DeflateStreamDecoder extends StreamFilter {
 	connect(merger);
     }
 
-    public void start() throws InterruptedException {
+    public void start() {
 	input = getInputQueue();
 	new Thread(deflateDecoderThread).start();
     }
