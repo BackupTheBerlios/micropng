@@ -1,11 +1,10 @@
 package micropng.encodingview;
 
 import micropng.micropng.Dimensions;
-import micropng.micropng.MicropngThread;
 
 public class NoneDeInterlacer extends DeInterlacer {
 
-    private class WorkerThread implements MicropngThread {
+    private class WorkerThread implements Runnable {
 
 	private long width;
 	private long height;
@@ -31,6 +30,6 @@ public class NoneDeInterlacer extends DeInterlacer {
     }
 
     public void deInterlace(Dimensions size, Filter filter) throws InterruptedException {
-	new Thread(new WorkerThread(size, filter)).run();
+	new Thread(new WorkerThread(size, filter)).start();
     }
 }

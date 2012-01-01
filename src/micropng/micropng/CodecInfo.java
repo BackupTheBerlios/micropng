@@ -1,5 +1,6 @@
 package micropng.micropng;
 
+import micropng.encodingview.CompressionMethod;
 import micropng.encodingview.FilterMethod;
 import micropng.encodingview.InterlaceMethod;
 
@@ -9,12 +10,9 @@ public class CodecInfo {
     private boolean colour;
     private boolean palette;
     private int bitDepth;
+    private CompressionMethod compressionMethod;
     private FilterMethod filterMethod;
     private InterlaceMethod interlaceMethod;
-
-    public Dimensions getSize() {
-	return size;
-    }
 
     public void setSize(Dimensions size) {
 	this.size = size;
@@ -50,6 +48,18 @@ public class CodecInfo {
 
     public void setBitDepth(int bitDepth) {
 	this.bitDepth = bitDepth;
+    }
+
+    public CompressionMethod getCompressionMethod() {
+	return compressionMethod;
+    }
+
+    public void setCompressionMethod(CompressionMethod compressionMethod) {
+	this.compressionMethod = compressionMethod;
+    }
+
+    public Dimensions getSize() {
+	return size;
     }
 
     public void setFilterMethod(FilterMethod filterMethod) {

@@ -2,19 +2,11 @@ package micropng.contentview;
 
 import micropng.chunkview.ChunkSequence;
 import micropng.chunkview.chunk.Chunk;
-import micropng.chunkview.chunk.Data;
 import micropng.commonlib.Queue;
-import micropng.micropng.MicropngThread;
+import micropng.commonlib.StreamFilter;
 
-public class IDATContent implements Data {
-    private class QueueFeeder implements MicropngThread {
-
-	private Queue out;
-
-	public QueueFeeder(Queue out) {
-	    this.out = out;
-	}
-
+public class IDATContent extends StreamFilter {
+    private class QueueFeeder implements Runnable {
 	// TODO: make this faster
 	@Override
 	public void run() {
@@ -24,10 +16,11 @@ public class IDATContent implements Data {
 
 		    int next = in.take();
 		    while (next != -1) {
-			out.put(next);
+			out(next);
 			next = in.take();
 		    }
 		}
+		done();
 	    } catch (InterruptedException e) {
 		e.printStackTrace();
 	    }
@@ -35,15 +28,14 @@ public class IDATContent implements Data {
     }
 
     private ChunkSequence chunkSequence;
+    private QueueFeeder queuefeeder;
 
     public IDATContent(ChunkSequence chunkSequence) {
 	this.chunkSequence = chunkSequence;
+	queuefeeder = new QueueFeeder();
     }
 
-    public Queue getStream() {
-	Queue res = new Queue();
-	new Thread(new QueueFeeder(res)).run();
-	return res;
+    public void start() {
+	new Thread(queuefeeder).start();
     }
-
 }

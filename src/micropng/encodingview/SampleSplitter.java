@@ -1,11 +1,10 @@
 package micropng.encodingview;
 
 import micropng.commonlib.StreamFilter;
-import micropng.micropng.MicropngThread;
 
 public class SampleSplitter extends StreamFilter {
 
-    private class WorkerThread extends StreamFilter implements MicropngThread {
+    private class WorkerThread extends StreamFilter implements Runnable {
 
 	private long numberOfSamples;
 	private long numberOfLines;

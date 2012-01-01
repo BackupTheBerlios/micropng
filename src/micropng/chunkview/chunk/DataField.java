@@ -1,8 +1,10 @@
 package micropng.chunkview.chunk;
 
-public interface DataField extends Data {
+import micropng.commonlib.Queue;
 
-    // public Queue getStream(int from, int length);
+public interface DataField {
+
+    public Queue getStream();
 
     public byte[] getArray(int from, int length);
 

@@ -1,11 +1,10 @@
 package micropng.zlib;
 
 import micropng.commonlib.StreamFilter;
-import micropng.micropng.MicropngThread;
 import micropng.zlib.deflate.DeflateStreamDecoder;
 
 public class ZlibDecoder extends StreamFilter {
-    private class ZlibDecoderThread implements MicropngThread {
+    private class ZlibDecoderThread implements Runnable {
 
 	@Override
 	public void run() {
@@ -43,7 +42,7 @@ public class ZlibDecoder extends StreamFilter {
 		// }
 		// }
 
-		deflateDecoder.decompress();
+		deflateDecoder.start();
 
 		for (int i = 0; i < 4; i++) {
 		    ADLER32 <<= 8;
@@ -55,11 +54,18 @@ public class ZlibDecoder extends StreamFilter {
 	    }
 	}
     }
+
     private DeflateStreamDecoder deflateDecoder;
+    private ZlibDecoderThread zlibDecoderThread;
 
     public ZlibDecoder() {
-	 deflateDecoder = new DeflateStreamDecoder(getInputQueue());
-	 new Thread(new ZlibDecoderThread()).run();
+	deflateDecoder = new DeflateStreamDecoder();
+	super.connect(deflateDecoder);
+	zlibDecoderThread = new ZlibDecoderThread();
+    }
+
+    public void start() {
+	new Thread(zlibDecoderThread).start();
     }
 
     @Override

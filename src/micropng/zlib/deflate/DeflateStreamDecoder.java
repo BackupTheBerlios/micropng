@@ -42,7 +42,7 @@ public class DeflateStreamDecoder extends StreamFilter {
 		do {
 		    currentDeflateBlockHeader = new DeflateBlockHeader();
 		    currentDataBlockHeader = currentDeflateBlockHeader.getDataBlockHeader();
-		    merger.add(currentDataBlockHeader);
+		    merger.append(currentDataBlockHeader, currentDeflateBlockHeader.isLast());
 		    currentDataBlockHeader.decode();
 		} while (!currentDeflateBlockHeader.isLast());
 
@@ -56,14 +56,17 @@ public class DeflateStreamDecoder extends StreamFilter {
 
     private Queue input;
     private StreamsMerger merger;
+    private DeflateDecoderThread deflateDecoderThread;
 
-    public DeflateStreamDecoder(Queue inputQueue) {
-	this.input = inputQueue;
+    public DeflateStreamDecoder() {
+	deflateDecoderThread = new DeflateDecoderThread();
 	merger = new StreamsMerger();
+	connect(merger);
     }
 
-    public void decompress() throws InterruptedException {
-	new DeflateDecoderThread().run();
+    public void start() throws InterruptedException {
+	input = getInputQueue();
+	new Thread(deflateDecoderThread).start();
     }
 
     @Override

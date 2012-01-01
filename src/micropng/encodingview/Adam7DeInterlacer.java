@@ -1,10 +1,9 @@
 package micropng.encodingview;
 
 import micropng.micropng.Dimensions;
-import micropng.micropng.MicropngThread;
 
 public class Adam7DeInterlacer extends DeInterlacer {
-    private class FilterFeederThread implements MicropngThread {
+    private class FilterFeederThread implements Runnable {
 
 	private long width;
 	private long height;
@@ -41,8 +40,6 @@ public class Adam7DeInterlacer extends DeInterlacer {
 
     @Override
     public void deInterlace(Dimensions size, Filter filter) {
-	new Thread(new FilterFeederThread(size, filter)).run();
-
+	new Thread(new FilterFeederThread(size, filter)).start();
     }
-
 }

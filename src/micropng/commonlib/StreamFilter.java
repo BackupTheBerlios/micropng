@@ -5,12 +5,14 @@ public abstract class StreamFilter {
     private Queue output;
 
     public StreamFilter() {
-	this.input = new Queue();
+	this.input = null;
 	this.output = null;
     }
 
     public void connect(StreamFilter nextInChain) {
-	this.output = nextInChain.input;
+	Queue connection = new Queue();
+	output = connection;
+	nextInChain.input = connection;
     }
 
     public int in() throws InterruptedException {

@@ -2,35 +2,33 @@ package micropng.commonlib;
 
 import java.util.LinkedList;
 
-import micropng.micropng.MicropngThread;
+import micropng.zlib.deflate.DataBlockHeader;
 
 public class StreamsMerger extends StreamFilter {
 
-    private class WorkerThread implements MicropngThread {
-
-	private StreamFilter currentStream;
+    private class WorkerThread implements Runnable {
 
 	@Override
 	public void run() {
-	    boolean maybeMoreWork = true;
-	    int value;
 
 	    try {
-		while (maybeMoreWork) {
+		boolean done = false;
+
+		while (!done) {
 		    synchronized (workerThread) {
 			if (buffer.peek() == null) {
-			    if (done) {
-				maybeMoreWork = false;
+			    if (last) {
+				done = true;
 			    } else {
 				workerThread.wait();
 			    }
-			} else {
-			    currentStream = buffer.poll();
-			    value = currentStream.in();
 
-			    while (value != -1) {
-				out(value);
-				value = currentStream.in();
+			} else {
+			    DummyFilter dummy = new DummyFilter();
+			    int next = in();
+			    while (next != -1) {
+				out(next);
+				next = in();
 			    }
 			}
 		    }
@@ -42,31 +40,27 @@ public class StreamsMerger extends StreamFilter {
 	}
     }
 
-    private Thread workerThread;
+    private WorkerThread workerThread;
+    private Thread threadObject;
+    private boolean last;
     private LinkedList<StreamFilter> buffer;
-    private boolean done;
 
     public StreamsMerger() {
-	workerThread = new Thread(new WorkerThread());
+	workerThread = new WorkerThread();
+	threadObject = new Thread(workerThread);
 	buffer = new LinkedList<StreamFilter>();
-	done = false;
-	workerThread.run();
+	last = false;
     }
 
-    public void add(StreamFilter stream) {
-	synchronized (workerThread) {
-	    buffer.addLast(stream);
-	    workerThread.notify();
-	}
+    public void start() {
+	threadObject.start();
     }
 
-    @Override
-    public void done() throws InterruptedException {
+    public void append(DataBlockHeader dataBlockHeader, boolean last) {
 	synchronized (workerThread) {
-	    done = true;
+	    buffer.addLast(dataBlockHeader);
+	    this.last = last;
 	    workerThread.notify();
 	}
-	workerThread.join();
-	super.done();
     }
 }

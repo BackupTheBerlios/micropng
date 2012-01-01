@@ -9,7 +9,8 @@ import micropng.chunkview.chunk.Chunk;
 import micropng.chunkview.chunk.Type;
 import micropng.commonlib.Status;
 import micropng.micropng.ConfigurationListener;
-import micropng.micropng.EncodingAnalyzer;
+import micropng.micropng.ContentAnalyzer;
+import micropng.micropng.FullIDATDecoder;
 import micropng.pngio.FileReader;
 import micropng.userinterface.inputoptions.Parameter;
 
@@ -21,7 +22,8 @@ public class Configurator {
 	File inputFile = filePath.<File>take();
 	FileReader reader = new FileReader();
 	ChunkSequence chunkSequence;
-	EncodingAnalyzer encodingAnalyzer = new EncodingAnalyzer();
+	FullIDATDecoder decoder;
+	ContentAnalyzer contentAnalyzer = new ContentAnalyzer();
 
 	if (!inputFile.isFile()) {
 	    return Status.error("Der Pfad „" + inputFile + "“ zeigt auf keine normale Datei.");
@@ -49,8 +51,8 @@ public class Configurator {
 //	    }
 	}
 
-	encodingAnalyzer.analyze(chunkSequence);
-
+	decoder = new FullIDATDecoder(chunkSequence);
+	decoder.decode();
 	return Status.ok();
     }
 

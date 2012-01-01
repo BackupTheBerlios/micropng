@@ -1,11 +1,10 @@
 package micropng.chunkview.chunk;
 
 import micropng.commonlib.Queue;
-import micropng.micropng.MicropngThread;
 
 public class RAMData implements DataField {
 
-    private class QueueFeeder implements MicropngThread {
+    private class QueueFeeder implements Runnable {
 
 	private Queue out;
 
@@ -51,7 +50,7 @@ public class RAMData implements DataField {
     @Override
     public Queue getStream() {
 	Queue res = new Queue();
-	new Thread(new QueueFeeder(res)).run();
+	new Thread(new QueueFeeder(res)).start();
 	return res;
     }
 
