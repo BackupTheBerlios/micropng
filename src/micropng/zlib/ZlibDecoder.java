@@ -40,13 +40,15 @@ public class ZlibDecoder extends StreamFilter {
 	    // DICTID |= in();
 	    // }
 	    // }
-
+	    shortCut();
 	    deflateDecoder.start();
 
 	    for (int i = 0; i < 4; i++) {
 		ADLER32 <<= 8;
 		ADLER32 |= in();
 	    }
+
+	    done();
 	}
     }
 
@@ -55,6 +57,7 @@ public class ZlibDecoder extends StreamFilter {
 
     public ZlibDecoder() {
 	deflateDecoder = new DeflateStreamDecoder();
+	connect(deflateDecoder);
 	zlibDecoderThread = new ZlibDecoderThread();
     }
 

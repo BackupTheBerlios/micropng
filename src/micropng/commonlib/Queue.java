@@ -91,9 +91,13 @@ public class Queue {
     }
 
     /**
-     * Directly route any input from this Queue to target, bypassing the
-     * external take/put methods. Note: calling close() on this Queue, does
-     * <b>not</b> automatically close the target Queue.
+     * Directly route any input from this Queue to target.
+     * 
+     * The external take/put methods are being bypassed. However, these methods
+     * remain usable.
+     * 
+     * Note: calling close() on this Queue, does <b>not</b> automatically close
+     * the target Queue.
      * 
      * @param target
      */
