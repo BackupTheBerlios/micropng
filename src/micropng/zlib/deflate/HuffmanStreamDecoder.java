@@ -35,7 +35,7 @@ public class HuffmanStreamDecoder extends StreamFilter {
     private int readValueFromTree(HuffmanTreeWalker treeWalker, Queue input) {
 	treeWalker.reset();
 	do {
-	    treeWalker.step(input.take());
+	    treeWalker.step(input.takeBit());
 	} while (!treeWalker.isLeaf());
 
 	return treeWalker.getValue();
