@@ -28,9 +28,9 @@ public class DynamicHuffmanBlockHeader extends DataBlockHeader {
 	int numberOfLiteralAndLengthCodes = HLIT + 257;
 	int numberOfDistanceCodes = HDIST + 1;
 	int numberOfCodeLengthCodes = HCLEN + 4;
-	int[] codeLengthCodes = new int[numberOfCodeLengthCodes];
 	int[] codeLengthCodesOrder = { 16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14,
 		1, 15 };
+	int[] codeLengthCodes = new int[codeLengthCodesOrder.length];
 	HuffmanTree codeLengthsTree;
 	HuffmanTreeWalker codeLengthsTreeWalker;
 	int[] literalLengthsAndDistanceCodesTable = new int[numberOfLiteralAndLengthCodes
