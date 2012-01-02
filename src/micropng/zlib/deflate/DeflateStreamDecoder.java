@@ -24,7 +24,7 @@ public class DeflateStreamDecoder extends StreamFilter {
 		return new UncompressedBlockHeader(input);
 	    case 0x01:
 		return new FixedHuffmanBlockHeader(input);
-	    case 0x10:
+	    case 0x02:
 		return new DynamicHuffmanBlockHeader(input);
 	    }
 
