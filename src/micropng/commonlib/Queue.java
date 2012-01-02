@@ -105,8 +105,12 @@ public class Queue {
     public void shortCut(Queue target) {
 	target.flush();
 	synchronized (this) {
+	    if (outBlock != null) {
+		int[] currentBlock = Arrays.copyOfRange(outBlock, outPos, outBlock.length);
+		target.queue.add(currentBlock);
+	    }
 	    target.queue.addAll(queue);
-	    this.queue = target.queue;
+	    queue = target.queue;
 	}
     }
 
