@@ -23,7 +23,6 @@ public class ZlibDecoder extends StreamFilter {
 
 	    // specified in zlib, but prohibited by png spec:
 	    // int DICTID;
-	    int ADLER32 = 0;
 	    CMF = in();
 	    CM = CMF & 0x0f; // must be 8
 	    CINFO = (CMF & 0xf0) >>> 4; // must be 7
@@ -40,28 +39,44 @@ public class ZlibDecoder extends StreamFilter {
 	    // DICTID |= in();
 	    // }
 	    // }
+
 	    shortCut();
-	    deflateDecoder.start();
 
-	    for (int i = 0; i < 4; i++) {
-		ADLER32 <<= 8;
-		ADLER32 |= in();
-	    }
-
-	    done();
+	    deflateDecoder.decode();
 	}
     }
 
     private DeflateStreamDecoder deflateDecoder;
+    private Adler32Checker adler32Checker;
     private ZlibDecoderThread zlibDecoderThread;
+    private int adler32;
 
     public ZlibDecoder() {
 	deflateDecoder = new DeflateStreamDecoder();
 	connect(deflateDecoder);
+	adler32Checker = new Adler32Checker(this);
+	deflateDecoder.connect(adler32Checker);
+	adler32Checker.start();
 	zlibDecoderThread = new ZlibDecoderThread();
+	adler32 = 0;
+    }
+
+    public void compareAdler32CheckSum() {
+	//TODO: maybe it is better to process this in a separate thread,
+	// so the Adler32Checker thread is able to die?
+	for (int i = 0; i < 4; i++) {
+	    adler32 <<= 8;
+	    adler32 |= in();
+	}
+	adler32Checker.check(adler32);
     }
 
     public void start() {
 	new Thread(zlibDecoderThread).start();
     }
+
+//    @Override
+//    public void connect(StreamFilter nextInChain) {
+//	deflateDecoder.connect(nextInChain);
+//    }
 }

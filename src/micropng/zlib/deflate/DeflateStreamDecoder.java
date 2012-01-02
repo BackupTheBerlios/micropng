@@ -32,36 +32,26 @@ public class DeflateStreamDecoder extends StreamFilter {
 	}
     }
 
-    private class DeflateDecoderThread implements Runnable {
-
-	@Override
-	public void run() {
-	    DeflateBlockHeader currentDeflateBlockHeader;
-	    DataBlockHeader currentDataBlockHeader;
-	    do {
-		currentDeflateBlockHeader = new DeflateBlockHeader();
-		currentDataBlockHeader = currentDeflateBlockHeader.getDataBlockHeader();
-		merger.append(currentDataBlockHeader, currentDeflateBlockHeader.isLast());
-		currentDataBlockHeader.decode();
-	    } while (!currentDeflateBlockHeader.isLast());
-
-	    done();
-	}
-    }
-
     private Queue input;
     private StreamsMerger merger;
-    private DeflateDecoderThread deflateDecoderThread;
 
     public DeflateStreamDecoder() {
-	deflateDecoderThread = new DeflateDecoderThread();
 	merger = new StreamsMerger();
 	connect(merger);
     }
 
-    public void start() {
-	input = getInputQueue();
-	new Thread(deflateDecoderThread).start();
+    public void decode() {
+	this.input = getInputQueue();
+	DeflateBlockHeader currentDeflateBlockHeader;
+	DataBlockHeader currentDataBlockHeader;
+	do {
+	    currentDeflateBlockHeader = new DeflateBlockHeader();
+	    currentDataBlockHeader = currentDeflateBlockHeader.getDataBlockHeader();
+	    merger.append(currentDataBlockHeader, currentDeflateBlockHeader.isLast());
+	    currentDataBlockHeader.decode();
+	} while (!currentDeflateBlockHeader.isLast());
+
+	done();
     }
 
     @Override
