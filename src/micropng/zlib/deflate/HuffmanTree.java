@@ -40,7 +40,7 @@ public class HuffmanTree {
     public class HuffmanTreeWalker {
 	private HuffmanNode pos;
 
-	private HuffmanTreeWalker () {
+	private HuffmanTreeWalker() {
 	    reset();
 	}
 
@@ -59,6 +59,7 @@ public class HuffmanTree {
 		pos = pos.right;
 	    }
 	}
+
 	public int getValue() {
 	    return pos.getValue();
 	}
@@ -120,7 +121,7 @@ public class HuffmanTree {
 	}
 	currentNode.setValue(value);
     }
-    
+
     public HuffmanTreeWalker getHuffmanTreeWalker() {
 	HuffmanTreeWalker res = new HuffmanTreeWalker();
 	return res;

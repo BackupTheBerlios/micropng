@@ -32,7 +32,7 @@ public abstract class StreamFilter {
 	return input;
     }
 
-    public void shortCut() {
-	input.shortCut(output);
-    }
+//    public void shortCut() {
+//	input.shortCut(output);
+//    }
 }

@@ -40,8 +40,6 @@ public class ZlibDecoder extends StreamFilter {
 	    // }
 	    // }
 
-	    shortCut();
-
 	    deflateDecoder.decode();
 	}
     }
@@ -52,26 +50,27 @@ public class ZlibDecoder extends StreamFilter {
     private int adler32;
 
     public ZlibDecoder() {
-	deflateDecoder = new DeflateStreamDecoder();
-	super.connect(deflateDecoder);
 	adler32Checker = new Adler32Checker(this);
-	deflateDecoder.connect(adler32Checker);
-	adler32Checker.start();
-	zlibDecoderThread = new ZlibDecoderThread();
-	adler32 = 0;
     }
 
-    public void compareAdler32CheckSum() {
-	//TODO: maybe it is better to process this in a separate thread,
+    public void readAndCompareAdler32CheckSum() {
+	// TODO: maybe it is better to process this in a separate thread,
 	// so the Adler32Checker thread is able to die?
+	adler32 = 0;
 	for (int i = 0; i < 4; i++) {
 	    adler32 <<= 8;
 	    adler32 |= in();
 	}
-	adler32Checker.check(adler32);
+	System.err.println("Adler-32 checksum is valid: " + adler32Checker.check(adler32));
     }
 
     public void start() {
+	deflateDecoder = new DeflateStreamDecoder(getInputQueue());
+	deflateDecoder.connect(adler32Checker);
+	adler32Checker.start();
+
+	zlibDecoderThread = new ZlibDecoderThread();
+
 	new Thread(zlibDecoderThread).start();
     }
 

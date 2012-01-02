@@ -34,8 +34,11 @@ public class DeflateStreamDecoder extends StreamFilter {
     private Queue input;
     private StreamFilter nextInChain;
 
+    public DeflateStreamDecoder(Queue input) {
+	this.input = input;
+    }
+    
     public void decode() {
-	this.input = getInputQueue();
 	DeflateBlockHeader currentDeflateBlockHeader;
 	DataBlockHeader currentDataBlockHeader;
 	do {

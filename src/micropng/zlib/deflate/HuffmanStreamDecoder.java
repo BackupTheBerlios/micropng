@@ -29,7 +29,7 @@ public class HuffmanStreamDecoder extends StreamFilter {
     public HuffmanStreamDecoder(HuffmanTree literalsAndLengths, HuffmanTree distances) {
 	this.literalsAndLengths = literalsAndLengths;
 	this.distances = distances;
-	 outputBuffer = new RingBuffer(MAXIMUM_DISTANCE);
+	outputBuffer = new RingBuffer(MAXIMUM_DISTANCE);
     }
 
     private int readValueFromTree(HuffmanTreeWalker treeWalker, Queue input) {
