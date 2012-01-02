@@ -85,7 +85,7 @@ public class HuffmanTree {
 	    next_code[bits] = code;
 	}
 
-	for (int n = 0; n <= codeLengths.length; n++) {
+	for (int n = 0; n < codeLengths.length; n++) {
 	    int len = codeLengths[n];
 	    if (len != 0) {
 		addCode(n, next_code[len], len);

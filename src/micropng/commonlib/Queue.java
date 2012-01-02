@@ -164,41 +164,63 @@ public class Queue {
      *         is left in the Queue and the input is closed.
      */
     public int takeBit() {
+	int res;
 	if (remainingBitsInByte == 0) {
 	    currentByte = take();
 	    if (currentByte == -1) {
 		return -1;
 	    }
+	    res = currentByte & 0x01;
+	    currentByte >>= 1;
 	    remainingBitsInByte = 7;
 	} else {
+	    res = currentByte & 0x01;
 	    currentByte >>= 1;
 	    remainingBitsInByte--;
 	}
 
-	return currentByte & 0x01;
+	return res;
     }
 
     /**
      * Returns and removes {@code numberOfBits} bits from the head of the Queue.
      * 
-     * This method blocks if there are not enough bits in this Queue.
+     * The bits are returned in the same order they are located in the input
+     * byte(s), crossing byte boundaries from LSB upwards. This method blocks if
+     * there are not enough bits in this Queue.
      * 
      * @param numberOfBits
      *            The number of bits to return. Valid values are in the range
      *            from 0 to 31. The behaviour for other values is undefined.
-     * @return {@code numberOfBits} bits from the head of the Queue or -1 if
-     *         there are not enough available and input is closed.
+     * @return {@code numberOfBits} bits from the head of the Queue.
      */
     public int takeBits(int numberOfBits) {
 	int res = 0;
-	for (int i = 0; i < numberOfBits; i++) {
-	    int nextBit = takeBit();
-	    if (nextBit == -1) {
-		return -1;
+	int bitsLeftToTake = numberOfBits;
+	int bitsTaken = 0;
+
+	while (bitsLeftToTake > 0) {
+	    if (bitsLeftToTake > remainingBitsInByte) {
+		int nextBitMask = currentByte << bitsTaken;
+		res |= nextBitMask;
+		bitsTaken += remainingBitsInByte;
+		bitsLeftToTake -= remainingBitsInByte;
+
+		currentByte = take();
+		if (currentByte == -1) {
+		    throw new InputClosedEarlyException();
+		}
+		remainingBitsInByte = 8;
+	    } else {
+		int lowPartMask = (1 << bitsLeftToTake) - 1;
+		int nextBitMask = (currentByte & lowPartMask) << bitsTaken;
+		res |= nextBitMask;
+		currentByte >>= bitsLeftToTake;
+		remainingBitsInByte -= bitsLeftToTake;
+		bitsLeftToTake = 0;
 	    }
-	    res <<= 1;
-	    res |= nextBit;
 	}
+
 	return res;
     }
 }
