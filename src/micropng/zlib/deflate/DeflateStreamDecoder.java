@@ -2,7 +2,6 @@ package micropng.zlib.deflate;
 
 import micropng.commonlib.Queue;
 import micropng.commonlib.StreamFilter;
-import micropng.commonlib.StreamsMerger;
 
 public class DeflateStreamDecoder extends StreamFilter {
     private class DeflateBlockHeader {
@@ -33,12 +32,7 @@ public class DeflateStreamDecoder extends StreamFilter {
     }
 
     private Queue input;
-    private StreamsMerger merger;
-
-    public DeflateStreamDecoder() {
-	merger = new StreamsMerger();
-	connect(merger);
-    }
+    private StreamFilter nextInChain;
 
     public void decode() {
 	this.input = getInputQueue();
@@ -47,7 +41,7 @@ public class DeflateStreamDecoder extends StreamFilter {
 	do {
 	    currentDeflateBlockHeader = new DeflateBlockHeader();
 	    currentDataBlockHeader = currentDeflateBlockHeader.getDataBlockHeader();
-	    merger.append(currentDataBlockHeader, currentDeflateBlockHeader.isLast());
+	    currentDataBlockHeader.connect(nextInChain);
 	    currentDataBlockHeader.decode();
 	} while (!currentDeflateBlockHeader.isLast());
 
@@ -56,6 +50,7 @@ public class DeflateStreamDecoder extends StreamFilter {
 
     @Override
     public void connect(StreamFilter nextInChain) {
-	merger.connect(nextInChain);
+	super.connect(nextInChain);
+	this.nextInChain = nextInChain;
     }
 }

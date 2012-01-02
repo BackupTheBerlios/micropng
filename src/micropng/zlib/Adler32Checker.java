@@ -14,7 +14,9 @@ public class Adler32Checker extends StreamFilter {
 	    while (next != -1) {
 		adler32.update(next);
 		out(next);
+		next = in();
 	    }
+	    done();
 	    zlibDecoder.compareAdler32CheckSum();
 	}
     }

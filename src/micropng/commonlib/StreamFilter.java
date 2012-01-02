@@ -10,9 +10,10 @@ public abstract class StreamFilter {
     }
 
     public void connect(StreamFilter nextInChain) {
-	Queue connection = new Queue();
-	output = connection;
-	nextInChain.input = connection;
+	if (nextInChain.input == null) {
+	    nextInChain.input = new Queue();
+	}
+	output = nextInChain.input;
     }
 
     public int in() {
