@@ -13,18 +13,6 @@ public class UncompressedBlockHeader extends DataBlockHeader {
     private static final int bitsForLEN = 16;
     private int sizeOfHeaderPadding;
 
-    public UncompressedBlockHeader(Queue input) {
-	int LEN;
-	@SuppressWarnings("unused")
-	int NLEN;
-	this.input = input;
-	originalHeaderBits = input.getRemainingBitsOfCurrentByte();
-	sizeOfHeaderPadding = originalHeaderBits.size();
-	LEN = readAndStore(bitsForLEN);
-	NLEN = readAndStore(bitsForLEN);
-	length = LEN;
-    }
-
     private int readAndStore(int numberOfBits) {
 	int res = input.takeBits(numberOfBits);
 	BitArrayListConverter.append(res, originalHeaderBits, numberOfBits);
@@ -32,6 +20,16 @@ public class UncompressedBlockHeader extends DataBlockHeader {
     }
 
     public void decode() {
+	int LEN;
+	@SuppressWarnings("unused")
+	int NLEN;
+	input = getInputQueue();
+	originalHeaderBits = input.getRemainingBitsOfCurrentByte();
+	sizeOfHeaderPadding = originalHeaderBits.size();
+	LEN = readAndStore(bitsForLEN);
+	NLEN = readAndStore(bitsForLEN);
+	length = LEN;
+
 	for (int i = 0; i < length; i++) {
 	    out(input.take());
 	}

@@ -18,8 +18,14 @@ public class DynamicHuffmanBlockHeader extends DataBlockHeader {
     private ArrayList<Integer> originalHeaderBits;
     private HuffmanStreamDecoder decoder;
 
-    public DynamicHuffmanBlockHeader(Queue input) {
-	this.input = input;
+    private int readAndStore(int numberOfBits) {
+	int res = input.takeBits(numberOfBits);
+	BitArrayListConverter.append(res, originalHeaderBits, numberOfBits);
+	return res;
+    }
+
+    @Override
+    public void decode() {
 	originalHeaderBits = new ArrayList<Integer>(256);
 	HLIT = readAndStore(5);
 	HDIST = readAndStore(5);
@@ -98,17 +104,8 @@ public class DynamicHuffmanBlockHeader extends DataBlockHeader {
 	distancesTree = new HuffmanTree(distanceCodesTable);
 
 	decoder = new HuffmanStreamDecoder(literalsAndLengthsTree, distancesTree);
-    }
 
-    private int readAndStore(int numberOfBits)  {
-	int res = input.takeBits(numberOfBits);
-	BitArrayListConverter.append(res, originalHeaderBits, numberOfBits);
-	return res;
-    }
-
-    @Override
-    public void decode() {
-	decoder.decode(input);
+	decoder.decode();
     }
 
     @Override

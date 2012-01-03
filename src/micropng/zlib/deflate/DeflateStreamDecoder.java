@@ -5,10 +5,12 @@ import micropng.commonlib.StreamFilter;
 
 public class DeflateStreamDecoder extends StreamFilter {
     private class DeflateBlockHeader {
+	private Queue input;
 	private int BFINAL;
 	private int BTYPE;
 
 	public DeflateBlockHeader() {
+	    input = getInputQueue();
 	    BFINAL = input.takeBit();
 	    BTYPE = input.takeBits(2);
 	}
@@ -20,40 +22,28 @@ public class DeflateStreamDecoder extends StreamFilter {
 	public DataBlockHeader getDataBlockHeader() {
 	    switch (BTYPE) {
 	    case 0x00:
-		return new UncompressedBlockHeader(input);
+		return new UncompressedBlockHeader();
 	    case 0x01:
-		return new FixedHuffmanBlockHeader(input);
+		return new FixedHuffmanBlockHeader();
 	    case 0x02:
-		return new DynamicHuffmanBlockHeader(input);
+		return new DynamicHuffmanBlockHeader();
 	    }
 
 	    return null;
 	}
     }
 
-    private Queue input;
-    private StreamFilter nextInChain;
-
-    public DeflateStreamDecoder(Queue input) {
-	this.input = input;
-    }
-    
     public void decode() {
 	DeflateBlockHeader currentDeflateBlockHeader;
 	DataBlockHeader currentDataBlockHeader;
 	do {
 	    currentDeflateBlockHeader = new DeflateBlockHeader();
 	    currentDataBlockHeader = currentDeflateBlockHeader.getDataBlockHeader();
-	    currentDataBlockHeader.connect(nextInChain);
+	    shareCurrentInputChannel(currentDataBlockHeader);
+	    shareCurrentOutputChannel(currentDataBlockHeader);
 	    currentDataBlockHeader.decode();
 	} while (!currentDeflateBlockHeader.isLast());
 
 	done();
-    }
-
-    @Override
-    public void connect(StreamFilter nextInChain) {
-	super.connect(nextInChain);
-	this.nextInChain = nextInChain;
     }
 }

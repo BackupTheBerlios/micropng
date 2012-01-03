@@ -41,12 +41,9 @@ public class HuffmanStreamDecoder extends StreamFilter {
 	return treeWalker.getValue();
     }
 
-    @Override
-    public void connect(StreamFilter nextInChain) {
-	outputBuffer.connect(nextInChain);
-    }
-
-    public void decode(Queue input) {
+    public void decode() {
+	Queue input = getInputQueue();
+	shareCurrentOutputChannel(outputBuffer);
 	HuffmanTreeWalker literalsAndLengthsTreeWalker = literalsAndLengths.getHuffmanTreeWalker();
 	HuffmanTreeWalker distancesTreeWalker = distances.getHuffmanTreeWalker();
 	int literalOrLengthCode;

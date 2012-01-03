@@ -2,7 +2,6 @@ package micropng.zlib.deflate;
 
 import java.util.ArrayList;
 
-import micropng.commonlib.Queue;
 import micropng.commonlib.StreamFilter;
 
 public class FixedHuffmanBlockHeader extends DataBlockHeader {
@@ -24,16 +23,8 @@ public class FixedHuffmanBlockHeader extends DataBlockHeader {
 	    5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
 	    5 });
 
-    private Queue input;
     private ArrayList<Integer> originalHeaderBits;
     private HuffmanStreamDecoder decoder;
-
-    public FixedHuffmanBlockHeader(Queue input) {
-	this.input = input;
-	originalHeaderBits = new ArrayList<Integer>(0);
-	decoder = new HuffmanStreamDecoder(defaultLiteralsAndLengthsCodesTree,
-		defaultDistancesCodesTree);
-    }
 
     @Override
     public ArrayList<Integer> getOriginalHeader() {
@@ -42,7 +33,12 @@ public class FixedHuffmanBlockHeader extends DataBlockHeader {
 
     @Override
     public void decode() {
-	decoder.decode(input);
+	originalHeaderBits = new ArrayList<Integer>(0);
+	decoder = new HuffmanStreamDecoder(defaultLiteralsAndLengthsCodesTree,
+		defaultDistancesCodesTree);
+	shareCurrentInputChannel(decoder);
+	shareCurrentOutputChannel(decoder);
+	decoder.decode();
     }
 
     @Override

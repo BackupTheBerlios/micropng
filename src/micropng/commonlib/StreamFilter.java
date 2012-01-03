@@ -32,6 +32,14 @@ public abstract class StreamFilter {
 	return input;
     }
 
+    public void shareCurrentInputChannel(StreamFilter target) {
+	target.input = input;
+    }
+
+    public void shareCurrentOutputChannel(StreamFilter target) {
+	target.output = output;
+    }
+
 //    public void shortCut() {
 //	input.shortCut(output);
 //    }

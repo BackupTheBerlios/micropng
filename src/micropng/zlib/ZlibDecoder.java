@@ -65,17 +65,14 @@ public class ZlibDecoder extends StreamFilter {
     }
 
     public void start() {
-	deflateDecoder = new DeflateStreamDecoder(getInputQueue());
+	deflateDecoder = new DeflateStreamDecoder();
+	shareCurrentInputChannel(deflateDecoder);
 	deflateDecoder.connect(adler32Checker);
+	shareCurrentOutputChannel(adler32Checker);
 	adler32Checker.start();
 
 	zlibDecoderThread = new ZlibDecoderThread();
 
 	new Thread(zlibDecoderThread).start();
-    }
-
-    @Override
-    public void connect(StreamFilter nextInChain) {
-	adler32Checker.connect(nextInChain);
     }
 }
