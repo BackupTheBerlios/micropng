@@ -1,6 +1,0 @@
-micropng 0.1 (..2010)
-- reduce number of IDAT chunks to as few as possible (1 chunk if IDAT data is not >= 1 GiB)
-
-micropng 0.0 (19.10.2009)
-- initial release
-- the only feature is sorting the chunks according to a total ordering (which might be not canonical when given unknown chunks)
