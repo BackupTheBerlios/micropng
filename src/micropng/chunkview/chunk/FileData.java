@@ -7,8 +7,8 @@ import micropng.commonlib.Queue;
 
 public class FileData implements DataField {
     private class QueueFeeder implements Runnable {
-
 	private Queue out;
+	private static final int mask = (1 << 8) - 1;
 
 	public QueueFeeder(Queue out) {
 	    this.out = out;
@@ -20,7 +20,7 @@ public class FileData implements DataField {
 		file.seek(start);
 
 		for (int i = 0; i < size; i++) {
-		    out.put(file.readByte());
+		    out.put(mask & file.readByte());
 		}
 		out.close();
 	    } catch (IOException e) {
