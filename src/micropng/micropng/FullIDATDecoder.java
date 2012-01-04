@@ -9,6 +9,7 @@ import micropng.commonlib.DataDumper;
 import micropng.commonlib.StreamFilter;
 import micropng.contentview.IDATContent;
 import micropng.encodingview.CompressionMethod;
+import micropng.encodingview.Filter;
 import micropng.encodingview.FilterMethod;
 import micropng.encodingview.InterlaceMethod;
 import micropng.zlib.ZlibDecoder;
@@ -76,6 +77,7 @@ public class FullIDATDecoder extends StreamFilter {
     }
 
     public void decode() {
+	generateCodecInfo();
 	new Thread(new DecoderThread()).start();
     }
 }
