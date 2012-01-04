@@ -98,8 +98,8 @@ public class DynamicHuffmanBlockHeader extends DataBlockHeader {
 
 	System.arraycopy(literalLengthsAndDistanceCodesTable, 0, literalAndLengthCodesTable, 0,
 		numberOfLiteralAndLengthCodes);
-	System.arraycopy(literalLengthsAndDistanceCodesTable, 0, distanceCodesTable,
-		numberOfLiteralAndLengthCodes, numberOfDistanceCodes);
+	System.arraycopy(literalLengthsAndDistanceCodesTable, numberOfLiteralAndLengthCodes,
+		distanceCodesTable, 0, numberOfDistanceCodes);
 
 	literalsAndLengthsTree = new HuffmanTree(literalAndLengthCodesTable);
 	distancesTree = new HuffmanTree(distanceCodesTable);
