@@ -41,7 +41,7 @@ public class Path implements ParameterValue<File>, Cloneable {
 	    e.printStackTrace();
 	    System.exit(-1);
 	}
-	res.value = new File(value.getPath());
+	res.value = (value==null)? null: new File(value.getPath());
 	return res;
     }
 }

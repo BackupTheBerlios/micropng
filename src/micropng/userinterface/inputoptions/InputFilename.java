@@ -1,16 +1,11 @@
 package micropng.userinterface.inputoptions;
 
-import java.io.File;
-
 public class InputFilename implements ParameterDescription {
     private static final String longHelp = "Der Pfad zu einer Eingabedatei. Jede Art von Pfad, der von der JVM verarbeitet werden kann, ist erlaubt.";
     private static final String longParameterName = "input-file";
     private static final String shortHelp = "Pfad der Eingabedatei";
     private static final char shortParameterName = 'i';
     private static final Path defaultValue = new Path();
-    static {
-	defaultValue.trySetting(new File(""));
-    }
 
     @Override
     public String getLongHelp() {

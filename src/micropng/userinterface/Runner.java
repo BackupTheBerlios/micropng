@@ -7,10 +7,14 @@ import micropng.commonlib.Status;
 public class Runner {
 
     public Status runActualProgram(UserConfiguration inputConfiguration) {
+	Status res;
 	Configurator configurator = new Configurator();
 	InternalConfiguration internalConfiguration = new InternalConfiguration();
 	try {
-	    configurator.makeActualConfig(inputConfiguration, internalConfiguration);
+	    res = configurator.makeActualConfig(inputConfiguration, internalConfiguration);
+	    if (res.getStatusType() == Status.StatusType.ERROR) {
+		return res;
+	    }
 	} catch (IOException e) {
 	    e.printStackTrace();
 	    return Status.error("");

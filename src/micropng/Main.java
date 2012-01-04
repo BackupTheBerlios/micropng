@@ -1,5 +1,6 @@
 package micropng;
 
+import micropng.commonlib.Status;
 import micropng.userinterface.Runner;
 import micropng.userinterface.UserConfiguration;
 import micropng.userinterface.invocationline.InvocationLineEvaluator;
@@ -9,7 +10,9 @@ public class Main {
 	InvocationLineEvaluator invocationLineEvaluator = new InvocationLineEvaluator();
 	UserConfiguration userConfiguration = invocationLineEvaluator.evaluate(args);
 	Runner runner = new Runner();
-
-	runner.launchInterface(userConfiguration);
+	Status status = runner.launchInterface(userConfiguration);
+	if (status.getStatusType() == Status.StatusType.ERROR) {
+	    System.err.println(status.message());
+	}
     }
 }

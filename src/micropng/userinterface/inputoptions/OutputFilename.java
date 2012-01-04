@@ -1,16 +1,11 @@
 package micropng.userinterface.inputoptions;
 
-import java.io.File;
-
 public class OutputFilename implements ParameterDescription {
     private static final String longHelp = "Der Pfad zu einer Ausgabedatei. Jede Art von Pfad, der von der JVM verarbeitet werden kann, ist erlaubt. Die Datei darf noch nicht existieren.";
     private static final String longParameterName = "output-file";
     private static final String shortHelp = "Pfad der Ausgabedatei";
     private static final char shortParameterName = 'o';
     private static final Path defaultValue = new Path();
-    static {
-	defaultValue.trySetting(new File(""));
-    }
 
     @Override
     public ParameterValue<?> defaultValue() {

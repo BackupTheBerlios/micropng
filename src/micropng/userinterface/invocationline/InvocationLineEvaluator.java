@@ -198,11 +198,11 @@ public class InvocationLineEvaluator implements OutputHandler {
 	int splitTextPosition = 0;
 	StringBuffer nextChunk;
 
-	if (defaultValue.length() != 0) {
+//	if (defaultValue.length() != 0) {
 	    fullTextString.append(defaultValuePrefix);
 	    fullTextString.append(defaultValue);
 	    fullTextString.append(defaultValueSuffix);
-	}
+//	}
 	splitText = fullTextString.toString().split(" ");
 
 	shortNameString.append(shortNamePrefix);
