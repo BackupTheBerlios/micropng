@@ -13,6 +13,7 @@ public class Main {
 	Status status = runner.launchInterface(userConfiguration);
 	if (status.getStatusType() == Status.StatusType.ERROR) {
 	    System.err.println(status.message());
+	    System.exit(-1);
 	}
     }
 }
