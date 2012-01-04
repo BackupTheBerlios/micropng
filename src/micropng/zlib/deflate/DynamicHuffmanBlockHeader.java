@@ -26,6 +26,7 @@ public class DynamicHuffmanBlockHeader extends DataBlockHeader {
 
     @Override
     public void decode() {
+	input = getInputQueue();
 	originalHeaderBits = new ArrayList<Integer>(256);
 	HLIT = readAndStore(5);
 	HDIST = readAndStore(5);
