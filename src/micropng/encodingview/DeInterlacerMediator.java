@@ -4,44 +4,41 @@ import micropng.commonlib.StreamFilter;
 import micropng.micropng.CodecInfo;
 
 public class DeInterlacerMediator extends StreamFilter {
-
-    private StreamFilter endOfQueue;
-
-    public DeInterlacerMediator(StreamFilter input) {
-	endOfQueue = input;
-    }
-
-    public void deInterlace(CodecInfo properties) {
-	int bitsPerSample = properties.getBitDepth();
+    public void deInterlace(CodecInfo codecInfo) {
+	int bitsPerSample = codecInfo.getBitDepth();
 	Filter filter = null;
-	DeInterlacer deInterlacer = null;
+	DeInterlacerFilterController deInterlacerFilterController = null;
+	Interlace deInterlacer = null;
 
-	switch (properties.getFilterMethod()) {
+	switch (codecInfo.getFilterMethod()) {
 	case METHOD_0:
-	    filter = new Filter(properties.numberOfChannels(), properties.getBitDepth());
-	    endOfQueue.connect(filter);
-	    endOfQueue = filter;
+	    filter = new Filter(codecInfo.numberOfChannels(), codecInfo.getBitDepth());
+	    shareCurrentInputChannel(filter);
+	    break;
+	}
+
+	switch (codecInfo.getInterlaceMethod()) {
+	case NONE:
+	    deInterlacerFilterController = new NoneInterlacerDecoderFilterController(codecInfo
+		    .getSize(), filter);
+	    deInterlacer = new NoneInterlace();
+	    break;
+	case ADAM7:
+	    deInterlacerFilterController = new Adam7DecoderFilterController(codecInfo.getSize(),
+		    filter);
+	    deInterlacer = new Adam7Interlace(true, codecInfo);
 	    break;
 	}
 
 	if (bitsPerSample != 8) {
 	    SampleSplitter splitter = new SampleSplitter(bitsPerSample);
-	    endOfQueue.connect(splitter);
-	    endOfQueue = splitter;
+	    filter.connect(splitter);
+	    splitter.connect(deInterlacer);
+	} else {
+	    filter.connect(deInterlacer);
 	}
 
-	switch (properties.getInterlaceMethod()) {
-	case NONE:
-	    deInterlacer = new NoneDeInterlacer();
-	    break;
-	case ADAM7:
-	    deInterlacer = new Adam7DeInterlacer();
-	    break;
-	}
-
-	endOfQueue.connect(deInterlacer);
-
-	deInterlacer.deInterlace(properties.getSize(), filter);
+	deInterlacerFilterController.start();
+	deInterlacer.start();
     }
-
 }

@@ -4,6 +4,7 @@ import micropng.commonlib.BigArrayOfInt;
 import micropng.commonlib.StreamFilter;
 
 public class Filter extends StreamFilter {
+
     private enum FilterTypes {
 	NONE, SUB, UP, AVERAGE, PAETH;
 	public static FilterTypes getType(int i) {
@@ -32,24 +33,26 @@ public class Filter extends StreamFilter {
     }
 
     public void unfilter(long numberOfLines) {
-	filterType = FilterTypes.getType(in());
+	for (long i = 0; i < numberOfLines; i++) {
+	    filterType = FilterTypes.getType(in());
 
-	switch (filterType) {
-	case NONE:
-	    doNone();
-	    break;
-	case SUB:
-	    doSub();
-	    break;
-	case UP:
-	    doUp();
-	    break;
-	case AVERAGE:
-	    doAverage();
-	    break;
-	case PAETH:
-	    doPaeth();
-	    break;
+	    switch (filterType) {
+	    case NONE:
+		doNone();
+		break;
+	    case SUB:
+		doSub();
+		break;
+	    case UP:
+		doUp();
+		break;
+	    case AVERAGE:
+		doAverage();
+		break;
+	    case PAETH:
+		doPaeth();
+		break;
+	    }
 	}
     }
 

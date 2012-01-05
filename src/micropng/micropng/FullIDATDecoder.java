@@ -9,7 +9,7 @@ import micropng.commonlib.DataDumper;
 import micropng.commonlib.StreamFilter;
 import micropng.contentview.IDATContent;
 import micropng.encodingview.CompressionMethod;
-import micropng.encodingview.Filter;
+import micropng.encodingview.DeInterlacerMediator;
 import micropng.encodingview.FilterMethod;
 import micropng.encodingview.InterlaceMethod;
 import micropng.zlib.ZlibDecoder;
@@ -24,6 +24,7 @@ public class FullIDATDecoder extends StreamFilter {
 	    IDATContent idatContent;
 	    ZlibDecoder zlibDecoder = new ZlibDecoder();
 	    DataDumper dataDumper = new DataDumper();
+	    DeInterlacerMediator deInterlacerMediator = new DeInterlacerMediator();
 
 	    for (Chunk c : chunkSequence) {
 		if (c.getType() == Type.IDAT.toInt()) {
@@ -33,20 +34,22 @@ public class FullIDATDecoder extends StreamFilter {
 
 	    idatContent = new IDATContent(idatSequence);
 	    idatContent.connect(zlibDecoder);
-	    zlibDecoder.connect(dataDumper);
+	    zlibDecoder.connect(deInterlacerMediator);
 
 	    idatContent.start();
 	    zlibDecoder.start();
+	    deInterlacerMediator.connect(dataDumper);
+	    deInterlacerMediator.deInterlace(codecInfo);
 	    dataDumper.start();
 	}
     }
 
     ChunkSequence chunkSequence;
-    CodecInfo encodingProperties;
+    CodecInfo codecInfo;
 
     public FullIDATDecoder(ChunkSequence chunkSequence) {
 	this.chunkSequence = chunkSequence;
-	encodingProperties = new CodecInfo();
+	codecInfo = new CodecInfo();
 	generateCodecInfo();
     }
 
@@ -62,18 +65,18 @@ public class FullIDATDecoder extends StreamFilter {
 	FilterMethod filterMethod = FilterMethod.getMethod(byteBuffer.get());
 	InterlaceMethod interlaceMethod = InterlaceMethod.getMethod(byteBuffer.get());
 
-	encodingProperties.setSize(size);
-	encodingProperties.setBitDepth(bitDepth);
-	encodingProperties.setPalette((colorType & 0x0001) != 0);
-	encodingProperties.setColour((colorType & 0x0010) != 0);
-	encodingProperties.setAlphaChannel((colorType & 0x0100) != 0);
-	encodingProperties.setCompressionMethod(compressionMethod);
-	encodingProperties.setFilterMethod(filterMethod);
-	encodingProperties.setInterlaceMethod(interlaceMethod);
+	codecInfo.setSize(size);
+	codecInfo.setBitDepth(bitDepth);
+	codecInfo.setPalette((colorType & 0x0001) != 0);
+	codecInfo.setColour((colorType & 0x0010) != 0);
+	codecInfo.setAlphaChannel((colorType & 0x0100) != 0);
+	codecInfo.setCompressionMethod(compressionMethod);
+	codecInfo.setFilterMethod(filterMethod);
+	codecInfo.setInterlaceMethod(interlaceMethod);
     }
 
     public CodecInfo encodingProperties() {
-	return encodingProperties;
+	return codecInfo;
     }
 
     public void decode() {

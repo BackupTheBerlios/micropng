@@ -40,7 +40,7 @@ public abstract class StreamFilter {
 	target.output = output;
     }
 
-//    public void shortCut() {
-//	input.shortCut(output);
-//    }
+    public void shortCut() {
+	input.shortCut(output);
+    }
 }

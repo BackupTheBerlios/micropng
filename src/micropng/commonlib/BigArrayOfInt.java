@@ -12,7 +12,7 @@ public class BigArrayOfInt {
 	this.size = size;
 	int numberOfFullArrays = (int) (size >> numberOfLSBs);
 	int sizeOfLastArray = (int) (size & LSBMask);
-	int totalNumberOfArrays = (sizeOfLastArray > 0)? numberOfFullArrays : numberOfFullArrays + 1;
+	int totalNumberOfArrays = (sizeOfLastArray == 0)? numberOfFullArrays : numberOfFullArrays + 1;
 	data = new int[totalNumberOfArrays][];
 	for (int i = 0; i < numberOfFullArrays; i++) {
 	    data[i] = new int[maximumPrimitiveArraySize];

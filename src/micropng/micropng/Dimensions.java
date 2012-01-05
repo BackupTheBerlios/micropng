@@ -17,4 +17,8 @@ public class Dimensions {
     public long getHeight() {
 	return height;
     }
+
+    public boolean isEmpty() {
+	return (width == 0) || (height == 0);
+    }
 }
