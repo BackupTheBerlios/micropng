@@ -39,6 +39,7 @@ public class DeInterlacerMediator extends StreamFilter {
 	}
 
 	deInterlacerFilterController.start();
+	shareCurrentOutputChannel(deInterlacer);
 	deInterlacer.start();
     }
 }
