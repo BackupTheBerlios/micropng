@@ -49,6 +49,7 @@ public class SampleSplitter extends StreamFilter {
 		    }
 		}
 	    }
+	    done();
 	}
     }
 

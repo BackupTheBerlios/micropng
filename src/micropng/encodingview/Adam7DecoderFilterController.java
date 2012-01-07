@@ -13,6 +13,7 @@ public class Adam7DecoderFilterController extends DeInterlacerFilterController {
 		    filter.unfilter(graphicsSizes[i].getHeight());
 		}
 	    }
+	    filter.done();
 	}
     }
 

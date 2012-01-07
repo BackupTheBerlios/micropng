@@ -32,6 +32,7 @@ public class Adam7Interlace extends Interlace {
 		    }
 		}
 	    }
+	    done();
 	}
     }
 

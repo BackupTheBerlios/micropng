@@ -8,6 +8,7 @@ public class NoneInterlacerDecoderFilterController extends DeInterlacerFilterCon
 	public void run() {
 	    filter.init(size.getWidth());
 	    filter.unfilter(size.getHeight());
+	    filter.done();
 	}
     }
 
