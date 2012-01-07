@@ -64,11 +64,8 @@ public class HuffmanStreamDecoder extends StreamFilter {
 		int numberOfDistanceExtraBits = extraBitsForDistancesTable[distanceCode];
 		int distanceExtraBits = input.takeBits(numberOfDistanceExtraBits);
 
-		length <<= numberOfLengthExtraBits;
-		length |= lengthExtraBits;
-
-		distance <<= numberOfDistanceExtraBits;
-		distance |= distanceExtraBits;
+		length += lengthExtraBits;
+		distance += distanceExtraBits;
 
 		outputBuffer.repeat(distance, length);
 	    }
