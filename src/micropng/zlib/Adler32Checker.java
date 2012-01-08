@@ -35,7 +35,7 @@ public class Adler32Checker extends StreamFilter {
 	workerThread.start();
     }
 
-    public boolean check(int checksum) {
+    public boolean check(long checksum) {
 	return adler32.getValue() == checksum;
     }
 }
