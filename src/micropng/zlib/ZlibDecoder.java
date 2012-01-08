@@ -61,7 +61,10 @@ public class ZlibDecoder extends StreamFilter {
 	    adler32 <<= 8;
 	    adler32 |= in();
 	}
-	System.err.println("Adler-32 checksum is valid: " + adler32Checker.check(adler32));
+	if (!adler32Checker.check(adler32)) {
+	    System.err.println("Adler32 checksum is invalid! Exit.");
+	    System.exit(-1);
+	}
     }
 
     public void start() {

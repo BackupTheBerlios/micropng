@@ -34,7 +34,6 @@ public class HuffmanTree {
 	public void setRight(HuffmanNode right) {
 	    this.right = right;
 	}
-
     }
 
     public class HuffmanTreeWalker {

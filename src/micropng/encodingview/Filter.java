@@ -58,9 +58,8 @@ public class Filter extends StreamFilter {
 
     private void doNone() {
 	for (long i = 0; i < lastScanline[0].size; i++) {
-	    int currentValue;
 	    for (BigArrayOfInt channel : lastScanline) {
-		currentValue = in();
+		int currentValue = in();
 		channel.set(i, currentValue);
 		out(currentValue);
 	    }
@@ -68,59 +67,61 @@ public class Filter extends StreamFilter {
     }
 
     private void doSub() {
+	int[] currentLinelastValues = new int[lastScanline.length];
 	for (long i = 0; i < lastScanline[0].size; i++) {
-	    int currentValue = 0;
-	    int lastValue;
-	    for (BigArrayOfInt channel : lastScanline) {
-		lastValue = currentValue;
-		currentValue = (in() + lastValue) & BYTE_MASK;
-		channel.set(i, currentValue);
+	    for (int j = 0; j < lastScanline.length; j++) {
+		BigArrayOfInt lastLineCurrentChannel = lastScanline[j];
+		int lastValue = currentLinelastValues[j];
+		int currentValue = (in() + lastValue) & BYTE_MASK; 
 		out(currentValue);
+		currentLinelastValues[j] = currentValue;
+		lastLineCurrentChannel.set(i, currentValue);
 	    }
 	}
     }
 
     private void doUp() {
 	for (long i = 0; i < lastScanline[0].size; i++) {
-	    int currentValue;
-	    for (BigArrayOfInt channel : lastScanline) {
-		currentValue = (in() + channel.elementAt(i)) & BYTE_MASK;
-		channel.set(i, currentValue);
+	    for (BigArrayOfInt lastLineCurrentChannel : lastScanline) {
+		int currentValue = (in() + lastLineCurrentChannel.elementAt(i)) & BYTE_MASK;
 		out(currentValue);
+		lastLineCurrentChannel.set(i, currentValue);
 	    }
 	}
     }
 
     private void doAverage() {
+	int[] currentLineLastValues = new int[lastScanline.length];
+
 	for (long i = 0; i < lastScanline[0].size; i++) {
-	    int currentValue = 0;
-	    int lastValue;
-	    int addend;
-	    for (BigArrayOfInt channel : lastScanline) {
-		lastValue = currentValue;
-		addend = (channel.elementAt(i) + lastValue) >> 1;
-		currentValue = (in() + addend) & BYTE_MASK;
-		channel.set(i, currentValue);
+	    for (int j = 0; j < lastScanline.length; j++) {
+		BigArrayOfInt lastLineCurrentChannel = lastScanline[j];
+		int currentLineLastValue = currentLineLastValues[j];
+		int addend = (lastLineCurrentChannel.elementAt(i) + currentLineLastValue) >> 1;
+	    	int currentValue = (in() + addend) & BYTE_MASK;
 		out(currentValue);
+		currentLineLastValues[j] = currentValue;
+		lastLineCurrentChannel.set(i, currentValue);
 	    }
 	}
     }
 
     private void doPaeth() {
+	int[] currentLineLastValues = new int[lastScanline.length];
+	int[] lastValuesAbove = new int[lastScanline.length];
+	
 	for (long i = 0; i < lastScanline[0].size; i++) {
-	    int current = 0;
-	    int last;
-	    int above;
-	    int lastAbove = 0;
-	    int addend;
-	    for (BigArrayOfInt channel : lastScanline) {
-		last = current;
-		above = channel.elementAt(i);
-		addend = paethPredictor(last, above, lastAbove);
-		current = (in() + addend) & BYTE_MASK;
-		channel.set(i, current);
-		out(current);
-		lastAbove = 0;
+	    for (int j = 0; j < lastScanline.length; j++) {
+		BigArrayOfInt lastLineCurrentChannel = lastScanline[j];
+		int last = currentLineLastValues[j];
+		int lastAbove = lastValuesAbove[j];
+		int above = lastLineCurrentChannel.elementAt(i);
+		int addend = paethPredictor(last, above, lastAbove);
+		int currentValue = (in() + addend) & BYTE_MASK;
+		out(currentValue);
+		currentLineLastValues[j] = currentValue;
+		lastValuesAbove[j] = above;
+		lastLineCurrentChannel.set(i, currentValue);
 	    }
 	}
     }
