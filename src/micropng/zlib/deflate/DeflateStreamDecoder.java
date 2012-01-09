@@ -35,8 +35,9 @@ public class DeflateStreamDecoder extends StreamFilter {
 
     public void decode() {
 	DeflateBlockHeader currentDeflateBlockHeader;
-	DataBlockHeader currentDataBlockHeader;
 	do {
+	    DataBlockHeader currentDataBlockHeader;
+
 	    currentDeflateBlockHeader = new DeflateBlockHeader();
 	    currentDataBlockHeader = currentDeflateBlockHeader.getDataBlockHeader();
 	    shareCurrentInputChannel(currentDataBlockHeader);
