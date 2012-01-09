@@ -3,12 +3,11 @@ package micropng.micropng;
 import micropng.encodingview.CompressionMethod;
 import micropng.encodingview.FilterMethod;
 import micropng.encodingview.InterlaceMethod;
+import micropng.fileview.ColourType;
 
 public class CodecInfo {
     private Dimensions size;
-    private boolean alphaChannel;
-    private boolean colour;
-    private boolean palette;
+    private ColourType colourType;
     private int bitDepth;
     private CompressionMethod compressionMethod;
     private FilterMethod filterMethod;
@@ -18,28 +17,8 @@ public class CodecInfo {
 	this.size = size;
     }
 
-    public boolean hasAlphaChannel() {
-	return alphaChannel;
-    }
-
-    public void setAlphaChannel(boolean alphaChannel) {
-	this.alphaChannel = alphaChannel;
-    }
-
-    public boolean isColour() {
-	return colour;
-    }
-
-    public void setColour(boolean colour) {
-	this.colour = colour;
-    }
-
-    public boolean isPalette() {
-	return palette;
-    }
-
-    public void setPalette(boolean palette) {
-	this.palette = palette;
+    public void setColourType(int colourType) {
+	this.colourType = ColourType.byInt(colourType);
     }
 
     public int getBitDepth() {
@@ -78,11 +57,19 @@ public class CodecInfo {
 	return interlaceMethod;
     }
 
+    public boolean isPalette() {
+	return colourType.isPalette();
+    }
+
+    public boolean isColour() {
+	return colourType.isColour();
+    }
+
+    public boolean hasAlphaChannel() {
+	return colourType.hasAlphaChannel();
+    }
+
     public int numberOfChannels() {
-	int res = colour ? 3 : 1;
-	if (alphaChannel) {
-	    res++;
-	}
-	return res;
+	return colourType.numberOfChannels();
     }
 }

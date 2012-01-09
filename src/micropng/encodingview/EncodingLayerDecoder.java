@@ -84,9 +84,7 @@ public class EncodingLayerDecoder extends StreamFilter {
 
 	codecInfo.setSize(size);
 	codecInfo.setBitDepth(bitDepth);
-	codecInfo.setPalette((colorType & 0x01) != 0);
-	codecInfo.setColour((colorType & 0x02) != 0);
-	codecInfo.setAlphaChannel((colorType & 0x04) != 0);
+	codecInfo.setColourType(colorType);
 	codecInfo.setCompressionMethod(compressionMethod);
 	codecInfo.setFilterMethod(filterMethod);
 	codecInfo.setInterlaceMethod(interlaceMethod);
