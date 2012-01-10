@@ -1,6 +1,7 @@
 package micropng.zlib.deflate;
 
 import micropng.commonlib.Queue;
+import micropng.commonlib.RingBuffer;
 import micropng.commonlib.StreamFilter;
 
 public class DeflateStreamDecoder extends StreamFilter {
@@ -33,8 +34,16 @@ public class DeflateStreamDecoder extends StreamFilter {
 	}
     }
 
+    private final static int MAXIMUM_DISTANCE = 32768;
+    private RingBuffer outputBuffer;
+
+    public DeflateStreamDecoder() {
+	outputBuffer = new RingBuffer(MAXIMUM_DISTANCE);
+    }
+
     public void decode() {
 	DeflateBlockHeader currentDeflateBlockHeader;
+	shareCurrentOutputChannel(outputBuffer);
 	do {
 	    DataBlockHeader currentDataBlockHeader;
 
@@ -42,7 +51,7 @@ public class DeflateStreamDecoder extends StreamFilter {
 	    currentDataBlockHeader = currentDeflateBlockHeader.getDataBlockHeader();
 	    shareCurrentInputChannel(currentDataBlockHeader);
 	    shareCurrentOutputChannel(currentDataBlockHeader);
-	    currentDataBlockHeader.decode();
+	    currentDataBlockHeader.decode(outputBuffer);
 	} while (!currentDeflateBlockHeader.isLast());
 
 	done();

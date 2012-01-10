@@ -14,49 +14,41 @@ public class EncodingLayerDecoder extends StreamFilter {
 
 	@Override
 	public void run() {
-	    int bitsPerSample = codecInfo.getBitDepth();
 	    Filter filter = null;
-	    DeInterlacerFilterController deInterlacerFilterController = null;
 	    Interlace deInterlacer = null;
 	    PaletteLookUp paletteLookUp = null;
+	    SampleSplitter splitter = new SampleSplitter(codecInfo);
 
 	    switch (codecInfo.getFilterMethod()) {
 	    case METHOD_0:
-		filter = new Filter(codecInfo.numberOfChannels(), codecInfo.getBitDepth());
+		filter = new Filter(codecInfo);
 		shareCurrentInputChannel(filter);
 		break;
 	    }
 
 	    switch (codecInfo.getInterlaceMethod()) {
 	    case NONE:
-		deInterlacerFilterController = new NoneInterlacerDecoderFilterController(codecInfo
-			.getSize(), filter);
-		deInterlacer = new NoneInterlace();
+		deInterlacer = new NoneInterlace(codecInfo.getSize());
 		break;
 	    case ADAM7:
-		deInterlacerFilterController = new Adam7DecoderFilterController(
-			codecInfo.getSize(), filter);
 		deInterlacer = new Adam7Interlace(true, codecInfo);
 		break;
-	    }
-
-	    if (bitsPerSample != 8) {
-		SampleSplitter splitter = new SampleSplitter(bitsPerSample);
-		filter.connect(splitter);
-		splitter.connect(deInterlacer);
-	    } else {
-		filter.connect(deInterlacer);
 	    }
 
 	    if (codecInfo.isPalette()) {
 		paletteLookUp = new PaletteLookUp(chunkSequence);
 		deInterlacer.connect(paletteLookUp);
-		shareCurrentInputChannel(paletteLookUp);
+		shareCurrentOutputChannel(paletteLookUp);
+		paletteLookUp.start();
 	    } else {
 		shareCurrentOutputChannel(deInterlacer);
 	    }
 
-	    deInterlacerFilterController.start();
+	    filter.connect(splitter);
+	    splitter.connect(deInterlacer);
+
+	    filter.start(deInterlacer.getGraphicsSizes());
+	    splitter.start(deInterlacer.getGraphicsSizes());
 	    deInterlacer.start();
 	}
     }
@@ -89,7 +81,7 @@ public class EncodingLayerDecoder extends StreamFilter {
 	codecInfo.setFilterMethod(filterMethod);
 	codecInfo.setInterlaceMethod(interlaceMethod);
     }
-    
+
     public void start() {
 	new Thread(new EncodingLayerDecoderThread()).start();
     }

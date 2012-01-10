@@ -43,22 +43,27 @@ public class Adam7Interlace extends Interlace {
     private final static int numberOfIterations = horizontalStepSizes.length;
     private boolean reassemble;
     private CodecInfo codecInfo;
+    private Dimensions[] graphicsSizes;
 
     public Adam7Interlace(boolean reassemble, CodecInfo codecInfo) {
-	this.reassemble = reassemble;
-	this.codecInfo = codecInfo;
-    }
-    
-    public static Dimensions[] calculate(Dimensions size) {
-	Dimensions[] res = new Dimensions[numberOfIterations];
+	Dimensions size = codecInfo.getSize();
 	long width = size.getWidth();
 	long height = size.getHeight();
+
+	this.reassemble = reassemble;
+	this.codecInfo = codecInfo;
+	graphicsSizes = new Dimensions[numberOfIterations];
+
 	for (int i = 0; i < horizontalStepSizes.length; i++) {
 	    long nextWidth = (width + horizontalOffsets[i] - 1) / horizontalStepSizes[i];
 	    long nextHeight = (height + verticalOffsets[i] - 1) / verticalStepSizes[i];
-	    res[i] = new Dimensions(nextWidth, nextHeight);
+	    graphicsSizes[i] = new Dimensions(nextWidth, nextHeight);
 	}
-	return res;
+    }
+
+    @Override
+    public Dimensions[] getGraphicsSizes() {
+	return graphicsSizes;
     }
 
     public void start() {

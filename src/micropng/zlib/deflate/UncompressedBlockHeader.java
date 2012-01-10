@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import micropng.commonlib.BitArrayListConverter;
 import micropng.commonlib.Queue;
+import micropng.commonlib.RingBuffer;
 
 public class UncompressedBlockHeader extends DataBlockHeader {
 
@@ -19,7 +20,8 @@ public class UncompressedBlockHeader extends DataBlockHeader {
 	return res;
     }
 
-    public void decode() {
+    @Override
+    public void decode(RingBuffer output) {
 	int LEN;
 	@SuppressWarnings("unused")
 	int NLEN;
@@ -31,7 +33,7 @@ public class UncompressedBlockHeader extends DataBlockHeader {
 	length = LEN;
 
 	for (int i = 0; i < length; i++) {
-	    out(input.take());
+	    output.out(input.take());
 	}
     }
 

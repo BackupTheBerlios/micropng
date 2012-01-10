@@ -2,58 +2,73 @@ package micropng.encodingview;
 
 import micropng.commonlib.BigArrayOfInt;
 import micropng.commonlib.StreamFilter;
+import micropng.micropng.CodecInfo;
+import micropng.micropng.Dimensions;
 
 public class Filter extends StreamFilter {
 
-    private enum FilterTypes {
+    private class FilterThread implements Runnable {
+	@Override
+	public void run() {
+	    int bitDepth = codecInfo.getBitDepth();
+
+	    for (Dimensions dimension : dimensions) {
+		if (!dimension.isEmpty()) {
+		    long height = dimension.getHeight();
+		    long bitsPerScanline = bitDepth * dimension.getWidth();
+		    long newScanLineSize = (long) Math.ceil(bitsPerScanline / 8f);
+
+		    for (int i = 0; i < lastScanline.length; i++) {
+			lastScanline[i] = new BigArrayOfInt(newScanLineSize);
+		    }
+
+		    for (long i = 0; i < height; i++) {
+			FilterType filterType = FilterType.getType(in());
+
+			switch (filterType) {
+			case NONE:
+			    doNone();
+			    break;
+			case SUB:
+			    doSub();
+			    break;
+			case UP:
+			    doUp();
+			    break;
+			case AVERAGE:
+			    doAverage();
+			    break;
+			case PAETH:
+			    doPaeth();
+			    break;
+			}
+		    }
+		}
+	    }
+	    done();
+	}
+    }
+
+    private enum FilterType {
 	NONE, SUB, UP, AVERAGE, PAETH;
-	public static FilterTypes getType(int i) {
-	    return FilterTypes.values()[i];
+	public static FilterType getType(int i) {
+	    return FilterType.values()[i];
 	}
     }
 
     private final static int BYTE_MASK = 0x0ff;
+    private CodecInfo codecInfo;
     private BigArrayOfInt[] lastScanline;
-    private FilterTypes filterType;
-    private int numberOfChannels;
-    private int bitsPerSample;
+    private Dimensions[] dimensions;
 
-    public Filter(int numberOfChannels, int bitsPerSample) {
-	this.bitsPerSample = bitsPerSample;
-	this.numberOfChannels = numberOfChannels;
-	lastScanline = new BigArrayOfInt[numberOfChannels];
+    public Filter(CodecInfo codecInfo) {
+	this.codecInfo = codecInfo;
+	lastScanline = new BigArrayOfInt[codecInfo.numberOfChannels()];
     }
 
-    public void init(long newImageWidth) {
-	long bitsPerScanline = newImageWidth * bitsPerSample;
-	long newScanLineSize = (long) Math.ceil(bitsPerScanline / 8f);
-	for (int i = 0; i < numberOfChannels; i++) {
-	    lastScanline[i] = new BigArrayOfInt(newScanLineSize);
-	}
-    }
-
-    public void unfilter(long numberOfLines) {
-	for (long i = 0; i < numberOfLines; i++) {
-	    filterType = FilterTypes.getType(in());
-
-	    switch (filterType) {
-	    case NONE:
-		doNone();
-		break;
-	    case SUB:
-		doSub();
-		break;
-	    case UP:
-		doUp();
-		break;
-	    case AVERAGE:
-		doAverage();
-		break;
-	    case PAETH:
-		doPaeth();
-		break;
-	    }
-	}
+    public void start(Dimensions[] dimensions) {
+	this.dimensions = dimensions;
+	new Thread(new FilterThread()).start();
     }
 
     private void doNone() {
@@ -72,7 +87,7 @@ public class Filter extends StreamFilter {
 	    for (int j = 0; j < lastScanline.length; j++) {
 		BigArrayOfInt lastLineCurrentChannel = lastScanline[j];
 		int lastValue = currentLinelastValues[j];
-		int currentValue = (in() + lastValue) & BYTE_MASK; 
+		int currentValue = (in() + lastValue) & BYTE_MASK;
 		out(currentValue);
 		currentLinelastValues[j] = currentValue;
 		lastLineCurrentChannel.set(i, currentValue);
@@ -98,7 +113,7 @@ public class Filter extends StreamFilter {
 		BigArrayOfInt lastLineCurrentChannel = lastScanline[j];
 		int currentLineLastValue = currentLineLastValues[j];
 		int addend = (lastLineCurrentChannel.elementAt(i) + currentLineLastValue) >> 1;
-	    	int currentValue = (in() + addend) & BYTE_MASK;
+		int currentValue = (in() + addend) & BYTE_MASK;
 		out(currentValue);
 		currentLineLastValues[j] = currentValue;
 		lastLineCurrentChannel.set(i, currentValue);
@@ -109,7 +124,7 @@ public class Filter extends StreamFilter {
     private void doPaeth() {
 	int[] currentLineLastValues = new int[lastScanline.length];
 	int[] lastValuesAbove = new int[lastScanline.length];
-	
+
 	for (long i = 0; i < lastScanline[0].size; i++) {
 	    for (int j = 0; j < lastScanline.length; j++) {
 		BigArrayOfInt lastLineCurrentChannel = lastScanline[j];

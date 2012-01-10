@@ -7,8 +7,6 @@ import micropng.zlib.deflate.HuffmanTree.HuffmanTreeWalker;
 
 public class HuffmanStreamDecoder extends StreamFilter {
 
-    private final static int MAXIMUM_DISTANCE = 32768;
-
     private final static int[] lengthsTable = { 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23,
 	    27, 31, 35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195, 227, 258 };
 
@@ -24,12 +22,10 @@ public class HuffmanStreamDecoder extends StreamFilter {
 
     private HuffmanTree literalsAndLengths;
     private HuffmanTree distances;
-    RingBuffer outputBuffer;
 
     public HuffmanStreamDecoder(HuffmanTree literalsAndLengths, HuffmanTree distances) {
 	this.literalsAndLengths = literalsAndLengths;
 	this.distances = distances;
-	outputBuffer = new RingBuffer(MAXIMUM_DISTANCE);
     }
 
     private int readValueFromTree(HuffmanTreeWalker treeWalker, Queue input) {
@@ -41,9 +37,8 @@ public class HuffmanStreamDecoder extends StreamFilter {
 	return treeWalker.getValue();
     }
 
-    public void decode() {
+    public void decode(RingBuffer output) {
 	Queue input = getInputQueue();
-	shareCurrentOutputChannel(outputBuffer);
 	HuffmanTreeWalker literalsAndLengthsTreeWalker = literalsAndLengths.getHuffmanTreeWalker();
 	HuffmanTreeWalker distancesTreeWalker = distances.getHuffmanTreeWalker();
 	int literalOrLengthCode;
@@ -52,7 +47,7 @@ public class HuffmanStreamDecoder extends StreamFilter {
 	    literalOrLengthCode = readValueFromTree(literalsAndLengthsTreeWalker, input);
 
 	    if (literalOrLengthCode < 256) {
-		outputBuffer.out(literalOrLengthCode);
+		output.out(literalOrLengthCode);
 	    } else if (literalOrLengthCode > 256) {
 		int lengthsTableIndex = literalOrLengthCode - 257;
 		int length = lengthsTable[lengthsTableIndex];
@@ -67,7 +62,7 @@ public class HuffmanStreamDecoder extends StreamFilter {
 		length += lengthExtraBits;
 		distance += distanceExtraBits;
 
-		outputBuffer.repeat(distance, length);
+		output.repeat(distance, length);
 	    }
 	} while (literalOrLengthCode != 256);
     }
