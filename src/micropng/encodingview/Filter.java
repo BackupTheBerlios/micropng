@@ -15,8 +15,8 @@ public class Filter extends StreamFilter {
 	    for (Dimensions dimension : dimensions) {
 		if (!dimension.isEmpty()) {
 		    long height = dimension.getHeight();
-		    long bitsPerScanline = bitDepth * dimension.getWidth();
-		    long newScanLineSize = (long) Math.ceil(bitsPerScanline / 8f);
+		    long newScanLineSize = (long) Math.ceil((dimension.getWidth() / 8f)
+			    * Math.min(8, bitDepth));
 
 		    for (int i = 0; i < lastScanline.length; i++) {
 			lastScanline[i] = new BigArrayOfInt(newScanLineSize);
@@ -63,7 +63,8 @@ public class Filter extends StreamFilter {
 
     public Filter(CodecInfo codecInfo) {
 	this.codecInfo = codecInfo;
-	lastScanline = new BigArrayOfInt[codecInfo.numberOfChannels()];
+	int bytesPerSample = Math.max(codecInfo.getBitDepth() >> 3, 1);
+	lastScanline = new BigArrayOfInt[codecInfo.numberOfChannels() * bytesPerSample];
     }
 
     public void start(Dimensions[] dimensions) {
