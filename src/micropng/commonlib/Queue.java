@@ -9,7 +9,7 @@ public class Queue {
     private ConcurrentLinkedQueue<int[]> queue;
     private int[] inBlock;
     private int[] outBlock;
-    private int blockSize;
+    private static final int blockSize = 0x1 << 10;
     private boolean closed;
 
     private int inPos;
@@ -19,10 +19,6 @@ public class Queue {
 
     public Queue() {
 	queue = new ConcurrentLinkedQueue<int[]>();
-	blockSize = 0x1 << 10;
-	closed = false;
-	inPos = 0;
-	outPos = 0;
     }
 
     /**
@@ -53,9 +49,9 @@ public class Queue {
 	ArrayList<Integer> res = new ArrayList<Integer>(remainingBitsInByte);
 
 	while (remainingBitsInByte > 0) {
-	    currentByte >>= 1;
-	    res.add(currentByte & 0x01);
 	    remainingBitsInByte--;
+	    res.add(currentByte & 0x01);
+	    currentByte >>= 1;
 	}
 
 	return res;
@@ -170,14 +166,13 @@ public class Queue {
 	    if (currentByte == -1) {
 		return -1;
 	    }
-	    res = currentByte & 0x01;
-	    currentByte >>= 1;
 	    remainingBitsInByte = 7;
 	} else {
-	    res = currentByte & 0x01;
-	    currentByte >>= 1;
 	    remainingBitsInByte--;
 	}
+
+	res = currentByte & 0x01;
+	currentByte >>= 1;
 
 	return res;
     }
