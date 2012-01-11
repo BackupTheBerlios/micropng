@@ -83,6 +83,16 @@ public class ChunkSequence implements Collection<Chunk> {
 	return chunkList.toArray(a);
     }
 
+    /**
+     * Return the first Chunk of type {@code type}.
+     * 
+     * Returns the first occuring Chunk of the specified type in this
+     * ChunkSequence regardless of any other Chunks of the same type. If there
+     * is no Chunk of the specified type, null is returned.
+     * 
+     * @param type the type of Chunk encoded as int 
+     * @return the first Chunk of type {@code type} or null if there is none
+     */
     public Chunk getChunk(int type) {
 	for (Chunk c : chunkList) {
 	    if (c.getType() == type) {
