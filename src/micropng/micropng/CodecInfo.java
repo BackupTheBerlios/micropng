@@ -72,4 +72,8 @@ public class CodecInfo {
     public int numberOfChannels() {
 	return colourType.numberOfChannels();
     }
+
+    public ColourType getColourType() {
+	return colourType;
+    }
 }
