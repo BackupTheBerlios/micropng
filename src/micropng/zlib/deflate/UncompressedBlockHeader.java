@@ -21,7 +21,7 @@ public class UncompressedBlockHeader extends DataBlockHeader {
     }
 
     @Override
-    public void decode(RingBuffer output) {
+    public void decode(RingBuffer outputBuffer) {
 	int LEN;
 	@SuppressWarnings("unused")
 	int NLEN;
@@ -33,7 +33,7 @@ public class UncompressedBlockHeader extends DataBlockHeader {
 	length = LEN;
 
 	for (int i = 0; i < length; i++) {
-	    output.out(input.take());
+	    outputBuffer.out(input.take());
 	}
     }
 

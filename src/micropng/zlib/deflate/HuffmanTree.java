@@ -48,9 +48,6 @@ public class HuffmanTree {
 	}
 
 	public boolean isLeaf() {
-//	    if (((pos.left == null) && (pos.right != null)) ||((pos.left != null) && (pos.right == null))) {
-//		throw new RuntimeException();
-//	    }
 	    return (pos.left == null) && (pos.right == null);
 	}
 

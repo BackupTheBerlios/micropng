@@ -38,7 +38,6 @@ public class FixedHuffmanBlockHeader extends DataBlockHeader {
 	decoder = new HuffmanStreamDecoder(defaultLiteralsAndLengthsCodesTree,
 		defaultDistancesCodesTree);
 	shareCurrentInputChannel(decoder);
-	shareCurrentOutputChannel(decoder);
 	decoder.decode(outputBuffer);
     }
 

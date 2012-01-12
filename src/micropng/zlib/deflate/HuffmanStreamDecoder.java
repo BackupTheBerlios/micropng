@@ -37,7 +37,7 @@ public class HuffmanStreamDecoder extends StreamFilter {
 	return treeWalker.getValue();
     }
 
-    public void decode(RingBuffer output) {
+    public void decode(RingBuffer outputBuffer) {
 	Queue input = getInputQueue();
 	HuffmanTreeWalker literalsAndLengthsTreeWalker = literalsAndLengths.getHuffmanTreeWalker();
 	HuffmanTreeWalker distancesTreeWalker = distances.getHuffmanTreeWalker();
@@ -47,7 +47,7 @@ public class HuffmanStreamDecoder extends StreamFilter {
 	    literalOrLengthCode = readValueFromTree(literalsAndLengthsTreeWalker, input);
 
 	    if (literalOrLengthCode < 256) {
-		output.out(literalOrLengthCode);
+		outputBuffer.out(literalOrLengthCode);
 	    } else if (literalOrLengthCode > 256) {
 		int lengthsTableIndex = literalOrLengthCode - 257;
 		int length = lengthsTable[lengthsTableIndex];
@@ -62,7 +62,7 @@ public class HuffmanStreamDecoder extends StreamFilter {
 		length += lengthExtraBits;
 		distance += distanceExtraBits;
 
-		output.repeat(distance, length);
+		outputBuffer.repeat(distance, length);
 	    }
 	} while (literalOrLengthCode != 256);
     }

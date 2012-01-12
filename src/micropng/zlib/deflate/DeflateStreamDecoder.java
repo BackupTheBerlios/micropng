@@ -50,7 +50,6 @@ public class DeflateStreamDecoder extends StreamFilter {
 	    currentDeflateBlockHeader = new DeflateBlockHeader();
 	    currentDataBlockHeader = currentDeflateBlockHeader.getDataBlockHeader();
 	    shareCurrentInputChannel(currentDataBlockHeader);
-	    shareCurrentOutputChannel(currentDataBlockHeader);
 	    currentDataBlockHeader.decode(outputBuffer);
 	} while (!currentDeflateBlockHeader.isLast());
 

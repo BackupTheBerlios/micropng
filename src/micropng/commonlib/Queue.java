@@ -29,6 +29,9 @@ public class Queue {
     public void close() {
 	flush();
 	synchronized (this) {
+	    if (closed) {
+		throw new DuplicateCloseException();
+	    }
 	    closed = true;
 	    notify();
 	}
@@ -83,30 +86,6 @@ public class Queue {
 		inBlock = null;
 		notify();
 	    }
-	}
-    }
-
-    /**
-     * Directly route any input from this Queue to target.
-     * 
-     * The external take/put methods are being bypassed. However, these methods
-     * remain usable.
-     * 
-     * Note: calling close() on this Queue, does <b>not</b> automatically close
-     * the target Queue.
-     * 
-     * @param target
-     */
-
-    public void shortCut(Queue target) {
-	target.flush();
-	synchronized (this) {
-	    if (outBlock != null) {
-		int[] currentBlock = Arrays.copyOfRange(outBlock, outPos, outBlock.length);
-		target.queue.add(currentBlock);
-	    }
-	    target.queue.addAll(queue);
-	    queue = target.queue;
 	}
     }
 

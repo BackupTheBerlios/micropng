@@ -108,7 +108,6 @@ public class DynamicHuffmanBlockHeader extends DataBlockHeader {
 	decoder = new HuffmanStreamDecoder(literalsAndLengthsTree, distancesTree);
 
 	shareCurrentInputChannel(decoder);
-	shareCurrentOutputChannel(decoder);
 
 	decoder.decode(outputBuffer);
     }

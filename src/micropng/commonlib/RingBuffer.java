@@ -1,7 +1,6 @@
 package micropng.commonlib;
 
 public class RingBuffer extends StreamFilter {
-
     private int[] outBuffer;
     private int outBufferPointer;
 
