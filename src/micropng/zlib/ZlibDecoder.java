@@ -46,7 +46,6 @@ public class ZlibDecoder extends StreamFilter {
 
     private DeflateStreamDecoder deflateDecoder;
     private Adler32Checker adler32Checker;
-    private ZlibDecoderThread zlibDecoderThread;
     private long adler32;
 
     public ZlibDecoder() {
@@ -74,8 +73,6 @@ public class ZlibDecoder extends StreamFilter {
 	shareCurrentOutputChannel(adler32Checker);
 	adler32Checker.start();
 
-	zlibDecoderThread = new ZlibDecoderThread();
-
-	new Thread(zlibDecoderThread).start();
+	new Thread(new ZlibDecoderThread()).start();
     }
 }

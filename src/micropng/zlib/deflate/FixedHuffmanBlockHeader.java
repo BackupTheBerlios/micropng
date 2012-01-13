@@ -3,7 +3,6 @@ package micropng.zlib.deflate;
 import java.util.ArrayList;
 
 import micropng.commonlib.RingBuffer;
-import micropng.commonlib.StreamFilter;
 
 public class FixedHuffmanBlockHeader extends DataBlockHeader {
 
@@ -39,10 +38,5 @@ public class FixedHuffmanBlockHeader extends DataBlockHeader {
 		defaultDistancesCodesTree);
 	shareCurrentInputChannel(decoder);
 	decoder.decode(outputBuffer);
-    }
-
-    @Override
-    public void connect(StreamFilter nextInChain) {
-	decoder.connect(nextInChain);
     }
 }

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import micropng.commonlib.BitArrayListConverter;
 import micropng.commonlib.Queue;
 import micropng.commonlib.RingBuffer;
-import micropng.commonlib.StreamFilter;
 import micropng.zlib.deflate.HuffmanTree.HuffmanTreeWalker;
 
 public class DynamicHuffmanBlockHeader extends DataBlockHeader {
@@ -115,10 +114,5 @@ public class DynamicHuffmanBlockHeader extends DataBlockHeader {
     @Override
     public ArrayList<Integer> getOriginalHeader() {
 	return originalHeaderBits;
-    }
-
-    @Override
-    public void connect(StreamFilter nextInChain) {
-	decoder.connect(nextInChain);
     }
 }

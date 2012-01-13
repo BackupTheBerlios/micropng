@@ -27,25 +27,21 @@ public class Queue {
      * Queue after close() triggers undefined behaviour.
      */
     public void close() {
-	flush();
 	synchronized (this) {
 	    if (closed) {
 		throw new DuplicateCloseException();
 	    }
+
+	    if (inBlock != null) {
+		int[] lastBlock = Arrays.copyOf(inBlock, inPos);
+		queue.add(lastBlock);
+		inBlock = null;
+	    }
+
 	    closed = true;
 	    notify();
 	}
-    }
 
-    private void flush() {
-	if (inBlock != null) {
-	    int[] lastBlock = Arrays.copyOf(inBlock, inPos);
-	    synchronized (this) {
-		queue.add(lastBlock);
-		inBlock = null;
-		notify();
-	    }
-	}
     }
 
     public ArrayList<Integer> getRemainingBitsOfCurrentByte() {
@@ -71,7 +67,6 @@ public class Queue {
      *            primitive int.
      */
     public void put(int value) {
-
 	if (inBlock == null) {
 	    inBlock = new int[blockSize];
 	    inPos = 0;
@@ -83,9 +78,9 @@ public class Queue {
 	if (inPos == blockSize) {
 	    synchronized (this) {
 		queue.add(inBlock);
-		inBlock = null;
 		notify();
 	    }
+	    inBlock = null;
 	}
     }
 
