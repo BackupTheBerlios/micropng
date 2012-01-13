@@ -17,10 +17,12 @@ public class FileData implements DataField {
 	@Override
 	public void run() {
 	    try {
-		file.seek(start);
+		synchronized (file) {
+		    file.seek(start);
 
-		for (int i = 0; i < size; i++) {
-		    out.put(mask & file.readByte());
+		    for (int i = 0; i < size; i++) {
+			out.put(mask & file.readByte());
+		    }
 		}
 		out.close();
 	    } catch (IOException e) {
@@ -43,8 +45,10 @@ public class FileData implements DataField {
     public byte[] getArray(int from, int length) {
 	byte[] res = new byte[length];
 	try {
-	    file.seek(start + from);
-	    file.readFully(res, 0, length);
+	    synchronized (file) {
+		file.seek(start + from);
+		file.readFully(res, 0, length);
+	    }
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
@@ -71,8 +75,10 @@ public class FileData implements DataField {
     @Override
     public int getByteAt(int pos) {
 	try {
-	    file.seek(start + pos);
-	    file.read();
+	    synchronized (file) {
+		file.seek(start + pos);
+		file.read();
+	    }
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
