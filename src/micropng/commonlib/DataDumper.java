@@ -8,7 +8,7 @@ public class DataDumper extends StreamFilter {
 	    int in;
 	    in = in();
 	    while (in != -1) {
-//		System.out.format("%03d ", in);
+//		System.out.format("%04x ", in);
 		in = in();
 	    }
 	}

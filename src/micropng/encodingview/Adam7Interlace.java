@@ -55,8 +55,10 @@ public class Adam7Interlace extends Interlace {
 	graphicsSizes = new Dimensions[numberOfIterations];
 
 	for (int i = 0; i < horizontalStepSizes.length; i++) {
-	    long nextWidth = (width + horizontalOffsets[i] - 1) / horizontalStepSizes[i];
-	    long nextHeight = (height + verticalOffsets[i] - 1) / verticalStepSizes[i];
+	    long nextWidth = (width - horizontalOffsets[i] + horizontalStepSizes[i] - 1)
+		    / horizontalStepSizes[i];
+	    long nextHeight = (height - verticalOffsets[i] + verticalStepSizes[i] - 1)
+		    / verticalStepSizes[i];
 	    graphicsSizes[i] = new Dimensions(nextWidth, nextHeight);
 	}
     }
