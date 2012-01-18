@@ -12,6 +12,7 @@ public class CodecInfo {
     private CompressionMethod compressionMethod;
     private FilterMethod filterMethod;
     private InterlaceMethod interlaceMethod;
+    private int[] significantBits;
 
     public void setSize(Dimensions size) {
 	this.size = size;
@@ -75,5 +76,13 @@ public class CodecInfo {
 
     public ColourType getColourType() {
 	return colourType;
+    }
+
+    public void setSignificantBits(int[] significantBits) {
+	this.significantBits = significantBits;
+    }
+
+    public int[] getSignificantBits() {
+	return significantBits;
     }
 }
