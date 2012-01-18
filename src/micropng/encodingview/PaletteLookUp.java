@@ -13,9 +13,10 @@ public class PaletteLookUp extends StreamFilter {
 	public void run() {
 	    int next = in();
 	    while (next != -1) {
-		out(lookUpTable[next][0]);
-		out(lookUpTable[next][1]);
-		out(lookUpTable[next][2]);
+		int[] nextEntry = lookUpTable[next];
+		out(nextEntry[0]);
+		out(nextEntry[1]);
+		out(nextEntry[2]);
 		next = in();
 	    }
 	    done();
