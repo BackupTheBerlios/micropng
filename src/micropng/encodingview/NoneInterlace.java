@@ -14,17 +14,17 @@ public class NoneInterlace extends Interlace {
 	    done();
 	}
     }
-    
+
     private Dimensions[] graphicsSizes;
-    
+
     public NoneInterlace(Dimensions size) {
 	this.graphicsSizes = new Dimensions[] { size };
     }
-    
+
     public Dimensions[] getGraphicsSizes() {
 	return graphicsSizes;
     }
-    
+
     public void start() {
 	new Thread(new NoneInterlaceThread()).start();
     }
