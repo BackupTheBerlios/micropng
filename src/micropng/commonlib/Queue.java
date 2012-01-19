@@ -168,26 +168,25 @@ public class Queue {
 	int bitsLeftToTake = numberOfBits;
 	int bitsTaken = 0;
 
-	while (bitsLeftToTake > 0) {
-	    if (bitsLeftToTake > remainingBitsInByte) {
-		int nextBitMask = currentByte << bitsTaken;
-		res |= nextBitMask;
-		bitsTaken += remainingBitsInByte;
-		bitsLeftToTake -= remainingBitsInByte;
+	while (bitsLeftToTake > remainingBitsInByte) {
+	    int nextBitMask = currentByte << bitsTaken;
+	    res |= nextBitMask;
+	    bitsTaken += remainingBitsInByte;
+	    bitsLeftToTake -= remainingBitsInByte;
 
-		currentByte = take();
-		if (currentByte == -1) {
-		    throw new InputClosedEarlyException();
-		}
-		remainingBitsInByte = 8;
-	    } else {
-		int lowPartMask = (1 << bitsLeftToTake) - 1;
-		int nextBitMask = (currentByte & lowPartMask) << bitsTaken;
-		res |= nextBitMask;
-		currentByte >>= bitsLeftToTake;
-		remainingBitsInByte -= bitsLeftToTake;
-		bitsLeftToTake = 0;
+	    currentByte = take();
+	    if (currentByte == -1) {
+		throw new InputClosedEarlyException();
 	    }
+	    remainingBitsInByte = 8;
+	}
+
+	if (bitsLeftToTake > 0) {
+	    int lowPartMask = (1 << bitsLeftToTake) - 1;
+	    int nextBitMask = (currentByte & lowPartMask) << bitsTaken;
+	    res |= nextBitMask;
+	    currentByte >>= bitsLeftToTake;
+	    remainingBitsInByte -= bitsLeftToTake;
 	}
 
 	return res;

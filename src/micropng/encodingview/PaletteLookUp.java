@@ -29,12 +29,12 @@ public class PaletteLookUp extends StreamFilter {
 	Chunk paletteChunk = chunkSequence.getChunk(Type.PLTE.toInt());
 	byte[] chunkData = paletteChunk.getData().getArray();
 	int numberOfPaletteEntries = chunkData.length / 3;
-	int pos = 0;
 	lookUpTable = new int[numberOfPaletteEntries][3];
-	for (int i = 0; i < numberOfPaletteEntries; i++) {
-	    lookUpTable[i][0] = 0xff & chunkData[pos++];
-	    lookUpTable[i][1] = 0xff & chunkData[pos++];
-	    lookUpTable[i][2] = 0xff & chunkData[pos++];
+	int pos = 0;
+	for (int[] lookUpTableElement : lookUpTable) {
+	    lookUpTableElement[0] = 0xff & chunkData[pos++];
+	    lookUpTableElement[1] = 0xff & chunkData[pos++];
+	    lookUpTableElement[2] = 0xff & chunkData[pos++];
 	}
     }
 
