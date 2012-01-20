@@ -9,6 +9,7 @@ public enum CoreGroup {
     private static ParameterGroup fileView;
     private static Parameter condenseIDATChunks = new Parameter(new CondenseIDATChunks());
     private static Parameter sortChunks = new Parameter(new SortChunks());
+    private static Parameter removeUselessSBIT = new Parameter(new RemoveUselessSBIT());
     private static Parameter inputFilename = new Parameter(new InputFilename());
     private static Parameter outputFilename = new Parameter(new OutputFilename());
     private static Parameter operationalMode = new Parameter(new OperationalMode());
@@ -21,6 +22,7 @@ public enum CoreGroup {
 	ArrayList<Parameter> fileViewParameters = new ArrayList<Parameter>();
 	fileViewParameters.add(condenseIDATChunks);
 	fileViewParameters.add(sortChunks);
+	fileViewParameters.add(removeUselessSBIT);
 	
 	ArrayList<ParameterGroup> fileViewSubgroups = new ArrayList<ParameterGroup>();
 	fileView = new ParameterGroup(fileViewName, fileViewParameters, fileViewSubgroups);
