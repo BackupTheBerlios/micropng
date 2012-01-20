@@ -3,7 +3,7 @@ package micropng.encodingview;
 import micropng.micropng.Dimensions;
 
 public class NoneInterlace extends Interlace {
-    public class NoneInterlaceThread implements Runnable {
+    private class NoneInterlaceThread implements Runnable {
 	@Override
 	public void run() {
 	    int next = in();

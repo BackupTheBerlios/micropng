@@ -40,7 +40,7 @@ public class FullIDATDecoder extends StreamFilter {
 	}
     }
 
-    ChunkSequence chunkSequence;
+    private ChunkSequence chunkSequence;
 
     public FullIDATDecoder(ChunkSequence chunkSequence) {
 	this.chunkSequence = chunkSequence;
