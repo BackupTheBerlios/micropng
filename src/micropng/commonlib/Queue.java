@@ -8,7 +8,7 @@ public class Queue {
     private int[] inBlock;
     private int[] outBlock;
     private boolean closed;
-    private Boolean waitingForBufferSwitch;
+    private boolean outWaitingForBufferSwitch;
     private int inPos;
     private int outMax;
     private int outPos;
@@ -19,7 +19,7 @@ public class Queue {
 	inBlock = new int[blockSize];
 	outBlock = new int[blockSize];
 	// closed = false;
-	waitingForBufferSwitch = new Boolean(false);
+	outWaitingForBufferSwitch = true;
 	inPos = 0;
 	outMax = blockSize;
 	outPos = outMax;
@@ -39,27 +39,6 @@ public class Queue {
 	return res;
     }
 
-    private void switchBuffers() {
-	if (waitingForBufferSwitch) {
-	    int[] tmp = inBlock;
-	    inBlock = outBlock;
-	    outBlock = tmp;
-	    inPos = 0;
-	    outPos = 0;
-	    waitingForBufferSwitch = false;
-	    notify();
-	} else {
-	    waitingForBufferSwitch = true;
-	    notify();
-	    try {
-		wait();
-	    } catch (InterruptedException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
-	}
-    }
-
     /**
      * Append a value.
      * 
@@ -73,9 +52,23 @@ public class Queue {
     public void put(int value) {
 	if (inPos == blockSize) {
 	    synchronized (this) {
-		switchBuffers();
+		while (!outWaitingForBufferSwitch) {
+		    try {
+			wait();
+		    } catch (InterruptedException e) {
+			e.printStackTrace();
+		    }
+		}
+		int[] tmp = inBlock;
+		inBlock = outBlock;
+		outBlock = tmp;
+		inPos = 0;
+		outPos = 0;
+		outWaitingForBufferSwitch = false;
+		notify();
 	    }
 	}
+
 	inBlock[inPos] = value;
 	inPos++;
     }
@@ -92,24 +85,25 @@ public class Queue {
 	    }
 
 	    if (inPos != 0) {
-		if (!waitingForBufferSwitch) {
+		while (!outWaitingForBufferSwitch) {
 		    try {
 			wait();
 		    } catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		    }
 		}
 		outMax = inPos;
 		outBlock = inBlock;
 		outPos = 0;
+		outWaitingForBufferSwitch = false;
 		notify();
 	    } else {
-		if (waitingForBufferSwitch) {
-		    //TODO: make this less ugly
+		if (outWaitingForBufferSwitch) {
+		    // TODO: make this less ugly
 		    outMax = 1;
 		    outBlock[0] = -1;
 		    outPos = 0;
+		    outWaitingForBufferSwitch = false;
 		    notify();
 		}
 	    }
@@ -134,7 +128,16 @@ public class Queue {
 		if (closed) {
 		    return -1;
 		}
-		switchBuffers();
+		outWaitingForBufferSwitch = true;
+		notify();
+		while (outWaitingForBufferSwitch) {
+		    try {
+			wait();
+		    } catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		    }
+		}
 	    }
 	}
 
