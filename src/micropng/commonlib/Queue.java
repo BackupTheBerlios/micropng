@@ -1,47 +1,30 @@
 package micropng.commonlib;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Queue {
 
-    private ConcurrentLinkedQueue<int[]> queue;
+    private static final int blockSize = 0x1 << 10;
     private int[] inBlock;
     private int[] outBlock;
-    private static final int blockSize = 0x1 << 10;
     private boolean closed;
-
+    private Boolean waitingForBufferSwitch;
     private int inPos;
+    private int outMax;
     private int outPos;
     private int remainingBitsInByte;
     private int currentByte;
 
     public Queue() {
-	queue = new ConcurrentLinkedQueue<int[]>();
-    }
-
-    /**
-     * Close for input: buffers will be internally transferred to output, and
-     * put() may not be called any more on this Queue. Any call of put() on this
-     * Queue after close() triggers undefined behaviour.
-     */
-    public void close() {
-	synchronized (this) {
-	    if (closed) {
-		throw new DuplicateCloseException();
-	    }
-
-	    if (inBlock != null) {
-		int[] lastBlock = Arrays.copyOf(inBlock, inPos);
-		queue.add(lastBlock);
-		inBlock = null;
-	    }
-
-	    closed = true;
-	    notify();
-	}
-
+	inBlock = new int[blockSize];
+	outBlock = new int[blockSize];
+	// closed = false;
+	waitingForBufferSwitch = new Boolean(false);
+	inPos = 0;
+	outMax = blockSize;
+	outPos = outMax;
+	// remainingBitsInByte = 0;
+	// currentByte = <uninitialized>;
     }
 
     public ArrayList<Integer> getRemainingBitsOfCurrentByte() {
@@ -56,6 +39,27 @@ public class Queue {
 	return res;
     }
 
+    private void switchBuffers() {
+	if (waitingForBufferSwitch) {
+	    int[] tmp = inBlock;
+	    inBlock = outBlock;
+	    outBlock = tmp;
+	    inPos = 0;
+	    outPos = 0;
+	    waitingForBufferSwitch = false;
+	    notify();
+	} else {
+	    waitingForBufferSwitch = true;
+	    notify();
+	    try {
+		wait();
+	    } catch (InterruptedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+	}
+    }
+
     /**
      * Append a value.
      * 
@@ -67,20 +71,50 @@ public class Queue {
      *            primitive int.
      */
     public void put(int value) {
-	if (inBlock == null) {
-	    inBlock = new int[blockSize];
-	    inPos = 0;
-	}
-
-	inBlock[inPos] = value;
-	inPos++;
-
 	if (inPos == blockSize) {
 	    synchronized (this) {
-		queue.add(inBlock);
-		notify();
+		switchBuffers();
 	    }
-	    inBlock = null;
+	}
+	inBlock[inPos] = value;
+	inPos++;
+    }
+
+    /**
+     * Close for input: buffers will be internally transferred to output, and
+     * put() may not be called any more on this Queue. Any call of put() on this
+     * Queue after close() triggers undefined behaviour.
+     */
+    public void close() {
+	synchronized (this) {
+	    if (closed) {
+		throw new DuplicateCloseException();
+	    }
+
+	    if (inPos != 0) {
+		if (!waitingForBufferSwitch) {
+		    try {
+			wait();
+		    } catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		    }
+		}
+		outMax = inPos;
+		outBlock = inBlock;
+		outPos = 0;
+		notify();
+	    } else {
+		if (waitingForBufferSwitch) {
+		    //TODO: make this less ugly
+		    outMax = 1;
+		    outBlock[0] = -1;
+		    outPos = 0;
+		    notify();
+		}
+	    }
+
+	    closed = true;
 	}
     }
 
@@ -90,37 +124,22 @@ public class Queue {
      * If there is no value waiting, block until a new value is available or the
      * stream is closed.
      * 
-     * @return the next value in stream or -1 when nothing is left
+     * @return the next value in stream or -1 if nothing is left
      */
     public int take() {
 	int res;
 
-	while (outBlock == null) {
+	if (outPos == outMax) {
 	    synchronized (this) {
-		outBlock = queue.poll();
-		if (outBlock == null) {
-		    if (closed) {
-			return -1;
-		    } else {
-			try {
-			    wait();
-			} catch (InterruptedException e) {
-			    // swallow this. There is no interruption. Period.
-			    e.printStackTrace();
-			}
-		    }
-		} else {
-		    outPos = 0;
+		if (closed) {
+		    return -1;
 		}
+		switchBuffers();
 	    }
 	}
 
 	res = outBlock[outPos];
 	outPos++;
-
-	if (outPos == outBlock.length) {
-	    outBlock = null;
-	}
 
 	return res;
     }
