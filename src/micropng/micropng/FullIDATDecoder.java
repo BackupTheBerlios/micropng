@@ -30,13 +30,12 @@ public class FullIDATDecoder extends StreamFilter {
 
 	    idatContent = new IDATContent(idatSequence);
 	    idatContent.connect(zlibDecoder);
-	    zlibDecoder.connect(encodingLayerDecoder);
-	    encodingLayerDecoder.connect(dataDumper);
-
-	    dataDumper.start();
-	    encodingLayerDecoder.start();
-	    zlibDecoder.start();
 	    idatContent.start();
+	    zlibDecoder.connect(encodingLayerDecoder);
+	    zlibDecoder.start();
+	    encodingLayerDecoder.connect(dataDumper);
+	    encodingLayerDecoder.start();
+	    dataDumper.start();
 	}
     }
 
