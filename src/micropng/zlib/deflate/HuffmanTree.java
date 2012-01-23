@@ -19,15 +19,12 @@ public class HuffmanTree {
 	}
 
 	public boolean isLeaf() {
-	    return (pos.left == null) && (pos.right == null);
+	    // pos.left == null iff pos.right == null iff isLeaf
+	    return pos.left == null;
 	}
 
 	public void step(int bit) {
-	    if (bit == 0) {
-		pos = pos.left;
-	    } else {
-		pos = pos.right;
-	    }
+	    pos = (bit == 0) ? pos.left : pos.right;
 	}
 
 	public int getValue() {
@@ -93,7 +90,6 @@ public class HuffmanTree {
     }
 
     public HuffmanTreeWalker getHuffmanTreeWalker() {
-	HuffmanTreeWalker res = new HuffmanTreeWalker();
-	return res;
+	return new HuffmanTreeWalker();
     }
 }
