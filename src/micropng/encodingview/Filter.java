@@ -144,10 +144,28 @@ public class Filter extends StreamFilter {
 
     private int paethPredictor(int a, int b, int c) {
 	int Pr;
-	int p = a + b - c;
-	int pa = Math.abs(p - a);
-	int pb = Math.abs(p - b);
-	int pc = Math.abs(p - c);
+
+//	original bits from specification
+//	int p = a + b - c;
+//	int pa = Math.abs(p - a);
+//	int pb = Math.abs(p - b);
+//	int pc = Math.abs(p - c);
+
+	int p = -c;
+	int pa = p + b;
+	int pb = p + a;
+	int pc = pa + pb;
+
+	if (pa < 0) {
+	    pa = -pa;
+	}
+	if (pb < 0) {
+	    pb = -pb;
+	}
+	if (pc < 0) {
+	    pc = -pc;
+	}
+
 	if (pa <= pb && pa <= pc) {
 	    Pr = a;
 	} else if (pb <= pc) {
