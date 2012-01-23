@@ -2,38 +2,9 @@ package micropng.zlib.deflate;
 
 public class HuffmanTree {
     private class HuffmanNode {
-
 	private int value;
 	private HuffmanNode left;
 	private HuffmanNode right;
-
-	public HuffmanNode() {
-
-	}
-
-	public int getValue() {
-	    return value;
-	}
-
-	public void setValue(int value) {
-	    this.value = value;
-	}
-
-	public HuffmanNode getLeft() {
-	    return left;
-	}
-
-	public void setLeft(HuffmanNode left) {
-	    this.left = left;
-	}
-
-	public HuffmanNode getRight() {
-	    return right;
-	}
-
-	public void setRight(HuffmanNode right) {
-	    this.right = right;
-	}
     }
 
     public class HuffmanTreeWalker {
@@ -60,7 +31,7 @@ public class HuffmanTree {
 	}
 
 	public int getValue() {
-	    return pos.getValue();
+	    return pos.value;
 	}
     }
 
@@ -104,21 +75,21 @@ public class HuffmanTree {
 	    leftTree = ((mask & code) == 0);
 
 	    if (leftTree) {
-		nextNode = currentNode.getLeft();
+		nextNode = currentNode.left;
 		if (nextNode == null) {
 		    nextNode = new HuffmanNode();
-		    currentNode.setLeft(nextNode);
+		    currentNode.left = nextNode;
 		}
 	    } else {
-		nextNode = currentNode.getRight();
+		nextNode = currentNode.right;
 		if (nextNode == null) {
 		    nextNode = new HuffmanNode();
-		    currentNode.setRight(nextNode);
+		    currentNode.right = nextNode;
 		}
 	    }
 	    currentNode = nextNode;
 	}
-	currentNode.setValue(value);
+	currentNode.value = value;
     }
 
     public HuffmanTreeWalker getHuffmanTreeWalker() {
