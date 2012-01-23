@@ -1,6 +1,5 @@
 package micropng.micropng;
 
-
 import micropng.chunkview.ChunkSequence;
 import micropng.chunkview.chunk.Chunk;
 import micropng.chunkview.chunk.Type;
