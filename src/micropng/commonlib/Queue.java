@@ -20,7 +20,7 @@ public class Queue {
 	outBlock = new int[blockSize];
 	// closed = false;
 	outWaitingForBufferSwitch = true;
-	inPos = 0;
+	// inPos = 0;
 	outMax = blockSize;
 	outPos = outMax;
 	// remainingBitsInByte = 0;
@@ -42,8 +42,7 @@ public class Queue {
     /**
      * Append a value.
      * 
-     * Other than take(), this method does <b>not</b> block, as it may allocate
-     * unlimited space internally.
+     * If this {@code Queue} is full, block until the new value can be stored.
      * 
      * @param value
      *            The byte to append on this Queue, stored in the LSB of the
@@ -76,7 +75,9 @@ public class Queue {
     /**
      * Close for input: buffers will be internally transferred to output, and
      * put() may not be called any more on this Queue. Any call of put() on this
-     * Queue after close() triggers undefined behaviour.
+     * Queue after close() triggers undefined behaviour. Depending on the
+     * internal state, this method may block until more values are removed with
+     * take().
      */
     public void close() {
 	synchronized (this) {
@@ -134,7 +135,6 @@ public class Queue {
 		    try {
 			wait();
 		    } catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		    }
 		}
