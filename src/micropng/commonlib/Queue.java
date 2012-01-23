@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Queue {
 
-    private static final int blockSize = 0x1 << 10;
+    private static final int blockSize = 0x1 << 11;
     private int[] inBlock;
     private int[] outBlock;
     private boolean closed;
