@@ -6,15 +6,33 @@ public class RingBuffer extends StreamFilter {
 
     public RingBuffer(int capacity) {
 	this.outBuffer = new int[capacity];
-	outBufferPointer = 0;
+	// outBufferPointer = 0;
     }
 
-    // TODO: this can be much faster
+    // TODO: think about Arraycopy
     public void repeat(int distance, int length) {
-	int sourcePointer = (outBufferPointer - distance + outBuffer.length) % outBuffer.length;
-	for (int i = 0; i < length; i++) {
-	    out(outBuffer[sourcePointer]);
-	    sourcePointer = (sourcePointer + 1) % outBuffer.length;
+	int startPos = outBufferPointer - distance;
+	int lastPos;
+	int currentPos;
+	int bufferLimit = outBuffer.length;
+
+	if (startPos < 0) {
+	    startPos += bufferLimit;
+	}
+
+	lastPos = startPos + length;
+	currentPos = startPos;
+
+	if (lastPos > bufferLimit) {
+	    lastPos -= bufferLimit;
+	    while (currentPos < bufferLimit) {
+		out(outBuffer[currentPos++]);
+	    }
+	    currentPos = 0;
+	}
+
+	while (currentPos < lastPos) {
+	    out(outBuffer[currentPos++]);
 	}
     }
 
