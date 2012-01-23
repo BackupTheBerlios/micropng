@@ -12,10 +12,10 @@ import micropng.fileview.PNGProperties;
 
 public class FileReader {
 
-    private Chunk readChunk(RandomAccessFile input) throws IOException {
+    private Chunk readChunk(RandomAccessFile input, File inputFile) throws IOException {
 	int length = input.readInt();
 	int type = input.readInt();
-	FileData data = new FileData(input, input.getFilePointer(), length);
+	FileData data = new FileData(inputFile, input.getFilePointer(), length);
 	int crc;
 
 	input.seek(input.getFilePointer() + length);
@@ -30,7 +30,7 @@ public class FileReader {
 
 	input.seek(PNGProperties.getSignatureLength());
 	do {
-	    Chunk nextChunk = readChunk(input);
+	    Chunk nextChunk = readChunk(input, inputFile);
 	    res.add(nextChunk);
 	} while (input.getFilePointer() < inputFile.length());
 

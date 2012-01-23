@@ -1,7 +1,11 @@
 package micropng.chunkview.chunk;
 
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
 
 import micropng.commonlib.Queue;
 
@@ -16,11 +20,11 @@ public class FileData implements DataField {
 	@Override
 	public void run() {
 	    try {
-		synchronized (file) {
-		    file.seek(start);
+		synchronized (this) {
+		    fileChannel.position(start);
 
 		    for (int i = 0; i < size; i++) {
-			out.put(file.readUnsignedByte());
+			out.put(dataInputStream.readUnsignedByte());
 		    }
 		}
 		out.close();
@@ -30,12 +34,15 @@ public class FileData implements DataField {
 	}
     }
 
-    private RandomAccessFile file;
+    private DataInputStream dataInputStream;
+    private FileChannel fileChannel;
     private long start;
     private int size;
 
-    public FileData(RandomAccessFile file, long start, int size) {
-	this.file = file;
+    public FileData(File file, long start, int size) throws FileNotFoundException {
+	FileInputStream  fileInputStream = new FileInputStream(file);
+	this.dataInputStream = new DataInputStream(fileInputStream);
+	this.fileChannel = fileInputStream.getChannel();
 	this.start = start;
 	this.size = size;
     }
@@ -44,9 +51,9 @@ public class FileData implements DataField {
     public byte[] getArray(int from, int length) {
 	byte[] res = new byte[length];
 	try {
-	    synchronized (file) {
-		file.seek(start + from);
-		file.readFully(res, 0, length);
+	    synchronized (this) {
+		fileChannel.position(start + from);
+		dataInputStream.readFully(res, 0, length);
 	    }
 	} catch (IOException e) {
 	    e.printStackTrace();
@@ -73,14 +80,15 @@ public class FileData implements DataField {
 
     @Override
     public int getByteAt(int pos) {
+	int res = -1;
 	try {
-	    synchronized (file) {
-		file.seek(start + pos);
-		file.read();
+	    synchronized (this) {
+		fileChannel.position(start + pos);
+		res = dataInputStream.readUnsignedByte();
 	    }
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
-	return 0;
+	return res;
     }
 }
