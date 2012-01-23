@@ -13,7 +13,7 @@ public enum CoreGroup {
     private static Parameter inputFilename = new Parameter(new InputFilename());
     private static Parameter outputFilename = new Parameter(new OutputFilename());
     private static Parameter operationalMode = new Parameter(new OperationalMode());
-    private static Parameter userInterface = new Parameter(new UserInterface());
+    //private static Parameter userInterface = new Parameter(new UserInterface());
     private static Parameter verbose = new Parameter(new Verbose());
 
     static {
@@ -32,7 +32,7 @@ public enum CoreGroup {
 	baseGroupParameters.add(inputFilename);
 	baseGroupParameters.add(outputFilename);
 	baseGroupParameters.add(operationalMode);
-	baseGroupParameters.add(userInterface);
+	//baseGroupParameters.add(userInterface);
 	baseGroupParameters.add(verbose);
 	ArrayList<ParameterGroup> baseGroupSubgroups = new ArrayList<ParameterGroup>();
 	baseGroupSubgroups.add(fileView);
