@@ -12,9 +12,9 @@ public enum CoreGroup {
     private static Parameter removeUselessSBIT = new Parameter(new RemoveUselessSBIT());
     private static Parameter inputFilename = new Parameter(new InputFilename());
     private static Parameter outputFilename = new Parameter(new OutputFilename());
-    private static Parameter operationalMode = new Parameter(new OperationalMode());
+    //private static Parameter operationalMode = new Parameter(new OperationalMode());
     //private static Parameter userInterface = new Parameter(new UserInterface());
-    private static Parameter verbose = new Parameter(new Verbose());
+    //private static Parameter verbose = new Parameter(new Verbose());
 
     static {
 
@@ -31,9 +31,9 @@ public enum CoreGroup {
 	ArrayList<Parameter> baseGroupParameters = new ArrayList<Parameter>();
 	baseGroupParameters.add(inputFilename);
 	baseGroupParameters.add(outputFilename);
-	baseGroupParameters.add(operationalMode);
+	//baseGroupParameters.add(operationalMode);
 	//baseGroupParameters.add(userInterface);
-	baseGroupParameters.add(verbose);
+	//baseGroupParameters.add(verbose);
 	ArrayList<ParameterGroup> baseGroupSubgroups = new ArrayList<ParameterGroup>();
 	baseGroupSubgroups.add(fileView);
 	base = new ParameterGroup(baseGroupName, baseGroupParameters, baseGroupSubgroups);
