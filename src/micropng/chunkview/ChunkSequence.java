@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import micropng.chunkview.chunk.Chunk;
+import micropng.chunkview.chunk.Type;
 
 public class ChunkSequence implements Collection<Chunk> {
 
@@ -86,7 +87,7 @@ public class ChunkSequence implements Collection<Chunk> {
     /**
      * Return the first Chunk of type {@code type}.
      * 
-     * Returns the first occuring Chunk of the specified type in this
+     * Returns the first occurring Chunk of the specified type in this
      * ChunkSequence regardless of any other Chunks of the same type. If there
      * is no Chunk of the specified type, null is returned.
      * 
@@ -101,4 +102,20 @@ public class ChunkSequence implements Collection<Chunk> {
 	}
 	return null;
     }
+
+    /**
+     * Return the first Chunk of the known type {@code type}.
+     * 
+     * Returns the first occurring Chunk of the specified known type in this
+     * ChunkSequence regardless of any other Chunks of the same type. If there
+     * is no Chunk of the specified type, null is returned.
+     * 
+     * @param type the known type of the Chunk
+     * @return the first Chunk of type {@code type} or null if there is none
+     */
+
+    public Chunk getChunk(Type type) {
+	return getChunk(type.toInt());
+    }
 }
+ 
