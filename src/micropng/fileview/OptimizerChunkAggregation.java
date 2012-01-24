@@ -1,7 +1,6 @@
 package micropng.fileview;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import micropng.chunkview.ChunkSequence;
 import micropng.chunkview.chunk.CRCCalculator;
@@ -21,10 +20,6 @@ public class OptimizerChunkAggregation {
 	    if (Type.IDAT.equals(u.getType())) {
 		ChunkSequence inputSequence = u.getChunks();
 		if (inputSequence.size() > 1) {
-		    Iterator<Chunk> inputSequenceIterator = inputSequence.iterator();
-		    Chunk nextChunk;
-		    DataField nextData;
-
 		    int newLength = 0;
 		    int newType = Type.IDAT.toInt();
 		    DataGroup newData;
@@ -33,9 +28,8 @@ public class OptimizerChunkAggregation {
 		    ArrayList<DataField> dataList = new ArrayList<DataField>();
 		    ChunkSequence newChunkSequence = new ChunkSequence();
 
-		    while (inputSequenceIterator.hasNext()) {
-			nextChunk = inputSequenceIterator.next();
-			nextData = nextChunk.getData();
+		    for (Chunk nextChunk : inputSequence) {
+			DataField nextData = nextChunk.getData();
 
 			if (nextData.getSize() == 0) {
 			    continue;
