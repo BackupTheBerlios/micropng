@@ -21,7 +21,7 @@ public class OptimizerRemoveUselessSBIT {
 		i++;
 	    }
 
-	    if (useful) {
+	    if (!useful) {
 		chunkSequence.remove(sBITChunk);
 	    }
 	}
