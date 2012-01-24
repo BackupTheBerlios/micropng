@@ -36,6 +36,9 @@ public class Configurator {
 	InternalConfiguration res = new InternalConfiguration();
 	Parameter inputFilePath = userConf.getByLongName("input-file");
 	Parameter outputFilePath = userConf.getByLongName("output-file");
+	Parameter condenseIDAT = userConf.getByLongName("condense-idat");
+	Parameter sortChunks = userConf.getByLongName("sort-chunks");
+	Parameter removeUselessSBIT = userConf.getByLongName("no-useless-sbit");
 	File inputFile = inputFilePath.<File> take();
 	File outputFile = outputFilePath.<File> take();
 	FileReader reader = new FileReader();
@@ -79,9 +82,7 @@ public class Configurator {
 	    if (!Type.isKnown(type)) {
 		if (Type.isAncillary(type)) {
 		    if (!Type.isSafeToCopy(type)) {
-			// if (ancillaryChunkShallBeKept(userConf, type)) {
 			res.setUnknownAncillaryChunk(true);
-			// }
 		    }
 		} else {
 		    res.setUnknownMandatoryChunk(true);
@@ -89,6 +90,10 @@ public class Configurator {
 	    }
 	}
 
+	res.setRegroupIDATChunks(condenseIDAT.<Boolean> take());
+	res.setSortChunks(sortChunks.<Boolean> take());
+	res.setRemoveUselessSBIT(removeUselessSBIT.<Boolean> take());
+	
 	// decoder = new FullIDATDecoder(chunkSequence);
 	// decoder.decode();
 

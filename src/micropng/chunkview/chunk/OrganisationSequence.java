@@ -14,7 +14,7 @@ public class OrganisationSequence extends ArrayList<OrganisationUnit> {
 	for (Chunk currentChunk : inputSequence) {
 	    int currentType = currentChunk.getType();
 
-	    if (!((Type.IDAT.equals(currentType)) && (Type.IDAT.equals(lastMandatory)))) {
+	    if (!((Type.IDAT.toInt() == currentType) && (Type.IDAT.equals(lastMandatory)))) {
 		currentSequence = new ChunkSequence();
 		currentSequence.add(currentChunk);
 		add(new OrganisationUnit(currentSequence, lastMandatory));

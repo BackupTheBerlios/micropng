@@ -6,7 +6,6 @@ import micropng.chunkview.ChunkSequence;
 import micropng.commonlib.FourByteConverter;
 
 public class OrganisationUnit implements Comparable<OrganisationUnit> {
-
     private ChunkSequence chunks;
     private Type previousType;
     private int type;
@@ -92,7 +91,8 @@ public class OrganisationUnit implements Comparable<OrganisationUnit> {
 
     private int compareContent(OrganisationUnit c) {
 	if (Type.isKnown(type)) {
-	    return ComparatorCorrelations.valueOf(FourByteConverter.stringValue(type)).getComparator().compare(this, c);
+	    return ComparatorCorrelations.valueOf(FourByteConverter.stringValue(type))
+		    .getComparator().compare(this, c);
 	} else {
 	    return SameTypeComparator.ALPHABETICAL_ORDERING.compare(this, c);
 	}

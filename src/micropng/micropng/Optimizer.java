@@ -12,34 +12,32 @@ import micropng.userinterface.InternalConfiguration;
 public class Optimizer {
 
     public ChunkSequence optimize(InternalConfiguration configuration) throws IOException {
-	ChunkSequence chunkSequence = configuration.getChunkSequence();
+	ChunkSequence res = configuration.getChunkSequence();
 
 	if (!configuration.unknownMandatoryChunk()) {
+
 	    if (configuration.sortChunks()) {
-		OrganisationSequence chunkOrganisationSequence = new OrganisationSequence(
-			chunkSequence);
+		OrganisationSequence chunkOrganisationSequence = new OrganisationSequence(res);
 		OptimizerOrdering ordering = new OptimizerOrdering();
 		ordering.optimize(chunkOrganisationSequence);
-		chunkSequence = chunkOrganisationSequence.toChunkSequence();
+		res = chunkOrganisationSequence.toChunkSequence();
 	    }
+	    
+
 
 	    if (configuration.removeUselessSBIT()) {
 		OptimizerRemoveUselessSBIT sBITRemoval = new OptimizerRemoveUselessSBIT();
-		sBITRemoval.optimize(chunkSequence);
+		sBITRemoval.optimize(res);
 	    }
 
 	    if (configuration.regroupIDATChunks()) {
-		OrganisationSequence chunkOrganisationSequence = new OrganisationSequence(
-			chunkSequence);
+		OrganisationSequence chunkOrganisationSequence = new OrganisationSequence(res);
 		OptimizerChunkAggregation aggregation = new OptimizerChunkAggregation();
 		aggregation.optimize(chunkOrganisationSequence);
-		chunkSequence = chunkOrganisationSequence.toChunkSequence();
+		res = chunkOrganisationSequence.toChunkSequence();
 	    }
 	}
 
-	// outputFileObject = new File(configuration.getPath() + "_output.png");
-	//FileWriter writer = new FileWriter();
-	//writer.writeSequence(outputFileObject, chunkSequence);
-	return chunkSequence;
+	return res;
     }
 }

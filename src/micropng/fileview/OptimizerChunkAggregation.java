@@ -17,7 +17,7 @@ public class OptimizerChunkAggregation {
 
     public void optimize(OrganisationSequence organisationSequence) {
 	for (OrganisationUnit u : organisationSequence) {
-	    if (Type.IDAT.equals(u.getType())) {
+	    if (Type.IDAT.toInt() == u.getType()) {
 		ChunkSequence inputSequence = u.getChunks();
 		if (inputSequence.size() > 1) {
 		    int newLength = 0;

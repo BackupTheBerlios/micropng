@@ -85,6 +85,7 @@ public class DataGroup implements DataField {
 
 	for (DataField d : dataElements) {
 	    System.arraycopy(d.getArray(), 0, res, pos, d.getSize());
+	    pos += d.getSize();
 	}
 
 	return res;
