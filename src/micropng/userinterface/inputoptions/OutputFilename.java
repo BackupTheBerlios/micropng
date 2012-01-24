@@ -8,11 +8,6 @@ public class OutputFilename implements ParameterDescription {
     private static final Path defaultValue = new Path();
 
     @Override
-    public ParameterValue<?> defaultValue() {
-	return defaultValue.clone();
-    }
-
-    @Override
     public String getLongHelp() {
 	return longHelp;
     }
@@ -30,5 +25,10 @@ public class OutputFilename implements ParameterDescription {
     @Override
     public char getShortParameterName() {
 	return shortParameterName;
+    }
+
+    @Override
+    public ParameterValue<?> defaultValue() {
+	return defaultValue.clone();
     }
 }

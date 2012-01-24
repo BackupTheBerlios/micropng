@@ -1,35 +1,45 @@
 package micropng.micropng;
 
-import java.io.File;
 import java.io.IOException;
 
+import micropng.chunkview.ChunkSequence;
+import micropng.chunkview.OptimizerRemoveUselessSBIT;
 import micropng.chunkview.chunk.OrganisationSequence;
 import micropng.fileview.OptimizerChunkAggregation;
 import micropng.fileview.OptimizerOrdering;
-import micropng.pngio.FileWriter;
 import micropng.userinterface.InternalConfiguration;
 
 public class Optimizer {
-    private InternalConfiguration configuration;
-    private File outputFileObject;
 
-    public Optimizer(InternalConfiguration configuration) throws IOException {
-	this.configuration = configuration;
-    }
+    public ChunkSequence optimize(InternalConfiguration configuration) throws IOException {
+	ChunkSequence chunkSequence = configuration.getChunkSequence();
 
-    public void run() throws IOException {
-	OrganisationSequence chunkOrganisationSequence = new OrganisationSequence(configuration.getChunkSequence());
-	OptimizerOrdering ordering;
-	OptimizerChunkAggregation aggregation;
+	if (!configuration.unknownMandatoryChunk()) {
+	    if (configuration.sortChunks()) {
+		OrganisationSequence chunkOrganisationSequence = new OrganisationSequence(
+			chunkSequence);
+		OptimizerOrdering ordering = new OptimizerOrdering();
+		ordering.optimize(chunkOrganisationSequence);
+		chunkSequence = chunkOrganisationSequence.toChunkSequence();
+	    }
 
-	ordering = new OptimizerOrdering();
-	aggregation = new OptimizerChunkAggregation();
-	
-	ordering.optimize(chunkOrganisationSequence);
-	aggregation.optimize(chunkOrganisationSequence);
+	    if (configuration.removeUselessSBIT()) {
+		OptimizerRemoveUselessSBIT sBITRemoval = new OptimizerRemoveUselessSBIT();
+		sBITRemoval.optimize(chunkSequence);
+	    }
 
-	//outputFileObject = new File(configuration.getPath() + "_output.png");
-	FileWriter writer = new FileWriter();
-	writer.writeSequence(outputFileObject, chunkOrganisationSequence.toChunkSequence());
+	    if (configuration.regroupIDATChunks()) {
+		OrganisationSequence chunkOrganisationSequence = new OrganisationSequence(
+			chunkSequence);
+		OptimizerChunkAggregation aggregation = new OptimizerChunkAggregation();
+		aggregation.optimize(chunkOrganisationSequence);
+		chunkSequence = chunkOrganisationSequence.toChunkSequence();
+	    }
+	}
+
+	// outputFileObject = new File(configuration.getPath() + "_output.png");
+	//FileWriter writer = new FileWriter();
+	//writer.writeSequence(outputFileObject, chunkSequence);
+	return chunkSequence;
     }
 }

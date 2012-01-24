@@ -24,10 +24,6 @@ public class FileWriter {
     public void writeSequence(File outputFileObject, ChunkSequence chunkSequence) throws IOException {
 	RandomAccessFile outputFile;
 
-	if (!outputFileObject.createNewFile()) {
-	    throw new CanNotCreateFileException();
-	}
-
 	outputFile = new RandomAccessFile(outputFileObject, "rw");
 
 	outputFile.write(PNGProperties.getSignature());

@@ -25,8 +25,8 @@ public class TransparencyLookUp extends StreamFilter {
     private static final int MASK = 0x000000ff;
     
     private void greyscaleLookUp(Chunk transparencyChunk) {
-	byte[] chunkData = transparencyChunk.getData().getArray();
-	int transparentValue = ((MASK & chunkData[0]) << 8) | chunkData[1];
+	//byte[] chunkData = transparencyChunk.getData().getArray();
+	//int transparentValue = ((MASK & chunkData[0]) << 8) | chunkData[1];
     }
 
     private void truecolorLookUp(Chunk transparencyChunk) {
@@ -46,7 +46,7 @@ public class TransparencyLookUp extends StreamFilter {
     }
 
     public void transparencyLookUp(CodecInfo codecInfo, ChunkSequence chunkSequence) {
-	Chunk transparencyChunk = chunkSequence.getChunk(Type.tRNS.toInt());
+	Chunk transparencyChunk = chunkSequence.getChunk(Type.tRNS);
 	if (transparencyChunk != null) {
 	    ColourType colourType = codecInfo.getColourType();
 	    switch (colourType) {

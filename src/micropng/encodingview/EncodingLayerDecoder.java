@@ -1,13 +1,10 @@
 package micropng.encodingview;
 
-import java.nio.ByteBuffer;
-
 import micropng.chunkview.ChunkSequence;
 import micropng.chunkview.chunk.Chunk;
 import micropng.chunkview.chunk.Type;
 import micropng.commonlib.StreamFilter;
 import micropng.micropng.CodecInfo;
-import micropng.micropng.Dimensions;
 
 public class EncodingLayerDecoder extends StreamFilter {
     private class EncodingLayerDecoderThread implements Runnable {
@@ -58,28 +55,8 @@ public class EncodingLayerDecoder extends StreamFilter {
 
     public EncodingLayerDecoder(ChunkSequence chunkSequence) {
 	this.chunkSequence = chunkSequence;
-	codecInfo = new CodecInfo();
-	generateCodecInfo();
-    }
-
-    private void generateCodecInfo() {
-	Chunk header = chunkSequence.getChunk(Type.IHDR.toInt());
-	ByteBuffer byteBuffer = ByteBuffer.wrap(header.getData().getArray());
-	int width = byteBuffer.getInt();
-	int height = byteBuffer.getInt();
-	Dimensions size = new Dimensions(width, height);
-	int bitDepth = byteBuffer.get();
-	int colorType = byteBuffer.get();
-	CompressionMethod compressionMethod = CompressionMethod.getMethod(byteBuffer.get());
-	FilterMethod filterMethod = FilterMethod.getMethod(byteBuffer.get());
-	InterlaceMethod interlaceMethod = InterlaceMethod.getMethod(byteBuffer.get());
-
-	codecInfo.setSize(size);
-	codecInfo.setBitDepth(bitDepth);
-	codecInfo.setColourType(colorType);
-	codecInfo.setCompressionMethod(compressionMethod);
-	codecInfo.setFilterMethod(filterMethod);
-	codecInfo.setInterlaceMethod(interlaceMethod);
+	Chunk header = chunkSequence.getChunk(Type.IHDR);
+	codecInfo = new CodecInfo(header);
     }
 
     public void start() {

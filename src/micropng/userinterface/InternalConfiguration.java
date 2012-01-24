@@ -1,5 +1,7 @@
 package micropng.userinterface;
 
+import java.io.File;
+
 import micropng.chunkview.ChunkSequence;
 
 public class InternalConfiguration {
@@ -7,13 +9,14 @@ public class InternalConfiguration {
     private ChunkSequence chunkSequence;
     // private boolean informationalMode;
     // private boolean optimizeHuffmanTrees;
+    private File outputFile;
     // private boolean reencodeZlibStreams;
     private boolean regroupIDATChunks;
     // private boolean removeAncillaryChunks;
+    private boolean removeUselessSBIT;
     private boolean sortChunks;
     private boolean unknownMandatoryChunk;
     private boolean unknownAncillaryChunk;
-
     // private int verbosity;
 
     public ChunkSequence getChunkSequence() {
@@ -24,6 +27,14 @@ public class InternalConfiguration {
 	this.chunkSequence = chunkSequence;
     }
 
+    public File getOutputFile() {
+        return outputFile;
+    }
+
+    void setOutputFile(File outputFile) {
+        this.outputFile = outputFile;
+    }
+
     public boolean regroupIDATChunks() {
 	return regroupIDATChunks;
     }
@@ -32,6 +43,14 @@ public class InternalConfiguration {
 	this.regroupIDATChunks = regroupIDATChunks;
     }
 
+    public boolean removeUselessSBIT() {
+	return removeUselessSBIT;
+    }
+
+    void setRemoveUselessSBIT(boolean removeUselessSBIT) {
+	this.removeUselessSBIT = removeUselessSBIT;
+    }
+    
     public boolean sortChunks() {
 	return sortChunks;
     }
