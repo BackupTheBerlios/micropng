@@ -1,7 +1,6 @@
 package micropng.chunkview.chunk;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import micropng.chunkview.ChunkSequence;
 
@@ -9,12 +8,10 @@ import micropng.chunkview.ChunkSequence;
 public class OrganisationSequence extends ArrayList<OrganisationUnit> {
 
     public OrganisationSequence(ChunkSequence inputSequence) {
-	Iterator<Chunk> inputSequenceIterator = inputSequence.iterator();
 	Type lastMandatory = null;
 	ChunkSequence currentSequence = null;
 
-	while (inputSequenceIterator.hasNext()) {
-	    Chunk currentChunk = inputSequenceIterator.next();
+	for (Chunk currentChunk : inputSequence) {
 	    int currentType = currentChunk.getType();
 
 	    if (!((Type.IDAT.equals(currentType)) && (Type.IDAT.equals(lastMandatory)))) {
