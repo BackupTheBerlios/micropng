@@ -1,3 +1,8 @@
+/*
+ * Copyright 2009-2012 Martin Walch
+ * redistributable under the terms of the GNU GPL version 3
+ */
+
 package micropng;
 
 import micropng.commonlib.Status;
