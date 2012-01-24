@@ -7,7 +7,7 @@ public class SortChunks implements ParameterDescription {
     private static final char shortParameterName = 's';
     private static final YesNoSwitch defaultValue = new YesNoSwitch();
     static {
-	defaultValue.trySetting(true);
+	defaultValue.trySetting(false);
     }
 
     @Override
