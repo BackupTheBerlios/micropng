@@ -13,12 +13,6 @@ public class FileWriter {
 
     class CanNotCreateFileException extends IOException {
 	private static final long serialVersionUID = 1L;
-
-	public CanNotCreateFileException() {
-	}
-    }
-
-    public FileWriter() {
     }
 
     public void writeSequence(File outputFileObject, ChunkSequence chunkSequence) throws IOException {
