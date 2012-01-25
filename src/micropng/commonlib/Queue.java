@@ -124,7 +124,8 @@ public class Queue {
     public int take() {
 	int res;
 
-	if (outPos == outMax) {
+	// not (outPos == outMax), because during close(), outMax may be reduced
+	if (outPos >= outMax) {
 	    synchronized (this) {
 		if (closed) {
 		    return -1;
