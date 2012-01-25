@@ -4,11 +4,6 @@ public abstract class StreamFilter {
     private Queue input;
     private Queue output;
 
-    public StreamFilter() {
-	this.input = null;
-	this.output = null;
-    }
-
     public void connect(StreamFilter nextInChain) {
 	if (nextInChain.input == null) {
 	    nextInChain.input = new Queue();
