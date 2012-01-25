@@ -10,7 +10,7 @@ import micropng.chunkview.chunk.Type;
 import micropng.commonlib.Status;
 //import micropng.micropng.ConfigurationListener;
 //import micropng.micropng.ContentAnalyzer;
-//import micropng.micropng.FullIDATDecoder;
+import micropng.micropng.FullIDATDecoder;
 import micropng.pngio.FileReader;
 import micropng.userinterface.inputoptions.Parameter;
 
@@ -43,8 +43,8 @@ public class Configurator {
 	File outputFile = outputFilePath.<File> take();
 	FileReader reader = new FileReader();
 	ChunkSequence chunkSequence;
-	// FullIDATDecoder decoder;
-	// ContentAnalyzer contentAnalyzer = new ContentAnalyzer();
+	FullIDATDecoder decoder;
+	//ContentAnalyzer contentAnalyzer = new ContentAnalyzer();
 
 	if (!inputFile.isFile()) {
 	    setLastStatus(Status.error("Der Pfad „" + inputFile
@@ -57,21 +57,21 @@ public class Configurator {
 	    return null;
 	}
 
-	if (outputFile.getName().isEmpty()) {
-	    setLastStatus(Status.error("Es wurde kein Ausgabepfad angegeben."));
-	    return null;
-	}
-
-	if (outputFile.exists()) {
-	    setLastStatus(Status.error("Der Pfad „" + outputFile + "“ existiert bereits."));
-	    return null;
-	}
-
-	if (!outputFile.createNewFile()) {
-	    setLastStatus(Status.error("Der Datei „" + outputFile
-		    + "“ konnte nicht erstellt werden, weil sie schon existiert."));
-	    return null;
-	}
+//	if (outputFile.getName().isEmpty()) {
+//	    setLastStatus(Status.error("Es wurde kein Ausgabepfad angegeben."));
+//	    return null;
+//	}
+//
+//	if (outputFile.exists()) {
+//	    setLastStatus(Status.error("Der Pfad „" + outputFile + "“ existiert bereits."));
+//	    return null;
+//	}
+//
+//	if (!outputFile.createNewFile()) {
+//	    setLastStatus(Status.error("Der Datei „" + outputFile
+//		    + "“ konnte nicht erstellt werden, weil sie schon existiert."));
+//	    return null;
+//	}
 
 	chunkSequence = reader.readSequence(inputFile);
 	res.setChunkSequence(chunkSequence);
@@ -94,8 +94,8 @@ public class Configurator {
 	res.setSortChunks(sortChunks.<Boolean> take());
 	res.setRemoveUselessSBIT(removeUselessSBIT.<Boolean> take());
 	
-	// decoder = new FullIDATDecoder(chunkSequence);
-	// decoder.decode();
+	decoder = new FullIDATDecoder(chunkSequence);
+	decoder.decode();
 
 	setLastStatus(Status.ok());
 	return res;

@@ -24,8 +24,8 @@ public class Runner {
 		File outputFile = internalConfiguration.getOutputFile();
 		ChunkSequence finalSequence;
 		optimizer = new Optimizer();
-		finalSequence = optimizer.optimize(internalConfiguration);
-		fileWriter.writeSequence(outputFile, finalSequence);
+		//finalSequence = optimizer.optimize(internalConfiguration);
+		//fileWriter.writeSequence(outputFile, finalSequence);
 	    }
 	} catch (IOException e) {
 	    e.printStackTrace();
