@@ -33,7 +33,7 @@ public class UncompressedBlockHeader extends DataBlockHeader {
 	length = LEN;
 
 	for (int i = 0; i < length; i++) {
-	    outputBuffer.out(input.take());
+	    outputBuffer.put(input.take());
 	}
     }
 

@@ -11,15 +11,15 @@ public abstract class StreamFilter {
 	output = nextInChain.input;
     }
 
-    public int in() {
+    public final int in() {
 	return input.take();
     }
 
-    public void out(int value) {
+    public final void out(int value) {
 	output.put(value);
     }
 
-    public void done() {
+    public final void done() {
 	output.close();
     }
 

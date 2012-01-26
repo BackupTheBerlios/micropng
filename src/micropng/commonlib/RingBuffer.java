@@ -26,19 +26,19 @@ public class RingBuffer extends StreamFilter {
 	if (lastPos > bufferLimit) {
 	    lastPos -= bufferLimit;
 	    while (currentPos < bufferLimit) {
-		out(outBuffer[currentPos++]);
+		put(outBuffer[currentPos++]);
 	    }
 	    currentPos = 0;
 	}
 
 	while (currentPos < lastPos) {
-	    out(outBuffer[currentPos++]);
+	    put(outBuffer[currentPos++]);
 	}
     }
 
-    public void out(int value) {
+    public void put(int value) {
 	outBuffer[outBufferPointer] = value;
 	outBufferPointer = (outBufferPointer + 1) % outBuffer.length;
-	super.out(value);
+	out(value);
     }
 }

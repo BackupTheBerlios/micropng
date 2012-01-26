@@ -48,7 +48,7 @@ public class Queue {
      *            The byte to append on this Queue, stored in the LSB of the
      *            primitive int.
      */
-    public void put(int value) {
+    public final void put(int value) {
 	if (inPos == blockSize) {
 	    int[] tmp = inBlock;
 	    inBlock = outBlock;
@@ -79,7 +79,7 @@ public class Queue {
      * internal state, this method may block until more values are removed with
      * take().
      */
-    public void close() {
+    public final void close() {
 	synchronized (this) {
 	    if (closed) {
 		throw new DuplicateCloseException();
@@ -121,7 +121,7 @@ public class Queue {
      * 
      * @return the next value in stream or -1 if nothing is left
      */
-    public int take() {
+    public final int take() {
 	if (outPos == outMax) {
 	    synchronized (this) {
 		if (closed) {

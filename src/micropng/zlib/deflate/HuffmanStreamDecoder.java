@@ -47,7 +47,7 @@ public class HuffmanStreamDecoder extends StreamFilter {
 	    literalOrLengthCode = readValueFromTree(literalsAndLengthsTreeWalker, input);
 
 	    if (literalOrLengthCode < 256) {
-		outputBuffer.out(literalOrLengthCode);
+		outputBuffer.put(literalOrLengthCode);
 	    } else if (literalOrLengthCode > 256) {
 		int lengthsTableIndex = literalOrLengthCode - 257;
 		int length = lengthsTable[lengthsTableIndex];

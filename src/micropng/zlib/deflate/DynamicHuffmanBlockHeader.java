@@ -10,13 +10,14 @@ import micropng.zlib.deflate.HuffmanTree.HuffmanTreeWalker;
 public class DynamicHuffmanBlockHeader extends DataBlockHeader {
 
     private Queue input;
-    private int HLIT;
-    private int HDIST;
-    private int HCLEN;
-    private HuffmanTree literalsAndLengthsTree;
-    private HuffmanTree distancesTree;
     private ArrayList<Integer> originalHeaderBits;
-    private HuffmanStreamDecoder decoder;
+
+    // private int HLIT;
+    // private int HDIST;
+    // private int HCLEN;
+    // private HuffmanTree literalsAndLengthsTree;
+    // private HuffmanTree distancesTree;
+    // private HuffmanStreamDecoder decoder;
 
     private int readAndStore(int numberOfBits) {
 	int res = input.takeBits(numberOfBits);
@@ -26,6 +27,13 @@ public class DynamicHuffmanBlockHeader extends DataBlockHeader {
 
     @Override
     public void decode(RingBuffer outputBuffer) {
+	int HLIT;
+	int HDIST;
+	int HCLEN;
+	HuffmanTree literalsAndLengthsTree;
+	HuffmanTree distancesTree;
+	HuffmanStreamDecoder decoder;
+
 	input = getInputQueue();
 	originalHeaderBits = new ArrayList<Integer>(256);
 	HLIT = readAndStore(5);
