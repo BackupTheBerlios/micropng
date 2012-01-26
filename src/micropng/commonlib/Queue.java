@@ -50,10 +50,11 @@ public class Queue {
      */
     public void put(int value) {
 	if (inPos == blockSize) {
+	    int[] tmp = inBlock;
+	    inBlock = outBlock;
+	    inPos = 0;
+
 	    synchronized (this) {
-		int[] tmp = inBlock;
-		inBlock = outBlock;
-		inPos = 0;
 		while (!outWaitingForBufferSwitch) {
 		    try {
 			wait();
