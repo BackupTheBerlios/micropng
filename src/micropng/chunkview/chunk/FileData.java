@@ -53,7 +53,7 @@ public class FileData implements DataField {
 	try {
 	    synchronized (this) {
 		fileChannel.position(start + from);
-		dataInputStream.readFully(res, 0, length);
+		dataInputStream.readFully(res);
 	    }
 	} catch (IOException e) {
 	    e.printStackTrace();
