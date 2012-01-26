@@ -51,6 +51,9 @@ public class Queue {
     public void put(int value) {
 	if (inPos == blockSize) {
 	    synchronized (this) {
+		int[] tmp = inBlock;
+		inBlock = outBlock;
+		inPos = 0;
 		while (!outWaitingForBufferSwitch) {
 		    try {
 			wait();
@@ -58,10 +61,7 @@ public class Queue {
 			e.printStackTrace();
 		    }
 		}
-		int[] tmp = inBlock;
-		inBlock = outBlock;
 		outBlock = tmp;
-		inPos = 0;
 		outPos = 0;
 		outWaitingForBufferSwitch = false;
 		notify();
@@ -124,8 +124,7 @@ public class Queue {
     public int take() {
 	int res;
 
-	// not (outPos == outMax), because during close(), outMax may be reduced
-	if (outPos >= outMax) {
+	if (outPos == outMax) {
 	    synchronized (this) {
 		if (closed) {
 		    return -1;
