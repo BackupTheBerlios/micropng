@@ -69,8 +69,7 @@ public class Queue {
 	    }
 	}
 
-	inBlock[inPos] = value;
-	inPos++;
+	inBlock[inPos++] = value;
     }
 
     /**
@@ -123,8 +122,6 @@ public class Queue {
      * @return the next value in stream or -1 if nothing is left
      */
     public int take() {
-	int res;
-
 	if (outPos == outMax) {
 	    synchronized (this) {
 		if (closed) {
@@ -142,10 +139,7 @@ public class Queue {
 	    }
 	}
 
-	res = outBlock[outPos];
-	outPos++;
-
-	return res;
+	return outBlock[outPos++];
     }
 
     /**
