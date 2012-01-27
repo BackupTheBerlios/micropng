@@ -31,7 +31,7 @@ public class FileData implements DataField {
 			int lastReadCount;
 
 			if (size - bytesRead < bufferSize) {
-			    maximumLengthToRead = bufferSize;
+			    maximumLengthToRead = size - bytesRead;
 			}
 
 			lastReadCount = fileInputStream.read(buffer, 0, maximumLengthToRead);
