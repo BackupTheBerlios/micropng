@@ -4,7 +4,7 @@ import micropng.chunkscontentview.IDATContent;
 import micropng.chunkview.ChunkSequence;
 import micropng.chunkview.chunk.Chunk;
 import micropng.chunkview.chunk.Type;
-import micropng.commonlib.DataDumper;
+import micropng.commonlib.Sink;
 import micropng.commonlib.StreamFilter;
 import micropng.encodingview.EncodingLayerDecoder;
 import micropng.zlib.ZlibDecoder;
@@ -20,7 +20,7 @@ public class FullIDATDecoder extends StreamFilter {
 	ChunkSequence idatSequence = new ChunkSequence();
 	IDATContent idatContent;
 	ZlibDecoder zlibDecoder = new ZlibDecoder();
-	DataDumper dataDumper = new DataDumper();
+	Sink dataDumper = new Sink();
 	EncodingLayerDecoder encodingLayerDecoder = new EncodingLayerDecoder(chunkSequence);
 	int IDATType = Type.IDAT.toInt();
 

@@ -20,19 +20,17 @@ public class SampleSplitter extends StreamFilter {
 
 		    if (bitsPerSample < 8) {
 			int mask = (1 << bitsPerSample) - 1;
-			int currentByte;
-			int remainingBits;
 
 			for (long i = 0; i < numberOfLines; i++) {
-			    currentByte = in();
-			    remainingBits = 8;
+			    int currentByte = in();
+			    int remainingBits = 8;
 			    for (long j = 0; j < numberOfSamples; j++) {
 				if (remainingBits == 0) {
 				    currentByte = in();
 				    remainingBits = 8;
 				}
-				out((currentByte >> (remainingBits - bitsPerSample)) & mask);
 				remainingBits -= bitsPerSample;
+				out((currentByte >> remainingBits) & mask);
 			    }
 			}
 		    } else if (bitsPerSample > 8) {
@@ -41,8 +39,7 @@ public class SampleSplitter extends StreamFilter {
 				int sample = in();
 				int bitsRead = 8;
 				while (bitsRead < bitsPerSample) {
-				    sample <<= 8;
-				    sample |= in();
+				    sample = (sample << 8) | in();
 				    bitsRead += 8;
 				}
 				out(sample);

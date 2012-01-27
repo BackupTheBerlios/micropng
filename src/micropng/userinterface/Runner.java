@@ -14,24 +14,25 @@ public class Runner {
 	Status res;
 	Configurator configurator = new Configurator();
 	InternalConfiguration internalConfiguration;
-	Optimizer optimizer;
 
 	try {
 	    internalConfiguration = configurator.makeActualConfig(inputConfiguration);
-	    res = configurator.getLastStatus();
-	    if (res.getStatusType() == Status.StatusType.OK) {
-		FileWriter fileWriter = new FileWriter();
-		File outputFile = internalConfiguration.getOutputFile();
-		ChunkSequence finalSequence;
-		optimizer = new Optimizer();
-		//finalSequence = optimizer.optimize(internalConfiguration);
-		//fileWriter.writeSequence(outputFile, finalSequence);
-	    }
 	} catch (IOException e) {
 	    e.printStackTrace();
 	    return Status
 		    .error("Eine IOException ist aufgetreten. Dieses Problem ließ sich nicht beheben.");
 	}
+	res = configurator.getLastStatus();
+
+	if (res.getStatusType() == Status.StatusType.OK) {
+	    FileWriter fileWriter = new FileWriter();
+	    File outputFile = internalConfiguration.getOutputFile();
+	    ChunkSequence finalSequence;
+	    Optimizer optimizer = new Optimizer();
+	    // finalSequence = optimizer.optimize(internalConfiguration);
+	    // fileWriter.writeSequence(outputFile, finalSequence);
+	}
+
 	return res;
     }
 

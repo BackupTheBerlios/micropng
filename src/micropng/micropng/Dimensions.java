@@ -5,7 +5,6 @@ public class Dimensions {
     private long height;
 
     public Dimensions(long width, long height) {
-	super();
 	this.width = width;
 	this.height = height;
     }

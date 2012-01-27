@@ -56,7 +56,7 @@ public class Filter extends StreamFilter {
 	}
     }
 
-    private final static int BYTE_MASK = 0x0ff;
+    private final static int BYTE_MASK = 0xff;
     private CodecInfo codecInfo;
     private BigArrayOfInt[] lastScanline;
     private long scanlineSize;
@@ -64,7 +64,7 @@ public class Filter extends StreamFilter {
 
     public Filter(CodecInfo codecInfo) {
 	this.codecInfo = codecInfo;
-	int bytesPerSample = Math.max(codecInfo.getBitDepth() >> 3, 1);
+	int bytesPerSample = Math.max(codecInfo.getBitDepth() / 8, 1);
 	lastScanline = new BigArrayOfInt[codecInfo.numberOfChannels() * bytesPerSample];
     }
 
@@ -114,7 +114,7 @@ public class Filter extends StreamFilter {
 	    for (int j = 0; j < lastScanline.length; j++) {
 		BigArrayOfInt lastLineCurrentChannel = lastScanline[j];
 		int currentLineLastValue = currentLineLastValues[j];
-		int addend = (lastLineCurrentChannel.elementAt(i) + currentLineLastValue) >> 1;
+		int addend = (lastLineCurrentChannel.elementAt(i) + currentLineLastValue) / 2;
 		int currentValue = (in() + addend) & BYTE_MASK;
 		out(currentValue);
 		currentLineLastValues[j] = currentValue;

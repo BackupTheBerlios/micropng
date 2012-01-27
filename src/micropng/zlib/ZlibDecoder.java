@@ -46,7 +46,6 @@ public class ZlibDecoder extends StreamFilter {
 
     private DeflateStreamDecoder deflateDecoder;
     private Adler32Checker adler32Checker;
-    private long adler32;
 
     public ZlibDecoder() {
 	adler32Checker = new Adler32Checker(this);
@@ -55,7 +54,7 @@ public class ZlibDecoder extends StreamFilter {
     public void readAndCompareAdler32CheckSum() {
 	// TODO: maybe it is better to process this in a separate thread,
 	// so the Adler32Checker thread is able to die?
-	adler32 = 0;
+	long adler32 = 0;
 	for (int i = 0; i < 4; i++) {
 	    adler32 <<= 8;
 	    adler32 |= in();

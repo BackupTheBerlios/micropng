@@ -11,7 +11,7 @@ import micropng.commonlib.Queue;
 public class FileData implements DataField {
     private class QueueFeeder implements Runnable {
 	private Queue out;
-	private static final int bufferSize = 0x1 << 11;
+	private static final int bufferSize = 2048;
 
 	public QueueFeeder(Queue out) {
 	    this.out = out;

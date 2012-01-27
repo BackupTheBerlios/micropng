@@ -12,10 +12,8 @@ import micropng.userinterface.invocationline.InvocationLineEvaluator;
 
 public class Main {
     public static void main(String[] args) {
-	InvocationLineEvaluator invocationLineEvaluator = new InvocationLineEvaluator();
-	UserConfiguration userConfiguration = invocationLineEvaluator.evaluate(args);
-	Runner runner = new Runner();
-	Status status = runner.launchInterface(userConfiguration);
+	UserConfiguration userConfiguration = new InvocationLineEvaluator().evaluate(args);
+	Status status = new Runner().launchInterface(userConfiguration);
 	if (status.getStatusType() == Status.StatusType.ERROR) {
 	    System.err.println(status.message());
 	    System.exit(-1);

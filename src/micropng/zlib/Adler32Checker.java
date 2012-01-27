@@ -6,7 +6,7 @@ import micropng.commonlib.StreamFilter;
 
 public class Adler32Checker extends StreamFilter {
 
-    private class WorkerThread implements Runnable {
+    private class Adler32CheckerThread implements Runnable {
 
 	@Override
 	public void run() {
@@ -23,16 +23,14 @@ public class Adler32Checker extends StreamFilter {
 
     private ZlibDecoder zlibDecoder;
     private Adler32 adler32;
-    private Thread workerThread;
 
     public Adler32Checker(ZlibDecoder zlibDecoder) {
 	this.zlibDecoder = zlibDecoder;
 	adler32 = new Adler32();
-	workerThread = new Thread(new WorkerThread());
     }
 
     public void start() {
-	workerThread.start();
+	new Thread(new Adler32CheckerThread()).start();
     }
 
     public boolean check(long checksum) {
