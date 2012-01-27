@@ -1,13 +1,12 @@
 package micropng.commonlib;
 
+import java.nio.charset.Charset;
+
 public class FourByteConverter {
+    private static final Charset charset = Charset.forName("US-ASCII");
+
     public static String stringValue(int type) {
-	char[] tmp = new char[4];
-	for (int i = 0; i < 4; i++) {
-	    tmp[3 - i] = (char) (type & 0xff);
-	    type >>= 8;
-	}
-	return new String(tmp);
+	return new String(byteArrayValue(type), charset);
     }
 
     public static int intValue(String type) {
@@ -22,7 +21,7 @@ public class FourByteConverter {
     public static int[] intArrayValue(int type) {
 	int[] res = new int[4];
 	for (int i = 0; i < 4; i++) {
-	    res[3 - i] = (char) (type & 0xff);
+	    res[3 - i] = type & 0xff;
 	    type >>= 8;
 	}
 	return res;
@@ -31,7 +30,7 @@ public class FourByteConverter {
     public static byte[] byteArrayValue(int integer) {
 	byte[] res = new byte[4];
 	for (int i = 0; i < 4; i++) {
-	    res[3 - i] = (byte) (integer & 0xff);
+	    res[3 - i] = (byte) integer;
 	    integer >>= 8;
 	}
 	return res;
