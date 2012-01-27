@@ -2,9 +2,9 @@ package micropng.zlib.deflate;
 
 public class HuffmanTree {
     private class HuffmanNode {
-	private int value;
 	private HuffmanNode left;
 	private HuffmanNode right;
+	private int value;
     }
 
     public class HuffmanTreeWalker {
