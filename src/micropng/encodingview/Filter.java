@@ -15,11 +15,11 @@ public class Filter extends StreamFilter {
 	    for (Dimensions dimension : dimensions) {
 		if (!dimension.isEmpty()) {
 		    long height = dimension.getHeight();
-		    long newScanLineSize = (long) Math.ceil((dimension.getWidth() / 8f)
+		    scanlineSize = (long) Math.ceil((dimension.getWidth() / 8f)
 			    * Math.min(8, bitDepth));
 
 		    for (int i = 0; i < lastScanline.length; i++) {
-			lastScanline[i] = new BigArrayOfInt(newScanLineSize);
+			lastScanline[i] = new BigArrayOfInt(scanlineSize);
 		    }
 
 		    for (long i = 0; i < height; i++) {
@@ -59,6 +59,7 @@ public class Filter extends StreamFilter {
     private final static int BYTE_MASK = 0x0ff;
     private CodecInfo codecInfo;
     private BigArrayOfInt[] lastScanline;
+    private long scanlineSize;
     private Dimensions[] dimensions;
 
     public Filter(CodecInfo codecInfo) {
@@ -73,7 +74,7 @@ public class Filter extends StreamFilter {
     }
 
     private void doNone() {
-	for (long i = 0; i < lastScanline[0].size; i++) {
+	for (long i = 0; i < scanlineSize; i++) {
 	    for (BigArrayOfInt channel : lastScanline) {
 		int currentValue = in();
 		channel.set(i, currentValue);
@@ -84,7 +85,7 @@ public class Filter extends StreamFilter {
 
     private void doSub() {
 	int[] currentLinelastValues = new int[lastScanline.length];
-	for (long i = 0; i < lastScanline[0].size; i++) {
+	for (long i = 0; i < scanlineSize; i++) {
 	    for (int j = 0; j < lastScanline.length; j++) {
 		BigArrayOfInt lastLineCurrentChannel = lastScanline[j];
 		int lastValue = currentLinelastValues[j];
@@ -97,7 +98,7 @@ public class Filter extends StreamFilter {
     }
 
     private void doUp() {
-	for (long i = 0; i < lastScanline[0].size; i++) {
+	for (long i = 0; i < scanlineSize; i++) {
 	    for (BigArrayOfInt lastLineCurrentChannel : lastScanline) {
 		int currentValue = (in() + lastLineCurrentChannel.elementAt(i)) & BYTE_MASK;
 		out(currentValue);
@@ -109,7 +110,7 @@ public class Filter extends StreamFilter {
     private void doAverage() {
 	int[] currentLineLastValues = new int[lastScanline.length];
 
-	for (long i = 0; i < lastScanline[0].size; i++) {
+	for (long i = 0; i < scanlineSize; i++) {
 	    for (int j = 0; j < lastScanline.length; j++) {
 		BigArrayOfInt lastLineCurrentChannel = lastScanline[j];
 		int currentLineLastValue = currentLineLastValues[j];
@@ -126,7 +127,7 @@ public class Filter extends StreamFilter {
 	int[] currentLineLastValues = new int[lastScanline.length];
 	int[] lastValuesAbove = new int[lastScanline.length];
 
-	for (long i = 0; i < lastScanline[0].size; i++) {
+	for (long i = 0; i < scanlineSize; i++) {
 	    for (int j = 0; j < lastScanline.length; j++) {
 		BigArrayOfInt lastLineCurrentChannel = lastScanline[j];
 		int last = currentLineLastValues[j];
@@ -145,11 +146,11 @@ public class Filter extends StreamFilter {
     private int paethPredictor(int a, int b, int c) {
 	int Pr;
 
-//	original bits from specification
-//	int p = a + b - c;
-//	int pa = Math.abs(p - a);
-//	int pb = Math.abs(p - b);
-//	int pc = Math.abs(p - c);
+	// original bits from specification
+	// int p = a + b - c;
+	// int pa = Math.abs(p - a);
+	// int pb = Math.abs(p - b);
+	// int pc = Math.abs(p - c);
 
 	int p = -c;
 	int pa = p + b;
