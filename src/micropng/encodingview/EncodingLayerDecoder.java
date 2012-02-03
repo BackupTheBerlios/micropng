@@ -53,7 +53,6 @@ public class EncodingLayerDecoder extends StreamFilter {
 		end.connect(paletteLookUp);
 		streamFilters.add(paletteLookUp);
 		end = paletteLookUp;
-		paletteLookUp.start();
 	    }
 
 	    shareCurrentOutputChannel(end);
