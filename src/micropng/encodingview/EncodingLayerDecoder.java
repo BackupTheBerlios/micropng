@@ -1,5 +1,7 @@
 package micropng.encodingview;
 
+import java.util.ArrayList;
+
 import micropng.chunkview.ChunkSequence;
 import micropng.chunkview.chunk.Chunk;
 import micropng.chunkview.chunk.Type;
@@ -11,17 +13,9 @@ public class EncodingLayerDecoder extends StreamFilter {
 
 	@Override
 	public void run() {
-	    Filter filter = null;
 	    Interlace deInterlacer = null;
-	    PaletteLookUp paletteLookUp = null;
-	    SampleSplitter splitter = new SampleSplitter(codecInfo);
-
-	    switch (codecInfo.getFilterMethod()) {
-	    case METHOD_0:
-		filter = new Filter(codecInfo);
-		shareCurrentInputChannel(filter);
-		break;
-	    }
+	    ArrayList<StreamFilter> streamFilters = new ArrayList<StreamFilter>(4);
+	    StreamFilter end = null;
 
 	    switch (codecInfo.getInterlaceMethod()) {
 	    case NONE:
@@ -32,21 +26,41 @@ public class EncodingLayerDecoder extends StreamFilter {
 		break;
 	    }
 
-	    if (codecInfo.isPalette()) {
-		paletteLookUp = new PaletteLookUp(chunkSequence);
-		deInterlacer.connect(paletteLookUp);
-		shareCurrentOutputChannel(paletteLookUp);
-		paletteLookUp.start();
-	    } else {
-		shareCurrentOutputChannel(deInterlacer);
+	    switch (codecInfo.getFilterMethod()) {
+	    case METHOD_0:
+		Filter filter = new Filter(codecInfo, deInterlacer);
+		shareCurrentInputChannel(filter);
+		end = filter;
+		streamFilters.add(filter);
+		break;
 	    }
 
-	    filter.connect(splitter);
-	    splitter.connect(deInterlacer);
+	    if (codecInfo.getSampleDepth() != 8) {
+		SampleSplitter splitter = new SampleSplitter(codecInfo, deInterlacer);
+		end.connect(splitter);
+		streamFilters.add(splitter);
+		end = splitter;
+	    }
 
-	    filter.start(deInterlacer.getGraphicsSizes());
-	    splitter.start(deInterlacer.getGraphicsSizes());
-	    deInterlacer.start();
+	    if (codecInfo.getInterlaceMethod() == InterlaceMethod.ADAM7) {
+		end.connect(deInterlacer);
+		streamFilters.add(deInterlacer);
+		end = deInterlacer;
+	    }
+
+	    if (codecInfo.isPalette()) {
+		PaletteLookUp paletteLookUp = new PaletteLookUp(chunkSequence);
+		end.connect(paletteLookUp);
+		streamFilters.add(paletteLookUp);
+		end = paletteLookUp;
+		paletteLookUp.start();
+	    }
+
+	    shareCurrentOutputChannel(end);
+
+	    for (StreamFilter streamFilter : streamFilters) {
+		streamFilter.start();
+	    }
 	}
     }
 
@@ -59,6 +73,7 @@ public class EncodingLayerDecoder extends StreamFilter {
 	codecInfo = new CodecInfo(header);
     }
 
+    @Override
     public void start() {
 	new Thread(new EncodingLayerDecoderThread()).start();
     }

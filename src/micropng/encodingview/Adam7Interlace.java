@@ -68,6 +68,7 @@ public class Adam7Interlace extends Interlace {
 	return graphicsSizes;
     }
 
+    @Override
     public void start() {
 	if (reassemble) {
 	    new Thread(new ReAssemblerThread()).start();

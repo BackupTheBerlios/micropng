@@ -34,4 +34,8 @@ public abstract class StreamFilter {
     public void shareCurrentOutputChannel(StreamFilter target) {
 	target.output = output;
     }
+
+    public void start() {
+	
+    }
 }

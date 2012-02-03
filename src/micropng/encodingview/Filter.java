@@ -62,14 +62,14 @@ public class Filter extends StreamFilter {
     private long scanlineSize;
     private Dimensions[] dimensions;
 
-    public Filter(CodecInfo codecInfo) {
+    public Filter(CodecInfo codecInfo, Interlace interlacer) {
 	this.codecInfo = codecInfo;
+	this.dimensions = interlacer.getGraphicsSizes();
 	int bytesPerSample = Math.max(codecInfo.getBitDepth() / 8, 1);
 	lastScanline = new BigArrayOfInt[codecInfo.numberOfChannels() * bytesPerSample];
     }
 
-    public void start(Dimensions[] dimensions) {
-	this.dimensions = dimensions;
+    public void start() {
 	new Thread(new FilterThread()).start();
     }
 

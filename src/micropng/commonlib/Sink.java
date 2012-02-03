@@ -20,6 +20,7 @@ public class Sink extends StreamFilter {
 	dataDumperThread = new SinkThread();
     }
 
+    @Override
     public void start() {
 	new Thread(dataDumperThread).start();
     }

@@ -33,7 +33,7 @@ public class SampleSplitter extends StreamFilter {
 				out((currentByte >> remainingBits) & mask);
 			    }
 			}
-		    } else if (bitsPerSample > 8) {
+		    } else {
 			for (long i = 0; i < numberOfLines; i++) {
 			    for (long j = 0; j < numberOfSamples; j++) {
 				int sample = in();
@@ -43,12 +43,6 @@ public class SampleSplitter extends StreamFilter {
 				    bitsRead += 8;
 				}
 				out(sample);
-			    }
-			}
-		    } else {
-			for (long i = 0; i < numberOfLines; i++) {
-			    for (long j = 0; j < numberOfSamples; j++) {
-				out(in());
 			    }
 			}
 		    }
@@ -61,12 +55,13 @@ public class SampleSplitter extends StreamFilter {
     private CodecInfo codecInfo;
     private Dimensions[] dimensions;
 
-    public SampleSplitter(CodecInfo codecInfo) {
+    public SampleSplitter(CodecInfo codecInfo, Interlace interlacer) {
 	this.codecInfo = codecInfo;
+	this.dimensions = interlacer.getGraphicsSizes();
     }
 
-    public void start(Dimensions[] dimensions) {
-	this.dimensions = dimensions;
+    @Override
+    public void start() {
 	new Thread(new WorkerThread()).start();
     }
 }
