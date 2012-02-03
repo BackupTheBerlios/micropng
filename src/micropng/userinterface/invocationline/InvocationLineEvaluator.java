@@ -6,9 +6,9 @@ import java.util.Map;
 
 import micropng.commonlib.Status;
 import micropng.commonlib.Status.StatusType;
+import micropng.micropng.inputoptions.CoreGroup;
 import micropng.userinterface.OutputHandler;
 import micropng.userinterface.UserConfiguration;
-import micropng.userinterface.inputoptions.CoreGroup;
 import micropng.userinterface.inputoptions.IntegerValue;
 import micropng.userinterface.inputoptions.OneOfMany;
 import micropng.userinterface.inputoptions.Parameter;
@@ -60,8 +60,8 @@ public class InvocationLineEvaluator implements OutputHandler {
     private ParserTable parserTable;
     private HashMap<Parameter, ArrayList<String>> parameterValuesLiterals;
 
-    public InvocationLineEvaluator() {
-	coreGroup = CoreGroup.BASE.getGroup();
+    public InvocationLineEvaluator(ParameterGroup coreGroup) {
+	this.coreGroup = coreGroup;
 	userConfiguration = new UserConfiguration(coreGroup);
 	invocationLineGroup = InvocationLineGroup.INVOCATION.getGroup();
 	longNameLookUpTable = new HashMap<String, Parameter>();

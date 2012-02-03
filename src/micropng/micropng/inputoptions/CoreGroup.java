@@ -1,6 +1,15 @@
-package micropng.userinterface.inputoptions;
+package micropng.micropng.inputoptions;
 
 import java.util.ArrayList;
+
+import micropng.userinterface.inputoptions.CondenseIDATChunks;
+import micropng.userinterface.inputoptions.InputFilename;
+import micropng.userinterface.inputoptions.MissingDefinitionException;
+import micropng.userinterface.inputoptions.OutputFilename;
+import micropng.userinterface.inputoptions.Parameter;
+import micropng.userinterface.inputoptions.ParameterGroup;
+import micropng.userinterface.inputoptions.RemoveUselessSBIT;
+import micropng.userinterface.inputoptions.SortChunks;
 
 public enum CoreGroup {
     BASE, FILE_VIEW;

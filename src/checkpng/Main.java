@@ -3,21 +3,14 @@
  * redistributable under the terms of the GNU GPL version 3
  */
 
-package micropng;
+package checkpng;
 
-import micropng.commonlib.Status;
-import micropng.micropng.inputoptions.CoreGroup;
-import micropng.userinterface.Runner;
+import checkpng.inputoptions.CoreGroup;
 import micropng.userinterface.UserConfiguration;
 import micropng.userinterface.invocationline.InvocationLineEvaluator;
 
 public class Main {
     public static void main(String[] args) {
 	UserConfiguration userConfiguration = new InvocationLineEvaluator(CoreGroup.BASE.getGroup()).evaluate(args);
-	Status status = new Runner().launchInterface(userConfiguration);
-	if (status.getStatusType() == Status.StatusType.ERROR) {
-	    System.err.println(status.message());
-	    System.exit(-1);
-	}
     }
 }
