@@ -4,13 +4,13 @@ import micropng.commonlib.StreamFilter;
 import micropng.micropng.CodecInfo;
 import micropng.micropng.Dimensions;
 
-public class SampleSplitter extends StreamFilter {
+public class ValueSplitter extends StreamFilter {
 
     private class WorkerThread implements Runnable {
 
 	@Override
 	public void run() {
-	    int bitsPerSample = codecInfo.getBitDepth();
+	    int bitsPerValue = codecInfo.getBitDepth();
 	    int numberOfChannels = codecInfo.numberOfChannels();
 
 	    for (Dimensions dimension : dimensions) {
@@ -18,8 +18,8 @@ public class SampleSplitter extends StreamFilter {
 		    long numberOfLines = dimension.getHeight();
 		    long numberOfSamples = numberOfChannels * dimension.getWidth();
 
-		    if (bitsPerSample < 8) {
-			int mask = (1 << bitsPerSample) - 1;
+		    if (bitsPerValue < 8) {
+			int mask = (1 << bitsPerValue) - 1;
 
 			for (long i = 0; i < numberOfLines; i++) {
 			    int currentByte = in();
@@ -29,7 +29,7 @@ public class SampleSplitter extends StreamFilter {
 				    currentByte = in();
 				    remainingBits = 8;
 				}
-				remainingBits -= bitsPerSample;
+				remainingBits -= bitsPerValue;
 				out((currentByte >> remainingBits) & mask);
 			    }
 			}
@@ -38,7 +38,7 @@ public class SampleSplitter extends StreamFilter {
 			    for (long j = 0; j < numberOfSamples; j++) {
 				int sample = in();
 				int bitsRead = 8;
-				while (bitsRead < bitsPerSample) {
+				while (bitsRead < bitsPerValue) {
 				    sample = (sample << 8) | in();
 				    bitsRead += 8;
 				}
@@ -55,7 +55,7 @@ public class SampleSplitter extends StreamFilter {
     private CodecInfo codecInfo;
     private Dimensions[] dimensions;
 
-    public SampleSplitter(CodecInfo codecInfo, Interlace interlacer) {
+    public ValueSplitter(CodecInfo codecInfo, Interlace interlacer) {
 	this.codecInfo = codecInfo;
 	this.dimensions = interlacer.getGraphicsSizes();
     }
