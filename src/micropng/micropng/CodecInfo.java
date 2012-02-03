@@ -29,7 +29,7 @@ public class CodecInfo {
 	filterMethod = FilterMethod.getMethod(byteBuffer.get());
 	interlaceMethod = InterlaceMethod.getMethod(byteBuffer.get());
     }
-    
+
     public void setSize(Dimensions size) {
 	this.size = size;
     }
@@ -52,7 +52,7 @@ public class CodecInfo {
 	}
 	return bitDepth;
     }
-    
+
     public CompressionMethod getCompressionMethod() {
 	return compressionMethod;
     }

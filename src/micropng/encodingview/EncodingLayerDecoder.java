@@ -35,7 +35,7 @@ public class EncodingLayerDecoder extends StreamFilter {
 		break;
 	    }
 
-	    if (codecInfo.getSampleDepth() != 8) {
+	    if (codecInfo.getBitDepth() != 8) {
 		SampleSplitter splitter = new SampleSplitter(codecInfo, deInterlacer);
 		end.connect(splitter);
 		streamFilters.add(splitter);
