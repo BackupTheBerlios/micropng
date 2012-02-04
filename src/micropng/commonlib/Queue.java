@@ -85,29 +85,18 @@ public class Queue {
 		throw new DuplicateCloseException();
 	    }
 
-	    if (inPos != 0) {
-		while (!outWaitingForBufferSwitch) {
-		    try {
-			wait();
-		    } catch (InterruptedException e) {
-			e.printStackTrace();
-		    }
-		}
-		outMax = inPos;
-		outBlock = inBlock;
-		outPos = 0;
-		outWaitingForBufferSwitch = false;
-		notify();
-	    } else {
-		if (outWaitingForBufferSwitch) {
-		    // TODO: make this less ugly
-		    outMax = 1;
-		    outBlock[0] = -1;
-		    outPos = 0;
-		    outWaitingForBufferSwitch = false;
-		    notify();
+	    while (!outWaitingForBufferSwitch) {
+		try {
+		    wait();
+		} catch (InterruptedException e) {
+		    e.printStackTrace();
 		}
 	    }
+	    outMax = inPos;
+	    outBlock = inBlock;
+	    outPos = 0;
+	    outWaitingForBufferSwitch = false;
+	    notify();
 
 	    closed = true;
 	}
@@ -122,7 +111,7 @@ public class Queue {
      * @return the next value in stream or -1 if nothing is left
      */
     public final int take() {
-	if (outPos == outMax) {
+	while (outPos == outMax) {
 	    synchronized (this) {
 		if (closed) {
 		    return -1;
