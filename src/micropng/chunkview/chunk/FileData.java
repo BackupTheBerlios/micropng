@@ -48,7 +48,6 @@ public class FileData implements DataField {
 	}
     }
 
-    // private DataInputStream dataInputStream;
     private FileInputStream fileInputStream;
     private FileChannel fileChannel;
     private long start;

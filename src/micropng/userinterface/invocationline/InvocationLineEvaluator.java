@@ -6,7 +6,6 @@ import java.util.Map;
 
 import micropng.commonlib.Status;
 import micropng.commonlib.Status.StatusType;
-import micropng.micropng.inputoptions.CoreGroup;
 import micropng.userinterface.OutputHandler;
 import micropng.userinterface.UserConfiguration;
 import micropng.userinterface.inputoptions.IntegerValue;
