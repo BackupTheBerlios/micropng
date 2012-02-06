@@ -44,12 +44,8 @@ public class ZlibDecoder extends StreamFilter {
 	}
     }
 
-    private DeflateStreamDecoder deflateDecoder;
-    private Adler32Checker adler32Checker;
-
-    public ZlibDecoder() {
-	adler32Checker = new Adler32Checker(this);
-    }
+    private DeflateStreamDecoder deflateDecoder = new DeflateStreamDecoder();
+    private Adler32Checker adler32Checker = new Adler32Checker(this);
 
     public void readAndCompareAdler32CheckSum() {
 	// TODO: maybe it is better to process this in a separate thread,
@@ -66,7 +62,6 @@ public class ZlibDecoder extends StreamFilter {
     }
 
     public void start() {
-	deflateDecoder = new DeflateStreamDecoder();
 	shareCurrentInputChannel(deflateDecoder);
 	deflateDecoder.connect(adler32Checker);
 	shareCurrentOutputChannel(adler32Checker);

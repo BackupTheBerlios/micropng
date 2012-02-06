@@ -35,11 +35,7 @@ public class DeflateStreamDecoder extends StreamFilter {
     }
 
     private final static int MAXIMUM_DISTANCE = 32768;
-    private RingBuffer outputBuffer;
-
-    public DeflateStreamDecoder() {
-	outputBuffer = new RingBuffer(MAXIMUM_DISTANCE);
-    }
+    private RingBuffer outputBuffer = new RingBuffer(MAXIMUM_DISTANCE);
 
     public void decode() {
 	DeflateBlockHeader currentDeflateBlockHeader;

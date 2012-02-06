@@ -8,11 +8,7 @@ public class HuffmanTree {
     }
 
     public class HuffmanTreeWalker {
-	private HuffmanNode pos;
-
-	private HuffmanTreeWalker() {
-	    reset();
-	}
+	private HuffmanNode pos = root;
 
 	public void reset() {
 	    pos = root;
@@ -34,10 +30,9 @@ public class HuffmanTree {
 
     private static final int MAX_BITS = 15;
 
-    private HuffmanNode root;
+    private HuffmanNode root = new HuffmanNode();
 
     public HuffmanTree(int[] codeLengths) {
-	root = new HuffmanNode();
 	int[] bl_count = new int[MAX_BITS + 1];
 	int[] next_code = new int[MAX_BITS + 1];
 	int code = 0;

@@ -22,11 +22,10 @@ public class Adler32Checker extends StreamFilter {
     }
 
     private ZlibDecoder zlibDecoder;
-    private Adler32 adler32;
+    private Adler32 adler32 = new Adler32();
 
     public Adler32Checker(ZlibDecoder zlibDecoder) {
 	this.zlibDecoder = zlibDecoder;
-	adler32 = new Adler32();
     }
 
     public void start() {

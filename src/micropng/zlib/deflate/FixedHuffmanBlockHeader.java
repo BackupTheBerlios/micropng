@@ -23,8 +23,9 @@ public class FixedHuffmanBlockHeader extends DataBlockHeader {
 	    5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
 	    5 });
 
-    private ArrayList<Integer> originalHeaderBits;
-    private HuffmanStreamDecoder decoder;
+    private ArrayList<Integer> originalHeaderBits = new ArrayList<Integer>(0);
+    private HuffmanStreamDecoder decoder = new HuffmanStreamDecoder(
+	    defaultLiteralsAndLengthsCodesTree, defaultDistancesCodesTree);
 
     @Override
     public ArrayList<Integer> getOriginalHeader() {
@@ -33,9 +34,6 @@ public class FixedHuffmanBlockHeader extends DataBlockHeader {
 
     @Override
     public void decode(RingBuffer outputBuffer) {
-	originalHeaderBits = new ArrayList<Integer>(0);
-	decoder = new HuffmanStreamDecoder(defaultLiteralsAndLengthsCodesTree,
-		defaultDistancesCodesTree);
 	shareCurrentInputChannel(decoder);
 	decoder.decode(outputBuffer);
     }
