@@ -23,7 +23,7 @@ public class IDATContent extends StreamFilter {
 	}
     }
 
-    private ChunkSequence chunkSequence;
+    final ChunkSequence chunkSequence;
 
     public IDATContent(ChunkSequence chunkSequence) {
 	this.chunkSequence = chunkSequence;

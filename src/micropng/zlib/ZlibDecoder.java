@@ -6,6 +6,9 @@ import micropng.zlib.deflate.DeflateStreamDecoder;
 public class ZlibDecoder extends StreamFilter {
     private class ZlibDecoderThread implements Runnable {
 
+	ZlibDecoderThread() {
+	}
+
 	@Override
 	public void run() {
 	    int CMF;
@@ -44,7 +47,7 @@ public class ZlibDecoder extends StreamFilter {
 	}
     }
 
-    private DeflateStreamDecoder deflateDecoder = new DeflateStreamDecoder();
+    final DeflateStreamDecoder deflateDecoder = new DeflateStreamDecoder();
     private Adler32Checker adler32Checker = new Adler32Checker(this);
 
     public void readAndCompareAdler32CheckSum() {

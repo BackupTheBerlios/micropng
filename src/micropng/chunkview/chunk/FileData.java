@@ -48,10 +48,10 @@ public class FileData implements DataField {
 	}
     }
 
-    private FileInputStream fileInputStream;
-    private FileChannel fileChannel;
-    private long start;
-    private int size;
+    final FileInputStream fileInputStream;
+    final FileChannel fileChannel;
+    final long start;
+    final int size;
 
     public FileData(File file, long start, int size) throws FileNotFoundException {
 	this.fileInputStream = new FileInputStream(file);

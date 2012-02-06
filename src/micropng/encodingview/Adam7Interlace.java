@@ -6,6 +6,9 @@ import micropng.micropng.Dimensions;
 public class Adam7Interlace extends Interlace {
     private class ReAssemblerThread implements Runnable {
 
+	ReAssemblerThread() {
+	}
+
 	@Override
 	public void run() {
 	    Dimensions size = codecInfo.getSize();
@@ -36,13 +39,13 @@ public class Adam7Interlace extends Interlace {
 	}
     }
 
-    private final static int[] horizontalStepSizes = { 8, 8, 4, 4, 2, 2, 1 };
-    private final static int[] verticalStepSizes = { 8, 8, 8, 4, 4, 2, 2 };
-    private final static int[] horizontalOffsets = { 0, 4, 0, 2, 0, 1, 0 };
-    private final static int[] verticalOffsets = { 0, 0, 4, 0, 2, 0, 1 };
-    private final static int numberOfIterations = horizontalStepSizes.length;
+    final static int[] horizontalStepSizes = { 8, 8, 4, 4, 2, 2, 1 };
+    final static int[] verticalStepSizes = { 8, 8, 8, 4, 4, 2, 2 };
+    final static int[] horizontalOffsets = { 0, 4, 0, 2, 0, 1, 0 };
+    final static int[] verticalOffsets = { 0, 0, 4, 0, 2, 0, 1 };
+    final static int numberOfIterations = horizontalStepSizes.length;
     private boolean reassemble;
-    private CodecInfo codecInfo;
+    final CodecInfo codecInfo;
     private Dimensions[] graphicsSizes;
 
     public Adam7Interlace(boolean reassemble, CodecInfo codecInfo) {

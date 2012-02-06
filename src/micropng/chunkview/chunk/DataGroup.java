@@ -30,7 +30,7 @@ public class DataGroup implements DataField {
 	}
     }
 
-    private ArrayList<DataField> dataElements;
+    final ArrayList<DataField> dataElements;
 
     public DataGroup(ArrayList<DataField> dataElements) {
 	this.dataElements = dataElements;

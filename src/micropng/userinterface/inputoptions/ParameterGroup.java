@@ -5,10 +5,9 @@ import java.util.Iterator;
 
 public class ParameterGroup implements Iterable<Parameter> {
     private class ParameterIterator implements java.util.Iterator<Parameter> {
-	private Iterator<Parameter> iterator;
+	private Iterator<Parameter> iterator = getAllDependingParameters().iterator();
 
-	private ParameterIterator() {
-	    iterator = getAllDependingParameters().iterator();
+	ParameterIterator() {
 	}
 
 	@Override
@@ -50,7 +49,7 @@ public class ParameterGroup implements Iterable<Parameter> {
 	return subGroups;
     }
 
-    private ArrayList<Parameter> getAllDependingParameters() {
+    final ArrayList<Parameter> getAllDependingParameters() {
 	ArrayList<Parameter> res = new ArrayList<Parameter>();
 	res.addAll(parameters);
 

@@ -57,10 +57,10 @@ public class Filter extends StreamFilter {
     }
 
     private final static int BYTE_MASK = 0xff;
-    private CodecInfo codecInfo;
+    final CodecInfo codecInfo;
     private BigArrayOfInt[] lastScanline;
     private long scanlineSize;
-    private Dimensions[] dimensions;
+    final Dimensions[] dimensions;
 
     public Filter(CodecInfo codecInfo, Interlace interlacer) {
 	this.codecInfo = codecInfo;
@@ -73,7 +73,7 @@ public class Filter extends StreamFilter {
 	new Thread(new FilterThread()).start();
     }
 
-    private void doNone() {
+    final void doNone() {
 	for (long i = 0; i < scanlineSize; i++) {
 	    for (BigArrayOfInt channel : lastScanline) {
 		int currentValue = in();
@@ -83,7 +83,7 @@ public class Filter extends StreamFilter {
 	}
     }
 
-    private void doSub() {
+    final void doSub() {
 	int[] currentLinelastValues = new int[lastScanline.length];
 	for (long i = 0; i < scanlineSize; i++) {
 	    for (int j = 0; j < lastScanline.length; j++) {
@@ -97,7 +97,7 @@ public class Filter extends StreamFilter {
 	}
     }
 
-    private void doUp() {
+    final void doUp() {
 	for (long i = 0; i < scanlineSize; i++) {
 	    for (BigArrayOfInt lastLineCurrentChannel : lastScanline) {
 		int currentValue = (in() + lastLineCurrentChannel.elementAt(i)) & BYTE_MASK;
@@ -107,7 +107,7 @@ public class Filter extends StreamFilter {
 	}
     }
 
-    private void doAverage() {
+    final void doAverage() {
 	int[] currentLineLastValues = new int[lastScanline.length];
 
 	for (long i = 0; i < scanlineSize; i++) {
@@ -123,7 +123,7 @@ public class Filter extends StreamFilter {
 	}
     }
 
-    private void doPaeth() {
+    final void doPaeth() {
 	int[] currentLineLastValues = new int[lastScanline.length];
 	int[] lastValuesAbove = new int[lastScanline.length];
 
@@ -143,7 +143,7 @@ public class Filter extends StreamFilter {
 	}
     }
 
-    private int paethPredictor(int a, int b, int c) {
+    private final static int paethPredictor(int a, int b, int c) {
 	int Pr;
 
 	// original bits from specification

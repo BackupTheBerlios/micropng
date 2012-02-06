@@ -2,9 +2,12 @@ package micropng.zlib.deflate;
 
 public class HuffmanTree {
     private class HuffmanNode {
-	private HuffmanNode left;
-	private HuffmanNode right;
-	private int value;
+	HuffmanNode() {
+	}
+
+	HuffmanNode left;
+	HuffmanNode right;
+	int value;
     }
 
     public class HuffmanTreeWalker {
@@ -30,7 +33,7 @@ public class HuffmanTree {
 
     private static final int MAX_BITS = 15;
 
-    private HuffmanNode root = new HuffmanNode();
+    final HuffmanNode root = new HuffmanNode();
 
     public HuffmanTree(int[] codeLengths) {
 	int[] bl_count = new int[MAX_BITS + 1];
@@ -57,7 +60,7 @@ public class HuffmanTree {
 	}
     }
 
-    private void addCode(int value, int code, int length) {
+    public void addCode(int value, int code, int length) {
 	HuffmanNode currentNode = root;
 	int mask = 0x01 << length;
 	for (int i = 0; i < length; i++) {

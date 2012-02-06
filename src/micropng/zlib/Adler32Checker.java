@@ -8,6 +8,9 @@ public class Adler32Checker extends StreamFilter {
 
     private class Adler32CheckerThread implements Runnable {
 
+	Adler32CheckerThread() {
+	}
+
 	@Override
 	public void run() {
 	    int next = in();
@@ -21,8 +24,8 @@ public class Adler32Checker extends StreamFilter {
 	}
     }
 
-    private ZlibDecoder zlibDecoder;
-    private Adler32 adler32 = new Adler32();
+    final ZlibDecoder zlibDecoder;
+    final Adler32 adler32 = new Adler32();
 
     public Adler32Checker(ZlibDecoder zlibDecoder) {
 	this.zlibDecoder = zlibDecoder;
