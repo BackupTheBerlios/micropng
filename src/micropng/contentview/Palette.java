@@ -5,7 +5,7 @@ import micropng.chunkview.chunk.Chunk;
 public class Palette {
 
     private int[][] lookUpTable;
-    
+
     public Palette(Chunk paletteChunk) {
 	byte[] chunkData = paletteChunk.getData().getArray();
 	int numberOfPaletteEntries = chunkData.length / 3;

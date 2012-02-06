@@ -17,7 +17,7 @@ public class YesNoSwitch implements ParameterValue<Boolean> {
 
     @Override
     public String toString() {
-	return value? "y" : "n";
+	return value ? "y" : "n";
     }
 
     @Override

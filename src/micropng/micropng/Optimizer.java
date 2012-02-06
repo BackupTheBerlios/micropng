@@ -22,8 +22,6 @@ public class Optimizer {
 		ordering.optimize(chunkOrganisationSequence);
 		res = chunkOrganisationSequence.toChunkSequence();
 	    }
-	    
-
 
 	    if (configuration.removeUselessSBIT()) {
 		OptimizerRemoveUselessSBIT sBITRemoval = new OptimizerRemoveUselessSBIT();

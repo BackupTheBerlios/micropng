@@ -15,7 +15,8 @@ public class FileWriter {
 	private static final long serialVersionUID = 1L;
     }
 
-    public void writeSequence(File outputFileObject, ChunkSequence chunkSequence) throws IOException {
+    public void writeSequence(File outputFileObject, ChunkSequence chunkSequence)
+	    throws IOException {
 	RandomAccessFile outputFile;
 
 	outputFile = new RandomAccessFile(outputFileObject, "rw");

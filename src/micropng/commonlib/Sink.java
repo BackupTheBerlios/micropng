@@ -14,14 +14,8 @@ public class Sink extends StreamFilter {
 	}
     }
 
-    private SinkThread dataDumperThread = new SinkThread();
-
-    public Sink() {
-	dataDumperThread = new SinkThread();
-    }
-
     @Override
     public void start() {
-	new Thread(dataDumperThread).start();
+	new Thread(new SinkThread()).start();
     }
 }

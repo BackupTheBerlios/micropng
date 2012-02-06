@@ -7,16 +7,15 @@ public class RAMData implements DataField {
     private class QueueFeeder implements Runnable {
 	private Queue out;
 	private static final int mask = (1 << 8) - 1;
-	
+
 	public QueueFeeder(Queue out) {
 	    this.out = out;
 	}
 
 	@Override
 	public void run() {
-	    
-	    for (int i = 0; i < data.length; i++) {
-		out.put(mask & data[i]);
+	    for (byte b : data) {
+		out.put(mask & b);
 	    }
 	}
     }

@@ -31,7 +31,7 @@ public class IntegerValue implements ParameterValue<Long> {
     public String toString() {
 	return Long.toString(value);
     }
-    
+
     @Override
     public Status trySetting(Long value) {
 	if (value < lowerBound) {

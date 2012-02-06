@@ -36,6 +36,5 @@ public abstract class StreamFilter {
     }
 
     public void start() {
-	
     }
 }

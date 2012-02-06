@@ -8,7 +8,7 @@ import micropng.userinterface.inputoptions.Parameter;
 import micropng.userinterface.inputoptions.ParameterGroup;
 
 public enum CoreGroup {
-    BASE, FILE_VIEW;
+    BASE;
 
     private static ParameterGroup base;
     private static Parameter inputFilename = new Parameter(new InputFilename());

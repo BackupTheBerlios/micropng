@@ -67,9 +67,10 @@ public class EncodingLayerDecoder extends StreamFilter {
     private CodecInfo codecInfo;
 
     public EncodingLayerDecoder(ChunkSequence chunkSequence) {
+	Chunk headerChunk;
 	this.chunkSequence = chunkSequence;
-	Chunk header = chunkSequence.getChunk(Type.IHDR);
-	codecInfo = new CodecInfo(header);
+	headerChunk = chunkSequence.getChunk(Type.IHDR);
+	codecInfo = new CodecInfo(headerChunk);
     }
 
     @Override

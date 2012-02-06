@@ -9,11 +9,7 @@ import micropng.chunkview.chunk.Type;
 
 public class ChunkSequence implements Collection<Chunk> {
 
-    private ArrayList<Chunk> chunkList;
-
-    public ChunkSequence() {
-	this.chunkList = new ArrayList<Chunk>();
-    }
+    private ArrayList<Chunk> chunkList = new ArrayList<Chunk>();
 
     public Chunk elementAt(int pos) {
 	return chunkList.get(pos);
@@ -110,7 +106,8 @@ public class ChunkSequence implements Collection<Chunk> {
      * ChunkSequence regardless of any other Chunks of the same type. If there
      * is no Chunk of the specified type, null is returned.
      * 
-     * @param type the known type of the Chunk
+     * @param type
+     *            the known type of the Chunk
      * @return the first Chunk of type {@code type} or null if there is none
      */
 
@@ -118,4 +115,3 @@ public class ChunkSequence implements Collection<Chunk> {
 	return getChunk(type.toInt());
     }
 }
- 

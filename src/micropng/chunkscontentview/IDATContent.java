@@ -24,14 +24,12 @@ public class IDATContent extends StreamFilter {
     }
 
     private ChunkSequence chunkSequence;
-    private QueueFeeder queuefeeder;
 
     public IDATContent(ChunkSequence chunkSequence) {
 	this.chunkSequence = chunkSequence;
-	queuefeeder = new QueueFeeder();
     }
 
     public void start() {
-	new Thread(queuefeeder).start();
+	new Thread(new QueueFeeder()).start();
     }
 }

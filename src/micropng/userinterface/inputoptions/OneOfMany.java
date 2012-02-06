@@ -10,7 +10,7 @@ public class OneOfMany implements ParameterValue<String> {
     private String value;
 
     public OneOfMany(String[] possibleValues) {
-	this.possibleValues = new ArrayList<String> ();
+	this.possibleValues = new ArrayList<String>(possibleValues.length);
 	Collections.addAll(this.possibleValues, possibleValues);
     }
 

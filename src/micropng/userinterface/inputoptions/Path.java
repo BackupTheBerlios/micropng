@@ -5,11 +5,7 @@ import java.io.File;
 import micropng.commonlib.Status;
 
 public class Path implements ParameterValue<File>, Cloneable {
-    private File value;
-
-    public Path() {
-	this.value = new File("");
-    }
+    private File value = new File("");
 
     @Override
     public ValueType getType() {
@@ -41,7 +37,7 @@ public class Path implements ParameterValue<File>, Cloneable {
 	    e.printStackTrace();
 	    System.exit(-1);
 	}
-	res.value = (value==null)? null: new File(value.getPath());
+	res.value = (value == null) ? null : new File(value.getPath());
 	return res;
     }
 }

@@ -8,12 +8,12 @@ public class Status {
     private String msg;
     private static final Status ok;
     private StatusType statusType;
-    
+
     static {
 	ok = new Status(StatusType.OK);
 	ok.msg = "OK";
     }
-    
+
     private Status(StatusType statusType) {
 	this.statusType = statusType;
     }

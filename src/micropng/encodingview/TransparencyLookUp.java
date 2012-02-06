@@ -23,10 +23,10 @@ public class TransparencyLookUp extends StreamFilter {
     }
 
     private static final int MASK = 0xff;
-    
+
     private void greyscaleLookUp(Chunk transparencyChunk) {
-	//byte[] chunkData = transparencyChunk.getData().getArray();
-	//int transparentValue = ((MASK & chunkData[0]) << 8) | chunkData[1];
+	// byte[] chunkData = transparencyChunk.getData().getArray();
+	// int transparentValue = ((MASK & chunkData[0]) << 8) | chunkData[1];
     }
 
     private void truecolorLookUp(Chunk transparencyChunk) {

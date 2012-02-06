@@ -5,27 +5,15 @@ import java.util.ArrayList;
 public class Queue {
 
     private static final int blockSize = 2048;
-    private int[] inBlock;
-    private int[] outBlock;
-    private boolean closed;
-    private boolean outWaitingForBufferSwitch;
+    private int[] inBlock = new int[blockSize];
+    private int[] outBlock = new int[blockSize];
     private int inPos;
-    private int outMax;
-    private int outPos;
+    private int outMax = blockSize;
+    private int outPos = outMax;
     private int remainingBitsInByte;
     private int currentByte;
-
-    public Queue() {
-	inBlock = new int[blockSize];
-	outBlock = new int[blockSize];
-	// closed = false;
-	outWaitingForBufferSwitch = true;
-	// inPos = 0;
-	outMax = blockSize;
-	outPos = outMax;
-	// remainingBitsInByte = 0;
-	// currentByte = <uninitialized>;
-    }
+    private boolean closed;
+    private boolean outWaitingForBufferSwitch = true;
 
     public ArrayList<Integer> getRemainingBitsOfCurrentByte() {
 	ArrayList<Integer> res = new ArrayList<Integer>(remainingBitsInByte);
@@ -92,13 +80,13 @@ public class Queue {
 		    e.printStackTrace();
 		}
 	    }
-	    outMax = inPos;
 	    outBlock = inBlock;
+	    outMax = inPos;
 	    outPos = 0;
-	    outWaitingForBufferSwitch = false;
-	    notify();
-
 	    closed = true;
+	    outWaitingForBufferSwitch = false;
+
+	    notify();
 	}
     }
 

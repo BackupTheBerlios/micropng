@@ -9,10 +9,15 @@ public class BigArrayOfInt {
     private int[][] data;
 
     public BigArrayOfInt(long size) {
+	int numberOfFullArrays;
+	int sizeOfLastArray;
+	int totalNumberOfArrays;
+
 	this.size = size;
-	int numberOfFullArrays = (int) (size >> numberOfLSBs);
-	int sizeOfLastArray = (int) (size & LSBMask);
-	int totalNumberOfArrays = (sizeOfLastArray == 0)? numberOfFullArrays : numberOfFullArrays + 1;
+
+	numberOfFullArrays = (int) (size >> numberOfLSBs);
+	sizeOfLastArray = (int) (size & LSBMask);
+	totalNumberOfArrays = (sizeOfLastArray == 0) ? numberOfFullArrays : numberOfFullArrays + 1;
 	data = new int[totalNumberOfArrays][];
 	for (int i = 0; i < numberOfFullArrays; i++) {
 	    data[i] = new int[maximumPrimitiveArraySize];
@@ -32,5 +37,5 @@ public class BigArrayOfInt {
 	int highAddress = (int) (pos >> numberOfLSBs);
 	int lowAddress = (int) (pos & LSBMask);
 	data[highAddress][lowAddress] = value;
-   }
+    }
 }

@@ -6,10 +6,9 @@ import micropng.commonlib.Queue;
 public enum CRCCalculator {
     ;
 
-    private final static int[] crcTable;
+    private final static int[] crcTable = new int[256];
 
     static {
-	crcTable = new int[256];
 	makeCrcTable();
     }
 

@@ -6,9 +6,8 @@ public class UserInterface implements ParameterDescription {
     private static final String longParameterName = "user-interface";
     private static final String shortHelp = "Benutzeroberfläche";
     private static final char shortParameterName = 'u';
-    private static final OneOfMany defaultValue;
+    private static final OneOfMany defaultValue = new OneOfMany(possibleValues);
     static {
-	defaultValue = new OneOfMany(possibleValues);
 	defaultValue.trySetting(possibleValues[0]);
     }
 

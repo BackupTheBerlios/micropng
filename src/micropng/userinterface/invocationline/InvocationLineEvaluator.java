@@ -53,20 +53,15 @@ public class InvocationLineEvaluator implements OutputHandler {
 
     private ParameterGroup coreGroup;
     private UserConfiguration userConfiguration;
-    private ParameterGroup invocationLineGroup;
-    private HashMap<String, Parameter> longNameLookUpTable;
-    private HashMap<Character, Parameter> shortNameLookUpTable;
-    private ParserTable parserTable;
-    private HashMap<Parameter, ArrayList<String>> parameterValuesLiterals;
+    private ParameterGroup invocationLineGroup = InvocationLineGroup.INVOCATION.getGroup();
+    private HashMap<String, Parameter> longNameLookUpTable = new HashMap<String, Parameter>();
+    private HashMap<Character, Parameter> shortNameLookUpTable = new HashMap<Character, Parameter>();
+    private ParserTable parserTable = new ParserTable();
+    private HashMap<Parameter, ArrayList<String>> parameterValuesLiterals = new HashMap<Parameter, ArrayList<String>>();
 
     public InvocationLineEvaluator(ParameterGroup coreGroup) {
 	this.coreGroup = coreGroup;
 	userConfiguration = new UserConfiguration(coreGroup);
-	invocationLineGroup = InvocationLineGroup.INVOCATION.getGroup();
-	longNameLookUpTable = new HashMap<String, Parameter>();
-	shortNameLookUpTable = new HashMap<Character, Parameter>();
-	parameterValuesLiterals = new HashMap<Parameter, ArrayList<String>>();
-	parserTable = new ParserTable();
 
 	for (Parameter parameter : userConfiguration) {
 	    parserTable.registerParameter(parameter);
