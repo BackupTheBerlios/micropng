@@ -7,9 +7,6 @@ public class ParameterGroup implements Iterable<Parameter> {
     private class ParameterIterator implements java.util.Iterator<Parameter> {
 	private Iterator<Parameter> iterator = getAllDependingParameters().iterator();
 
-	ParameterIterator() {
-	}
-
 	@Override
 	public boolean hasNext() {
 	    return iterator.hasNext();
@@ -26,9 +23,9 @@ public class ParameterGroup implements Iterable<Parameter> {
 	}
     }
 
-    private String name;
-    private ArrayList<Parameter> parameters;
-    private ArrayList<ParameterGroup> subGroups;
+    private final String name;
+    private final ArrayList<Parameter> parameters;
+    private final ArrayList<ParameterGroup> subGroups;
 
     public ParameterGroup(String name, ArrayList<Parameter> parameters,
 	    ArrayList<ParameterGroup> subGroups) {
@@ -49,8 +46,8 @@ public class ParameterGroup implements Iterable<Parameter> {
 	return subGroups;
     }
 
-    final ArrayList<Parameter> getAllDependingParameters() {
-	ArrayList<Parameter> res = new ArrayList<Parameter>();
+    private final ArrayList<Parameter> getAllDependingParameters() {
+	final ArrayList<Parameter> res = new ArrayList<Parameter>();
 	res.addAll(parameters);
 
 	for (ParameterGroup g : subGroups) {

@@ -9,12 +9,12 @@ public enum ColourType {
     GREYSCALE_WITH_ALPHA(4, 2),
     TRUECOLOR_WITH_ALPHA(6, 4);
 
-    private int intType;
-    private int numberOfChannels;
+    private final int intType;
+    private final int numberOfChannels;
     private static final HashMap<Integer, ColourType> lookUpTable;
 
     static {
-	ColourType[] values = ColourType.values();
+	final ColourType[] values = ColourType.values();
 	lookUpTable = new HashMap<Integer, ColourType>(values.length * 2);
 
 	for (ColourType type : values) {

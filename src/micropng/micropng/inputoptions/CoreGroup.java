@@ -14,36 +14,39 @@ import micropng.userinterface.inputoptions.SortChunks;
 public enum CoreGroup {
     BASE, FILE_VIEW;
 
-    private static ParameterGroup base;
-    private static ParameterGroup fileView;
-    private static Parameter condenseIDATChunks = new Parameter(new CondenseIDATChunks());
-    private static Parameter sortChunks = new Parameter(new SortChunks());
-    private static Parameter removeUselessSBIT = new Parameter(new RemoveUselessSBIT());
-    private static Parameter inputFilename = new Parameter(new InputFilename());
-    private static Parameter outputFilename = new Parameter(new OutputFilename());
-    //private static Parameter operationalMode = new Parameter(new OperationalMode());
-    //private static Parameter userInterface = new Parameter(new UserInterface());
-    //private static Parameter verbose = new Parameter(new Verbose());
+    private final static ParameterGroup base;
+    private final static ParameterGroup fileView;
+    private final static Parameter condenseIDATChunks = new Parameter(new CondenseIDATChunks());
+    private final static Parameter sortChunks = new Parameter(new SortChunks());
+    private final static Parameter removeUselessSBIT = new Parameter(new RemoveUselessSBIT());
+    private final static Parameter inputFilename = new Parameter(new InputFilename());
+    private final static Parameter outputFilename = new Parameter(new OutputFilename());
+    //private final static Parameter operationalMode = new Parameter(new OperationalMode());
+    //private final static Parameter userInterface = new Parameter(new UserInterface());
+    //private final static Parameter verbose = new Parameter(new Verbose());
 
     static {
 
-	String fileViewName = "Sicht auf die gesamte Datei";
-	ArrayList<Parameter> fileViewParameters = new ArrayList<Parameter>();
+	final String fileViewName = "Sicht auf die gesamte Datei";
+	final ArrayList<Parameter> fileViewParameters = new ArrayList<Parameter>();
+
 	fileViewParameters.add(condenseIDATChunks);
 	fileViewParameters.add(sortChunks);
 	fileViewParameters.add(removeUselessSBIT);
 	
-	ArrayList<ParameterGroup> fileViewSubgroups = new ArrayList<ParameterGroup>();
+	final ArrayList<ParameterGroup> fileViewSubgroups = new ArrayList<ParameterGroup>();
 	fileView = new ParameterGroup(fileViewName, fileViewParameters, fileViewSubgroups);
 
-	String baseGroupName = "allgemeine Steuerung des Programms";
-	ArrayList<Parameter> baseGroupParameters = new ArrayList<Parameter>();
+	final String baseGroupName = "allgemeine Steuerung des Programms";
+	final ArrayList<Parameter> baseGroupParameters = new ArrayList<Parameter>();
+	
 	baseGroupParameters.add(inputFilename);
 	baseGroupParameters.add(outputFilename);
 	//baseGroupParameters.add(operationalMode);
 	//baseGroupParameters.add(userInterface);
 	//baseGroupParameters.add(verbose);
-	ArrayList<ParameterGroup> baseGroupSubgroups = new ArrayList<ParameterGroup>();
+
+	final ArrayList<ParameterGroup> baseGroupSubgroups = new ArrayList<ParameterGroup>();
 	baseGroupSubgroups.add(fileView);
 	base = new ParameterGroup(baseGroupName, baseGroupParameters, baseGroupSubgroups);
     }

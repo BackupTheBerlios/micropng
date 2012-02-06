@@ -12,7 +12,7 @@ public class PaletteLookUp extends StreamFilter {
 
 	@Override
 	public void run() {
-	    Palette localPalette = palette;
+	    final Palette localPalette = palette;
 	    int next = in();
 	    while (next != -1) {
 		int[] nextEntry = localPalette.lookUp(next);
@@ -25,7 +25,7 @@ public class PaletteLookUp extends StreamFilter {
 	}
     }
 
-    private Palette palette;
+    private final Palette palette;
 
     public PaletteLookUp(ChunkSequence chunkSequence) {
 	Chunk paletteChunk = chunkSequence.getChunk(Type.PLTE);

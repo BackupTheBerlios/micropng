@@ -6,9 +6,9 @@ import micropng.chunkview.ChunkSequence;
 import micropng.commonlib.FourByteConverter;
 
 public class OrganisationUnit implements Comparable<OrganisationUnit> {
-    private ChunkSequence chunks;
-    private Type previousType;
-    private int type;
+    private final ChunkSequence chunks;
+    private final Type previousType;
+    private final int type;
 
     /**
      * 
@@ -19,7 +19,7 @@ public class OrganisationUnit implements Comparable<OrganisationUnit> {
 
     public OrganisationUnit(ChunkSequence chunks, Type previousType) {
 	this.chunks = chunks;
-	this.type = chunks.elementAt(0).getType();
+	type = chunks.elementAt(0).getType();
 
 	if (Type.isKnown(type)) {
 	    this.previousType = Orientation.valueOf(type).getOrientation();

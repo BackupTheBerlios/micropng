@@ -23,7 +23,7 @@ public class Status {
     }
 
     public static Status error(String msg) {
-	Status res = new Status(StatusType.ERROR);
+	final Status res = new Status(StatusType.ERROR);
 	res.msg = msg;
 	return res;
     }

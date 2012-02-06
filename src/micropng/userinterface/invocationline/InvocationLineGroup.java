@@ -8,13 +8,14 @@ import micropng.userinterface.inputoptions.ParameterGroup;
 public enum InvocationLineGroup {
     INVOCATION;
 
-    private static ParameterGroup base;
-    private static Parameter shortHelp = new Parameter(new InvocationShortHelp());
-    private static Parameter longHelp = new Parameter(new InvocationLongHelp());
+    private final static ParameterGroup base;
+    private final static Parameter shortHelp = new Parameter(new InvocationShortHelp());
+    private final static Parameter longHelp = new Parameter(new InvocationLongHelp());
 
     static {
-	String baseGroupName = "programmzeilenspezifische Parameter";
-	ArrayList<Parameter> baseGroupParameters = new ArrayList<Parameter>();
+	final String baseGroupName = "programmzeilenspezifische Parameter";
+	final ArrayList<Parameter> baseGroupParameters = new ArrayList<Parameter>();
+
 	baseGroupParameters.add(shortHelp);
 	baseGroupParameters.add(longHelp);
 	ArrayList<ParameterGroup> baseGroupSubgroups = new ArrayList<ParameterGroup>();

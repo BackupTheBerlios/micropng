@@ -1,8 +1,8 @@
 package micropng.micropng;
 
 public class Dimensions {
-    private long width;
-    private long height;
+    private final long width;
+    private final long height;
 
     public Dimensions(long width, long height) {
 	this.width = width;

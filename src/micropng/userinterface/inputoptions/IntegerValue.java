@@ -4,8 +4,8 @@ import micropng.commonlib.Status;
 
 public class IntegerValue implements ParameterValue<Long> {
     private long value;
-    private long lowerBound;
-    private long upperBound;
+    private final long lowerBound;
+    private final long upperBound;
 
     public IntegerValue() {
 	this.lowerBound = Long.MIN_VALUE;

@@ -9,7 +9,7 @@ public class DataGroup implements DataField {
 
     private class QueueFeeder implements Runnable {
 
-	private Queue out;
+	private final Queue out;
 
 	public QueueFeeder(Queue out) {
 	    this.out = out;
@@ -30,7 +30,7 @@ public class DataGroup implements DataField {
 	}
     }
 
-    final ArrayList<DataField> dataElements;
+    private final ArrayList<DataField> dataElements;
 
     public DataGroup(ArrayList<DataField> dataElements) {
 	this.dataElements = dataElements;

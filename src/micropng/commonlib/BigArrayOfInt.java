@@ -6,12 +6,12 @@ public class BigArrayOfInt {
     private static final int maximumPrimitiveArraySize = 1 << numberOfLSBs;
     private static final int LSBMask = maximumPrimitiveArraySize - 1;
     public final long size;
-    private int[][] data;
+    private final int[][] data;
 
     public BigArrayOfInt(long size) {
-	int numberOfFullArrays;
-	int sizeOfLastArray;
-	int totalNumberOfArrays;
+	final int numberOfFullArrays;
+	final int sizeOfLastArray;
+	final int totalNumberOfArrays;
 
 	this.size = size;
 
@@ -28,14 +28,14 @@ public class BigArrayOfInt {
     }
 
     public int elementAt(long pos) {
-	int highAddress = (int) (pos >> numberOfLSBs);
-	int lowAddress = (int) (pos & LSBMask);
+	final int highAddress = (int) (pos >> numberOfLSBs);
+	final int lowAddress = (int) (pos & LSBMask);
 	return data[highAddress][lowAddress];
     }
 
     public void set(long pos, int value) {
-	int highAddress = (int) (pos >> numberOfLSBs);
-	int lowAddress = (int) (pos & LSBMask);
+	final int highAddress = (int) (pos >> numberOfLSBs);
+	final int lowAddress = (int) (pos & LSBMask);
 	data[highAddress][lowAddress] = value;
     }
 }

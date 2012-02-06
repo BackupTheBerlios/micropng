@@ -23,8 +23,8 @@ public class FixedHuffmanBlockHeader extends DataBlockHeader {
 	    5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
 	    5 });
 
-    private ArrayList<Integer> originalHeaderBits = new ArrayList<Integer>(0);
-    private HuffmanStreamDecoder decoder = new HuffmanStreamDecoder(
+    private final ArrayList<Integer> originalHeaderBits = new ArrayList<Integer>(0);
+    private final HuffmanStreamDecoder decoder = new HuffmanStreamDecoder(
 	    defaultLiteralsAndLengthsCodesTree, defaultDistancesCodesTree);
 
     @Override

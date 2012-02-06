@@ -6,7 +6,7 @@ import java.util.Collections;
 import micropng.commonlib.Status;
 
 public class OneOfMany implements ParameterValue<String> {
-    private ArrayList<String> possibleValues;
+    private final ArrayList<String> possibleValues;
     private String value;
 
     public OneOfMany(String[] possibleValues) {

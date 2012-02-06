@@ -9,7 +9,7 @@ import micropng.chunkview.chunk.Type;
 
 public class ChunkSequence implements Collection<Chunk> {
 
-    private ArrayList<Chunk> chunkList = new ArrayList<Chunk>();
+    private final ArrayList<Chunk> chunkList = new ArrayList<Chunk>();
 
     public Chunk elementAt(int pos) {
 	return chunkList.get(pos);

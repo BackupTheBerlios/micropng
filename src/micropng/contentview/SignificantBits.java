@@ -4,7 +4,7 @@ import micropng.chunkview.chunk.Chunk;
 
 public class SignificantBits {
 
-    private byte[] significanceTable;
+    private final byte[] significanceTable;
 
     public SignificantBits(Chunk sBITChunk) {
 	significanceTable = sBITChunk.getData().getArray();

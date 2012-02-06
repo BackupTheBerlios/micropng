@@ -1,10 +1,10 @@
 package micropng.chunkview.chunk;
 
-public class Chunk {
+public final class Chunk {
 
-    private int type;
-    private DataField data;
-    private int crc;
+    private final int type;
+    private final DataField data;
+    private final int crc;
 
     public Chunk(int type, DataField data, int crc) {
 	this.type = type;
@@ -12,23 +12,23 @@ public class Chunk {
 	this.crc = crc;
     }
 
-    public int getDataSize() {
+    public final int getDataSize() {
 	return data.getSize();
     }
 
-    public int getType() {
+    public final int getType() {
 	return type;
     }
 
-    public DataField getData() {
+    public final DataField getData() {
 	return data;
     }
 
-    public int getCrc() {
+    public final int getCrc() {
 	return crc;
     }
 
-    public int getByteAt(int pos) {
+    public final int getByteAt(int pos) {
 	return data.getByteAt(pos);
     }
 }

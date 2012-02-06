@@ -20,7 +20,7 @@ public class RAMData implements DataField {
 	}
     }
 
-    private byte[] data;
+    private final byte[] data;
 
     public RAMData(byte[] data) {
 	this.data = data;

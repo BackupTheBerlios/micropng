@@ -6,7 +6,7 @@ import micropng.commonlib.Status;
 import micropng.userinterface.inputoptions.IntegerValue;
 
 public class IntegerValueParser implements ValueParser {
-    private IntegerValue value;
+    private final IntegerValue value;
 
     public IntegerValueParser(IntegerValue value) {
 	this.value = value;
@@ -16,7 +16,7 @@ public class IntegerValueParser implements ValueParser {
     public Status parseValue(ArrayList<String> input) {
 	Long resultingValue = null;
 	for (String currentString : input) {
-	    Long newResultingValue = Long.valueOf(currentString);
+	    final Long newResultingValue = Long.valueOf(currentString);
 
 	    if ((resultingValue != null) && (!resultingValue.equals(newResultingValue))) {
 		return Status.error("Wert " + currentString

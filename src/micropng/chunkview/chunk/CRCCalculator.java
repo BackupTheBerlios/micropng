@@ -30,12 +30,13 @@ public enum CRCCalculator {
 	int crc = 0xffffffff;
 	int[] typeArray = FourByteConverter.intArrayValue(type);
 	Queue input = data.getStream();
+	int currentValue;
 
 	for (int i = 0; i < 4; i++) {
 	    crc = crcTable[(crc ^ typeArray[i]) & 0x000000ff] ^ (crc >>> 8);
 	}
 
-	int currentValue = input.take();
+	currentValue = input.take();
 	while (currentValue != -1) {
 	    crc = crcTable[(crc ^ currentValue) & 0x000000ff] ^ (crc >>> 8);
 	    currentValue = input.take();

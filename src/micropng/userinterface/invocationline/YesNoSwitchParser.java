@@ -7,9 +7,9 @@ import micropng.commonlib.Status;
 import micropng.userinterface.inputoptions.YesNoSwitch;
 
 public class YesNoSwitchParser implements ValueParser {
-    private static String[] trueLiterals = new String[] { "yes", "y", "1", "true" };
-    private static String[] falseLiterals = new String[] { "no", "n", "0", "false" };
-    private static HashMap<String, Boolean> literalsInterpretations;
+    private final static String[] trueLiterals = new String[] { "yes", "y", "1", "true" };
+    private final static String[] falseLiterals = new String[] { "no", "n", "0", "false" };
+    private final static HashMap<String, Boolean> literalsInterpretations;
 
     static {
 	literalsInterpretations = new HashMap<String, Boolean>();
@@ -21,7 +21,7 @@ public class YesNoSwitchParser implements ValueParser {
 	}
     }
 
-    private YesNoSwitch value;
+    private final YesNoSwitch value;
 
     public YesNoSwitchParser(YesNoSwitch value) {
 	this.value = value;
@@ -32,11 +32,11 @@ public class YesNoSwitchParser implements ValueParser {
 	Boolean resultingValue = null;
 
 	for (String currentString : input) {
-	    String lowerCaseString = currentString.toLowerCase();
+	    final String lowerCaseString = currentString.toLowerCase();
 	    if (!literalsInterpretations.containsKey(lowerCaseString)) {
 		return Status.error("Wert " + currentString + " nicht verstanden");
 	    } else {
-		Boolean newResultingValue = literalsInterpretations.get(lowerCaseString);
+		final Boolean newResultingValue = literalsInterpretations.get(lowerCaseString);
 		if ((resultingValue != null) && (!resultingValue.equals(newResultingValue))) {
 		    return Status.error("Wert " + currentString
 			    + " widerspricht vorangegangenem Wert");

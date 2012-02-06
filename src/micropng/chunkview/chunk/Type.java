@@ -24,7 +24,7 @@ public enum Type {
     tRNS,
     zTXt;
 
-    private int intType;
+    private final int intType;
     private static final HashSet<Integer> lookUpTable;
 
     static {

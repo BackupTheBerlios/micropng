@@ -8,9 +8,6 @@ public class Adler32Checker extends StreamFilter {
 
     private class Adler32CheckerThread implements Runnable {
 
-	Adler32CheckerThread() {
-	}
-
 	@Override
 	public void run() {
 	    Adler32 localAdler32 = adler32;

@@ -16,7 +16,7 @@ public class Queue {
     private boolean outWaitingForBufferSwitch = true;
 
     public ArrayList<Integer> getRemainingBitsOfCurrentByte() {
-	ArrayList<Integer> res = new ArrayList<Integer>(remainingBitsInByte);
+	final ArrayList<Integer> res = new ArrayList<Integer>(remainingBitsInByte);
 
 	while (remainingBitsInByte > 0) {
 	    remainingBitsInByte--;
@@ -38,7 +38,7 @@ public class Queue {
      */
     public final void put(int value) {
 	if (inPos == blockSize) {
-	    int[] tmp = inBlock;
+	    final int[] tmp = inBlock;
 	    inBlock = outBlock;
 	    inPos = 0;
 
@@ -128,7 +128,7 @@ public class Queue {
      *         is left in the Queue and the input is closed.
      */
     public int takeBit() {
-	int res;
+	final int res;
 	if (remainingBitsInByte == 0) {
 	    currentByte = take();
 	    if (currentByte == -1) {

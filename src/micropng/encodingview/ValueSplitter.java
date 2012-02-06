@@ -52,8 +52,8 @@ public class ValueSplitter extends StreamFilter {
 	}
     }
 
-    private CodecInfo codecInfo;
-    private Dimensions[] dimensions;
+    private final CodecInfo codecInfo;
+    private final Dimensions[] dimensions;
 
     public ValueSplitter(CodecInfo codecInfo, Interlace interlacer) {
 	this.codecInfo = codecInfo;

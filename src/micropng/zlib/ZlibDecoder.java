@@ -6,9 +6,6 @@ import micropng.zlib.deflate.DeflateStreamDecoder;
 public class ZlibDecoder extends StreamFilter {
     private class ZlibDecoderThread implements Runnable {
 
-	ZlibDecoderThread() {
-	}
-
 	@Override
 	public void run() {
 	    int CMF;

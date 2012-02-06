@@ -3,7 +3,7 @@ package micropng.encodingview;
 import micropng.micropng.Dimensions;
 
 public class NoneInterlace extends Interlace {
-    private Dimensions[] graphicsSizes;
+    private final Dimensions[] graphicsSizes;
 
     public NoneInterlace(Dimensions size) {
 	this.graphicsSizes = new Dimensions[] { size };

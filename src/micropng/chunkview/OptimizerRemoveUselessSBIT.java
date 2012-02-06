@@ -7,7 +7,7 @@ import micropng.micropng.CodecInfo;
 
 public class OptimizerRemoveUselessSBIT {
     public void optimize(ChunkSequence chunkSequence) {
-	Chunk sBITChunk = chunkSequence.getChunk(Type.sBIT);
+	final Chunk sBITChunk = chunkSequence.getChunk(Type.sBIT);
 	if (sBITChunk != null) {
 	    SignificantBits significantBits = new SignificantBits(sBITChunk);
 	    CodecInfo codecInfo = new CodecInfo(chunkSequence.getChunk(Type.IHDR));

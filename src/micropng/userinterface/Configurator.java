@@ -33,17 +33,17 @@ public class Configurator {
     }
 
     public InternalConfiguration makeActualConfig(UserConfiguration userConf) throws IOException {
-	InternalConfiguration res = new InternalConfiguration();
-	Parameter inputFilePath = userConf.getByLongName("input-file");
-	Parameter outputFilePath = userConf.getByLongName("output-file");
-	Parameter condenseIDAT = userConf.getByLongName("condense-idat");
-	Parameter sortChunks = userConf.getByLongName("sort-chunks");
-	Parameter removeUselessSBIT = userConf.getByLongName("no-useless-sbit");
-	File inputFile = inputFilePath.<File> take();
-	File outputFile = outputFilePath.<File> take();
-	FileReader reader = new FileReader();
-	ChunkSequence chunkSequence;
-	FullIDATDecoder decoder;
+	final InternalConfiguration res = new InternalConfiguration();
+	final Parameter inputFilePath = userConf.getByLongName("input-file");
+	final Parameter outputFilePath = userConf.getByLongName("output-file");
+	final Parameter condenseIDAT = userConf.getByLongName("condense-idat");
+	final Parameter sortChunks = userConf.getByLongName("sort-chunks");
+	final Parameter removeUselessSBIT = userConf.getByLongName("no-useless-sbit");
+	final File inputFile = inputFilePath.<File> take();
+	final File outputFile = outputFilePath.<File> take();
+	final FileReader reader = new FileReader();
+	final ChunkSequence chunkSequence;
+	final FullIDATDecoder decoder;
 	//ContentAnalyzer contentAnalyzer = new ContentAnalyzer();
 
 	if (!inputFile.isFile()) {

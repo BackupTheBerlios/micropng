@@ -1,7 +1,7 @@
 package micropng.commonlib;
 
 public class RingBuffer extends StreamFilter {
-    private int[] outBuffer;
+    private final int[] outBuffer;
     private int outBufferPointer;
 
     public RingBuffer(int capacity) {
@@ -14,7 +14,7 @@ public class RingBuffer extends StreamFilter {
 	int startPos = outBufferPointer - distance;
 	int lastPos;
 	int currentPos;
-	int bufferLimit = outBuffer.length;
+	final int bufferLimit = outBuffer.length;
 
 	if (startPos < 0) {
 	    startPos += bufferLimit;

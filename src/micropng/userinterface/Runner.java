@@ -12,8 +12,8 @@ public class Runner {
 
     public Status runActualProgram(UserConfiguration inputConfiguration) {
 	Status res;
-	Configurator configurator = new Configurator();
-	InternalConfiguration internalConfiguration;
+	final Configurator configurator = new Configurator();
+	final InternalConfiguration internalConfiguration;
 
 	try {
 	    internalConfiguration = configurator.makeActualConfig(inputConfiguration);

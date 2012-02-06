@@ -4,13 +4,14 @@ import micropng.chunkview.chunk.Chunk;
 
 public class Palette {
 
-    private int[][] lookUpTable;
+    private final int[][] lookUpTable;
 
     public Palette(Chunk paletteChunk) {
-	byte[] chunkData = paletteChunk.getData().getArray();
-	int numberOfPaletteEntries = chunkData.length / 3;
-	lookUpTable = new int[numberOfPaletteEntries][3];
+	final byte[] chunkData = paletteChunk.getData().getArray();
+	final int numberOfPaletteEntries = chunkData.length / 3;
 	int pos = 0;
+	lookUpTable = new int[numberOfPaletteEntries][3];
+
 	for (int[] lookUpTableElement : lookUpTable) {
 	    lookUpTableElement[0] = 0xff & chunkData[pos++];
 	    lookUpTableElement[1] = 0xff & chunkData[pos++];

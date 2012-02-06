@@ -8,17 +8,17 @@ import micropng.userinterface.inputoptions.ParameterGroup;
 
 public class UserConfiguration implements Iterable<Parameter> {
  
-    private ParameterGroup myGroup;
-    private HashMap<String, Parameter> longParametersTable;
-    private HashMap<Character, Parameter> shortParametersTable;
+    private final ParameterGroup myGroup;
+    private final HashMap<String, Parameter> longParametersTable;
+    private final HashMap<Character, Parameter> shortParametersTable;
 
     public UserConfiguration(ParameterGroup parameterGroup) {
 	myGroup = parameterGroup;
 	longParametersTable = new HashMap<String, Parameter>();
 	shortParametersTable = new HashMap<Character, Parameter>();
 	for (Parameter parameter : myGroup) {
-	    String keyLongParameter = parameter.getLongParameterName();
-	    char keyShortParameter = parameter.getShortParameterName();
+	    final String keyLongParameter = parameter.getLongParameterName();
+	    final char keyShortParameter = parameter.getShortParameterName();
 
 	    if (longParametersTable.containsKey(keyLongParameter)) {
 		throw new DuplicateParameterAssignment();

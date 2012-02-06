@@ -11,19 +11,18 @@ import micropng.fileview.PNGProperties;
 
 public class FileWriter {
 
-    class CanNotCreateFileException extends IOException {
-	private static final long serialVersionUID = 1L;
+    @SuppressWarnings({ "serial" })
+    private class CanNotCreateFileException extends IOException {
+
     }
 
     public void writeSequence(File outputFileObject, ChunkSequence chunkSequence)
 	    throws IOException {
-	RandomAccessFile outputFile;
-
-	outputFile = new RandomAccessFile(outputFileObject, "rw");
+	final RandomAccessFile outputFile = new RandomAccessFile(outputFileObject, "rw");
 
 	outputFile.write(PNGProperties.getSignature());
 
-	for (Chunk c : chunkSequence) {
+	for (final Chunk c : chunkSequence) {
 	    outputFile.write(FourByteConverter.byteArrayValue(c.getDataSize()));
 	    outputFile.write(FourByteConverter.byteArrayValue(c.getType()));
 	    outputFile.write(c.getData().getArray());

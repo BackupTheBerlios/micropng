@@ -3,9 +3,6 @@ package micropng.commonlib;
 public class Sink extends StreamFilter {
     private class SinkThread implements Runnable {
 
-	SinkThread() {
-	}
-
 	@Override
 	public void run() {
 	    int in;

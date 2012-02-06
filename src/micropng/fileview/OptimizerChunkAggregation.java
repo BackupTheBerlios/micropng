@@ -18,50 +18,52 @@ public class OptimizerChunkAggregation {
     public void optimize(OrganisationSequence organisationSequence) {
 	for (OrganisationUnit u : organisationSequence) {
 	    if (Type.IDAT.toInt() == u.getType()) {
-		ChunkSequence inputSequence = u.getChunks();
+		final ChunkSequence inputSequence = u.getChunks();
 		if (inputSequence.size() > 1) {
-		    int newLength = 0;
-		    int newType = Type.IDAT.toInt();
-		    DataGroup newData;
-		    int newCrc;
+		    final ChunkSequence newChunkSequence = new ChunkSequence();
+		    final int newType = Type.IDAT.toInt();
+		    final int maxSize = PNGProperties.getMaxSize();
 
-		    ArrayList<DataField> dataList = new ArrayList<DataField>();
-		    ChunkSequence newChunkSequence = new ChunkSequence();
+		    DataGroup nextNewDataGroup;
+		    int nextNewDataGroupLength = 0;
+		    int nextNewChunkCrc;
+		    ArrayList<DataField> nextDataList = new ArrayList<DataField>();
 
-		    for (Chunk nextChunk : inputSequence) {
-			DataField nextData = nextChunk.getData();
+		    for (final Chunk nextChunk : inputSequence) {
+			final DataField nextInputData = nextChunk.getData();
 
-			if (nextData.getSize() == 0) {
+			if (nextInputData.getSize() == 0) {
 			    continue;
 			}
 
-			if ((nextData.getSize() == PNGProperties.getMaxSize()) && (newLength == 0)) {
-			    newChunkSequence.add(nextChunk);
-			    continue;
-			}
-
-			if (nextData.getSize() <= PNGProperties.getMaxSize() - newLength) {
-			    dataList.add(nextData);
+			if (nextInputData.getSize() <= maxSize - nextNewDataGroupLength) {
+			    nextDataList.add(nextInputData);
+			    nextNewDataGroupLength += nextInputData.getSize();
 			} else {
-			    int firstPartLength = PNGProperties.getMaxSize() - newLength;
-			    DataField firstPart = new RAMData(nextData.getArray(0, firstPartLength));
-			    DataField secondPart = new RAMData(nextData.getArray(0, nextData.getSize() - firstPartLength));
+			    final int firstPartLength = maxSize - nextNewDataGroupLength;
+			    final DataField firstPart = new RAMData(nextInputData.getArray(0,
+				    firstPartLength));
+			    final DataField secondPart = new RAMData(nextInputData.getArray(0,
+				    nextInputData.getSize() - firstPartLength));
 
-			    dataList.add(firstPart);
-			    newData = new DataGroup(dataList);
-			    newCrc = CRCCalculator.calculate(newType, newData);
-			    newChunkSequence.add(new Chunk(newType, newData, newCrc));
+			    nextDataList.add(firstPart);
+			    nextNewDataGroup = new DataGroup(nextDataList);
+			    nextNewChunkCrc = CRCCalculator.calculate(newType, nextNewDataGroup);
+			    newChunkSequence.add(new Chunk(newType, nextNewDataGroup,
+				    nextNewChunkCrc));
 
-			    dataList = new ArrayList<DataField>();
-			    dataList.add(secondPart);
+			    nextDataList = new ArrayList<DataField>();
+			    nextDataList.add(secondPart);
+			    nextNewDataGroupLength = secondPart.getSize();
 			}
 		    }
 
-		    newData = new DataGroup(dataList);
-		    newCrc = CRCCalculator.calculate(newType, newData);
-		    newChunkSequence.add(new Chunk(newType, newData, newCrc));
+		    nextNewDataGroup = new DataGroup(nextDataList);
+		    nextNewChunkCrc = CRCCalculator.calculate(newType, nextNewDataGroup);
+		    newChunkSequence.add(new Chunk(newType, nextNewDataGroup, nextNewChunkCrc));
 
-		    organisationSequence.set(organisationSequence.indexOf(u), new OrganisationUnit(newChunkSequence, u.getPreviousType()));
+		    organisationSequence.set(organisationSequence.indexOf(u), new OrganisationUnit(
+			    newChunkSequence, u.getPreviousType()));
 		}
 	    }
 	}

@@ -9,7 +9,7 @@ import micropng.zlib.deflate.HuffmanTree.HuffmanTreeWalker;
 
 public class DynamicHuffmanBlockHeader extends DataBlockHeader {
 
-    private Queue input;
+    private Queue input; // TODO: make this final
     private ArrayList<Integer> originalHeaderBits;
 
     // private int HLIT;
@@ -20,7 +20,7 @@ public class DynamicHuffmanBlockHeader extends DataBlockHeader {
     // private HuffmanStreamDecoder decoder;
 
     private int readAndStore(int numberOfBits) {
-	int res = input.takeBits(numberOfBits);
+	final int res = input.takeBits(numberOfBits);
 	BitArrayListConverter.append(res, originalHeaderBits, numberOfBits);
 	return res;
     }

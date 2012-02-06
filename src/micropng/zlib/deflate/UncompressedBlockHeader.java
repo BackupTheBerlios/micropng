@@ -15,16 +15,16 @@ public class UncompressedBlockHeader extends DataBlockHeader {
     private int sizeOfHeaderPadding;
 
     private int readAndStore(int numberOfBits) {
-	int res = input.takeBits(numberOfBits);
+	final int res = input.takeBits(numberOfBits);
 	BitArrayListConverter.append(res, originalHeaderBits, numberOfBits);
 	return res;
     }
 
     @Override
     public void decode(RingBuffer outputBuffer) {
-	int LEN;
+	final int LEN;
 	@SuppressWarnings("unused")
-	int NLEN;
+	final int NLEN;
 	input = getInputQueue();
 	originalHeaderBits = input.getRemainingBitsOfCurrentByte();
 	sizeOfHeaderPadding = originalHeaderBits.size();

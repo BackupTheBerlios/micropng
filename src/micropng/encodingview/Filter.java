@@ -59,8 +59,8 @@ public class Filter extends StreamFilter {
     private final static int BYTE_MASK = 0xff;
     private final CodecInfo codecInfo;
     private final BigArrayOfInt[] lastScanline;
-    private long scanlineSize;
     private final Dimensions[] dimensions;
+    private long scanlineSize;
 
     public Filter(CodecInfo codecInfo, Interlace interlacer) {
 	this.codecInfo = codecInfo;

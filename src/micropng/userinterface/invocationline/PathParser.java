@@ -7,7 +7,7 @@ import micropng.commonlib.Status;
 import micropng.userinterface.inputoptions.Path;
 
 public class PathParser implements ValueParser {
-    private Path value;
+    private final Path value;
 
     public PathParser(Path value) {
 	this.value = value;
@@ -17,8 +17,7 @@ public class PathParser implements ValueParser {
     public Status parseValue(ArrayList<String> input) {
 	File resultingValue = null;
 	for (String currentString : input) {
-	    File newResultingValue = new File(currentString);
-	    newResultingValue = newResultingValue.getAbsoluteFile();
+	    final File newResultingValue = new File(currentString).getAbsoluteFile();
 
 	    if ((resultingValue != null) && (!resultingValue.equals(newResultingValue))) {
 		return Status.error("Wert " + currentString

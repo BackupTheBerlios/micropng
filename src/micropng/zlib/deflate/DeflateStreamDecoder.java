@@ -6,9 +6,9 @@ import micropng.commonlib.StreamFilter;
 
 public class DeflateStreamDecoder extends StreamFilter {
     private class DeflateBlockHeader {
-	private Queue input;
-	private int BFINAL;
-	private int BTYPE;
+	private final Queue input;
+	private final int BFINAL;
+	private final int BTYPE;
 
 	public DeflateBlockHeader() {
 	    input = getInputQueue();
@@ -35,7 +35,7 @@ public class DeflateStreamDecoder extends StreamFilter {
     }
 
     private final static int MAXIMUM_DISTANCE = 32768;
-    private RingBuffer outputBuffer = new RingBuffer(MAXIMUM_DISTANCE);
+    private final RingBuffer outputBuffer = new RingBuffer(MAXIMUM_DISTANCE);
 
     public void decode() {
 	DeflateBlockHeader currentDeflateBlockHeader;
