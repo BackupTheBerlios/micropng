@@ -12,9 +12,10 @@ public class PaletteLookUp extends StreamFilter {
 
 	@Override
 	public void run() {
+	    Palette localPalette = palette;
 	    int next = in();
 	    while (next != -1) {
-		int[] nextEntry = palette.lookUp(next);
+		int[] nextEntry = localPalette.lookUp(next);
 		out(nextEntry[0]);
 		out(nextEntry[1]);
 		out(nextEntry[2]);

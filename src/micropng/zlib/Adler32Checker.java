@@ -13,9 +13,10 @@ public class Adler32Checker extends StreamFilter {
 
 	@Override
 	public void run() {
+	    Adler32 localAdler32 = adler32;
 	    int next = in();
 	    while (next != -1) {
-		adler32.update(next);
+		localAdler32.update(next);
 		out(next);
 		next = in();
 	    }
@@ -24,8 +25,8 @@ public class Adler32Checker extends StreamFilter {
 	}
     }
 
-    final ZlibDecoder zlibDecoder;
-    final Adler32 adler32 = new Adler32();
+    private final ZlibDecoder zlibDecoder;
+    private Adler32 adler32 = new Adler32();
 
     public Adler32Checker(ZlibDecoder zlibDecoder) {
 	this.zlibDecoder = zlibDecoder;

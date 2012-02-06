@@ -24,14 +24,15 @@ public class FileData implements DataField {
 		    int bytesRead = 0;
 		    byte[] buffer = new byte[bufferSize];
 		    int maximumLengthToRead = bufferSize;
+		    int localSize = size;
 
 		    fileChannel.position(start);
 
-		    while (bytesRead < size) {
+		    while (bytesRead < localSize) {
 			int lastReadCount;
 
-			if (size - bytesRead < bufferSize) {
-			    maximumLengthToRead = size - bytesRead;
+			if (localSize - bytesRead < bufferSize) {
+			    maximumLengthToRead = localSize - bytesRead;
 			}
 
 			lastReadCount = fileInputStream.read(buffer, 0, maximumLengthToRead);
@@ -48,10 +49,10 @@ public class FileData implements DataField {
 	}
     }
 
-    final FileInputStream fileInputStream;
-    final FileChannel fileChannel;
-    final long start;
-    final int size;
+    private final FileInputStream fileInputStream;
+    private final FileChannel fileChannel;
+    private final long start;
+    private final int size;
 
     public FileData(File file, long start, int size) throws FileNotFoundException {
 	this.fileInputStream = new FileInputStream(file);
