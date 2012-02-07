@@ -12,7 +12,7 @@ import micropng.fileview.PNGProperties;
 
 public class FileReader {
 
-    private Chunk readChunk(RandomAccessFile input, File inputFile) throws IOException {
+    private static Chunk readChunk(RandomAccessFile input, File inputFile) throws IOException {
 	final int length = input.readInt();
 	final int type = input.readInt();
 	final FileData data = new FileData(inputFile, input.getFilePointer(), length);

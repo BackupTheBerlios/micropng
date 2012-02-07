@@ -21,11 +21,11 @@ public class FileData implements DataField {
 	public void run() {
 	    try {
 		synchronized (this) {
-		    int bytesRead = 0;
-		    byte[] buffer = new byte[bufferSize];
+		    final byte[] buffer = new byte[bufferSize];
+		    final int localSize = size;
 		    int maximumLengthToRead = bufferSize;
-		    int localSize = size;
-
+		    int bytesRead = 0;
+		    
 		    fileChannel.position(start);
 
 		    while (bytesRead < localSize) {
