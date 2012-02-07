@@ -61,6 +61,7 @@ public class ZlibDecoder extends StreamFilter {
 	}
     }
 
+    @Override
     public void start() {
 	shareCurrentInputChannel(deflateDecoder);
 	deflateDecoder.connect(adler32Checker);

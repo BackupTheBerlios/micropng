@@ -93,9 +93,8 @@ public class OrganisationUnit implements Comparable<OrganisationUnit> {
 	if (Type.isKnown(type)) {
 	    return ComparatorCorrelations.valueOf(FourByteConverter.stringValue(type))
 		    .getComparator().compare(this, c);
-	} else {
-	    return SameTypeComparator.ALPHABETICAL_ORDERING.compare(this, c);
 	}
+	return SameTypeComparator.ALPHABETICAL_ORDERING.compare(this, c);
     }
 
     @Override

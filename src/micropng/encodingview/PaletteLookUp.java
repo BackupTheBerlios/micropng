@@ -32,6 +32,7 @@ public class PaletteLookUp extends StreamFilter {
 	palette = new Palette(paletteChunk);
     }
 
+    @Override
     public void start() {
 	new Thread(new PaletteLookUpThread()).start();
     }

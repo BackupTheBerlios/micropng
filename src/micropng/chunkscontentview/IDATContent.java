@@ -29,6 +29,7 @@ public class IDATContent extends StreamFilter {
 	this.chunkSequence = chunkSequence;
     }
 
+    @Override
     public void start() {
 	new Thread(new QueueFeeder()).start();
     }

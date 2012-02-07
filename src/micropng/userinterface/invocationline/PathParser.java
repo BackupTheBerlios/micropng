@@ -19,11 +19,10 @@ public class PathParser implements ValueParser {
 	for (String currentString : input) {
 	    final File newResultingValue = new File(currentString).getAbsoluteFile();
 
-	    if ((resultingValue != null) && (!resultingValue.equals(newResultingValue))) {
-		return Status.error("Wert " + currentString
-			+ " kann nicht mit vorangegangenem Wert vereinigt werden");
-	    } else {
+	    if (resultingValue == null) {
 		resultingValue = newResultingValue;
+	    } else if (!resultingValue.equals(newResultingValue)) {
+		return Status.error("Wert " + currentString + " widerspricht vorangegangenem Wert");
 	    }
 	}
 

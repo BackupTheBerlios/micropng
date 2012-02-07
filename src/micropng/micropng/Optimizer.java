@@ -1,7 +1,5 @@
 package micropng.micropng;
 
-import java.io.IOException;
-
 import micropng.chunkview.ChunkSequence;
 import micropng.chunkview.OptimizerRemoveUselessSBIT;
 import micropng.chunkview.chunk.OrganisationSequence;
@@ -11,7 +9,7 @@ import micropng.userinterface.InternalConfiguration;
 
 public class Optimizer {
 
-    public ChunkSequence optimize(InternalConfiguration configuration) throws IOException {
+    public ChunkSequence optimize(InternalConfiguration configuration) {
 	ChunkSequence res = configuration.getChunkSequence();
 
 	if (!configuration.unknownMandatoryChunk()) {

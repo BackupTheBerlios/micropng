@@ -21,9 +21,8 @@ public class IntegerValueParser implements ValueParser {
 	    if ((resultingValue != null) && (!resultingValue.equals(newResultingValue))) {
 		return Status.error("Wert " + currentString
 			+ " kann nicht mit vorangegangenem Wert vereinigt werden");
-	    } else {
-		resultingValue = newResultingValue;
 	    }
+	    resultingValue = newResultingValue;
 	}
 
 	return value.trySetting(resultingValue);

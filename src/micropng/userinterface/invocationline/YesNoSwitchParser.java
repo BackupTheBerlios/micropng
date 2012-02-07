@@ -33,16 +33,18 @@ public class YesNoSwitchParser implements ValueParser {
 
 	for (String currentString : input) {
 	    final String lowerCaseString = currentString.toLowerCase();
+	    final Boolean newResultingValue;
+
 	    if (!literalsInterpretations.containsKey(lowerCaseString)) {
 		return Status.error("Wert " + currentString + " nicht verstanden");
-	    } else {
-		final Boolean newResultingValue = literalsInterpretations.get(lowerCaseString);
-		if ((resultingValue != null) && (!resultingValue.equals(newResultingValue))) {
-		    return Status.error("Wert " + currentString
-			    + " widerspricht vorangegangenem Wert");
-		} else {
-		    resultingValue = newResultingValue;
-		}
+	    }
+
+	    newResultingValue = literalsInterpretations.get(lowerCaseString);
+
+	    if (resultingValue == null) {
+		resultingValue = newResultingValue;
+	    } else if (!resultingValue.equals(newResultingValue)) {
+		return Status.error("Wert " + currentString + " widerspricht vorangegangenem Wert");
 	    }
 	}
 

@@ -69,6 +69,7 @@ public class Filter extends StreamFilter {
 	lastScanline = new BigArrayOfInt[codecInfo.numberOfChannels() * bytesPerSample];
     }
 
+    @Override
     public void start() {
 	new Thread(new FilterThread()).start();
     }

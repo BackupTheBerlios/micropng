@@ -29,6 +29,7 @@ public class Adler32Checker extends StreamFilter {
 	this.zlibDecoder = zlibDecoder;
     }
 
+    @Override
     public void start() {
 	new Thread(new Adler32CheckerThread()).start();
     }

@@ -63,6 +63,7 @@ public class TransparencyLookUp extends StreamFilter {
 	}
     }
 
+    @Override
     public void start() {
 	new Thread(new TransparencyLookUpThread()).start();
     }

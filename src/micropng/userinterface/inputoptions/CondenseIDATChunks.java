@@ -32,6 +32,7 @@ public class CondenseIDATChunks implements ParameterDescription {
 	return shortParameterName;
     }
 
+    @Override
     public ParameterValue<?> defaultValue() {
 	return defaultValue.clone();
     }

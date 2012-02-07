@@ -9,6 +9,7 @@ public class NoneInterlace extends Interlace {
 	this.graphicsSizes = new Dimensions[] { size };
     }
 
+    @Override
     public Dimensions[] getGraphicsSizes() {
 	return graphicsSizes;
     }

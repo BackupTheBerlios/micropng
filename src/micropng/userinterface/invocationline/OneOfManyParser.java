@@ -19,12 +19,12 @@ public class OneOfManyParser implements ValueParser {
 	for (String currentString : input) {
 	    final String newResultingValue = currentString.toLowerCase();
 
-	    if ((resultingValue != null) && (!resultingValue.equals(newResultingValue))) {
-		return Status.error("Wert " + currentString
-			+ " kann nicht mit vorangegangenem Wert vereinigt werden");
-	    } else {
+	    if (resultingValue == null) {
 		resultingValue = newResultingValue;
+	    } else if (!resultingValue.equals(newResultingValue)) {
+		return Status.error("Wert " + currentString + " widerspricht vorangegangenem Wert");
 	    }
+
 	}
 	return value.trySetting(resultingValue);
     }

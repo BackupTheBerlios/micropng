@@ -80,11 +80,10 @@ public class HuffmanTree {
     private HuffmanNode fixSubtree(HuffmanNodeDraft draftNode) {
 	if (draftNode.left != null) {
 	    return new HuffmanNode(fixSubtree(draftNode.left), fixSubtree(draftNode.right));
-	} else {
-	    return new HuffmanNode(draftNode.value);
 	}
+	return new HuffmanNode(draftNode.value);
     }
-    
+
     private void addCode(int value, int code, int length) {
 	HuffmanNodeDraft currentNode = rootDraft;
 

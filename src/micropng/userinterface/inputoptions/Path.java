@@ -4,7 +4,7 @@ import java.io.File;
 
 import micropng.commonlib.Status;
 
-public class Path implements ParameterValue<File>, Cloneable {
+public class Path implements ParameterValue<File> {
     private File value = new File("");
 
     @Override
