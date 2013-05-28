@@ -1,7 +1,9 @@
 /*
- * Copyright 2009-2012 Martin Walch
+ * Copyright 2009-2013 Martin Walch
  * redistributable under the terms of the GNU GPL version 3
  */
+
+//TODO: Merge checkpng and micropng. Use enums for implementation selection. 
 
 package checkpng;
 
